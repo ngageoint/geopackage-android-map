@@ -24,3 +24,7 @@ local.properties
 # IDE files
 .idea/
 *.iml
+
+# Library
+geopackage-sdk
+geopackage-sdk/
