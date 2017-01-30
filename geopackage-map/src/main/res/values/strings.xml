@@ -2,19 +2,4 @@
 
     <string name="app_name">GeoPackageMapSDK</string>
 
-    <string name="geopackage_db_rollback_suffix">-journal</string>
-
-    <string name="tile_generator_variable_z">\\{z\\}</string>
-    <string name="tile_generator_variable_x">\\{x\\}</string>
-    <string name="tile_generator_variable_y">\\{y\\}</string>
-    <string name="tile_generator_variable_min_lat">\\{minLat\\}</string>
-    <string name="tile_generator_variable_max_lat">\\{maxLat\\}</string>
-    <string name="tile_generator_variable_min_lon">\\{minLon\\}</string>
-    <string name="tile_generator_variable_max_lon">\\{maxLon\\}</string>
-
-    <string name="feature_tiles_compress_format">PNG</string>
-    <string name="feature_tiles_point_radius">2.0</string>
-    <string name="feature_tiles_line_stroke_width">2.0</string>
-    <string name="feature_tiles_polygon_stroke_width">2.0</string>
-
 </resources>
