@@ -6,10 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-
 import java.util.List;
 
 import mil.nga.geopackage.BoundingBox;
@@ -18,16 +14,17 @@ import mil.nga.geopackage.features.user.FeatureCursor;
 import mil.nga.geopackage.features.user.FeatureDao;
 import mil.nga.geopackage.features.user.FeatureRow;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
-import mil.nga.geopackage.map.geom.GoogleMapShape;
-import mil.nga.geopackage.map.geom.GoogleMapShapeConverter;
-import mil.nga.geopackage.map.geom.MultiLatLng;
-import mil.nga.geopackage.map.geom.MultiPolygonOptions;
-import mil.nga.geopackage.map.geom.MultiPolylineOptions;
 import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.geopackage.tiles.features.FeatureTiles;
 import mil.nga.wkb.geom.Geometry;
+import mil.nga.wkb.geom.GeometryCollection;
+import mil.nga.wkb.geom.LineString;
+import mil.nga.wkb.geom.MultiLineString;
+import mil.nga.wkb.geom.MultiPoint;
+import mil.nga.wkb.geom.MultiPolygon;
 import mil.nga.wkb.geom.Point;
+import mil.nga.wkb.geom.Polygon;
 
 /**
  * Google maps Feature Tiles implementation
@@ -38,6 +35,11 @@ import mil.nga.wkb.geom.Point;
 public class MapFeatureTiles extends FeatureTiles {
 
     /**
+     * Projection transform from Feature DAO to Web Mercator
+     */
+    private final ProjectionTransform transform;
+
+    /**
      * Constructor
      *
      * @param context
@@ -45,6 +47,7 @@ public class MapFeatureTiles extends FeatureTiles {
      */
     public MapFeatureTiles(Context context, FeatureDao featureDao) {
         super(context, featureDao);
+        transform = getProjectionToWebMercatorTransform(featureDao.getProjection());
     }
 
     /**
@@ -57,13 +60,8 @@ public class MapFeatureTiles extends FeatureTiles {
         Bitmap bitmap = createNewBitmap();
         Canvas canvas = new Canvas(bitmap);
 
-        // WGS84 to web mercator projection and google shape converter
-        ProjectionTransform wgs84ToWebMercatorTransform = getWgs84ToWebMercatorTransform();
-        GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
-                featureDao.getProjection());
-
         for (FeatureRow featureRow : results) {
-            drawFeature(webMercatorBoundingBox, wgs84ToWebMercatorTransform, canvas, featureRow, converter);
+            drawFeature(webMercatorBoundingBox, canvas, featureRow);
         }
 
         return bitmap;
@@ -78,13 +76,9 @@ public class MapFeatureTiles extends FeatureTiles {
         Bitmap bitmap = createNewBitmap();
         Canvas canvas = new Canvas(bitmap);
 
-        ProjectionTransform wgs84ToWebMercatorTransform = getWgs84ToWebMercatorTransform();
-        GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
-                featureDao.getProjection());
-
         while (cursor.moveToNext()) {
             FeatureRow row = cursor.getRow();
-            drawFeature(boundingBox, wgs84ToWebMercatorTransform, canvas, row, converter);
+            drawFeature(boundingBox, canvas, row);
         }
 
         cursor.close();
@@ -101,12 +95,8 @@ public class MapFeatureTiles extends FeatureTiles {
         Bitmap bitmap = createNewBitmap();
         Canvas canvas = new Canvas(bitmap);
 
-        ProjectionTransform wgs84ToWebMercatorTransform = getWgs84ToWebMercatorTransform();
-        GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
-                featureDao.getProjection());
-
         for (FeatureRow row : featureRow) {
-            drawFeature(boundingBox, wgs84ToWebMercatorTransform, canvas, row, converter);
+            drawFeature(boundingBox, canvas, row);
         }
 
         return bitmap;
@@ -116,76 +106,72 @@ public class MapFeatureTiles extends FeatureTiles {
      * Draw the feature on the canvas
      *
      * @param boundingBox
-     * @param transform
      * @param canvas
      * @param row
-     * @param converter
      */
-    private void drawFeature(BoundingBox boundingBox, ProjectionTransform transform, Canvas canvas, FeatureRow row, GoogleMapShapeConverter converter) {
+    private void drawFeature(BoundingBox boundingBox, Canvas canvas, FeatureRow row) {
         GeoPackageGeometryData geomData = row.getGeometry();
         if (geomData != null) {
             Geometry geometry = geomData.getGeometry();
-            GoogleMapShape shape = converter.toShape(geometry);
-            drawShape(boundingBox, transform, canvas, shape);
+            drawShape(boundingBox, canvas, geometry);
         }
     }
 
     /**
-     * Draw the shape on the canvas
+     * Draw the geometry on the canvas
      *
      * @param boundingBox
-     * @param transform
      * @param canvas
-     * @param shape
+     * @param geometry
      */
-    private void drawShape(BoundingBox boundingBox, ProjectionTransform transform, Canvas canvas, GoogleMapShape shape) {
+    private void drawShape(BoundingBox boundingBox, Canvas canvas, Geometry geometry) {
 
-        Object shapeObject = shape.getShape();
+        switch (geometry.getGeometryType()) {
 
-        switch (shape.getShapeType()) {
-
-            case LAT_LNG:
-                LatLng latLng = (LatLng) shapeObject;
-                drawLatLng(boundingBox, transform, canvas, pointPaint, latLng);
+            case POINT:
+                Point point = (Point) geometry;
+                drawPoint(boundingBox, canvas, pointPaint, point);
                 break;
-            case POLYLINE_OPTIONS:
-                PolylineOptions polylineOptions = (PolylineOptions) shapeObject;
+            case LINESTRING:
+                LineString lineString = (LineString) geometry;
                 Path linePath = new Path();
-                addPolyline(boundingBox, transform, linePath, polylineOptions);
+                addLineString(boundingBox, linePath, lineString);
                 drawLinePath(canvas, linePath);
                 break;
-            case POLYGON_OPTIONS:
-                PolygonOptions polygonOptions = (PolygonOptions) shapeObject;
+            case POLYGON:
+                Polygon polygon = (Polygon) geometry;
                 Path polygonPath = new Path();
-                addPolygon(boundingBox, transform, polygonPath, polygonOptions);
+                addPolygon(boundingBox, polygonPath, polygon);
                 drawPolygonPath(canvas, polygonPath);
                 break;
-            case MULTI_LAT_LNG:
-                MultiLatLng multiLatLng = (MultiLatLng) shapeObject;
-                for (LatLng latLngFromMulti : multiLatLng.getLatLngs()) {
-                    drawLatLng(boundingBox, transform, canvas, pointPaint, latLngFromMulti);
+            case MULTIPOINT:
+                MultiPoint multiPoint = (MultiPoint) geometry;
+                for (Point pointFromMulti : multiPoint.getPoints()) {
+                    drawPoint(boundingBox, canvas, pointPaint, pointFromMulti);
                 }
                 break;
-            case MULTI_POLYLINE_OPTIONS:
-                MultiPolylineOptions multiPolylineOptions = (MultiPolylineOptions) shapeObject;
+            case MULTILINESTRING:
+                MultiLineString multiLineString = (MultiLineString) geometry;
                 Path multiLinePath = new Path();
-                for (PolylineOptions polyline : multiPolylineOptions.getPolylineOptions()) {
-                    addPolyline(boundingBox, transform, multiLinePath, polyline);
+                for (LineString lineStringFromMulti : multiLineString.getLineStrings()) {
+                    addLineString(boundingBox, multiLinePath, lineStringFromMulti);
                 }
                 drawLinePath(canvas, multiLinePath);
                 break;
-            case MULTI_POLYGON_OPTIONS:
-                MultiPolygonOptions multiPolygonOptions = (MultiPolygonOptions) shapeObject;
+            case MULTIPOLYGON:
+                MultiPolygon multiPolygon = (MultiPolygon) geometry;
                 Path multiPolygonPath = new Path();
-                for (PolygonOptions polygon : multiPolygonOptions.getPolygonOptions()) {
-                    addPolygon(boundingBox, transform, multiPolygonPath, polygon);
+                for (Polygon polygonFromMulti : multiPolygon.getPolygons()) {
+                    addPolygon(boundingBox, multiPolygonPath, polygonFromMulti);
                 }
                 drawPolygonPath(canvas, multiPolygonPath);
                 break;
-            case COLLECTION:
-                List<GoogleMapShape> shapes = (List<GoogleMapShape>) shapeObject;
-                for (GoogleMapShape listShape : shapes) {
-                    drawShape(boundingBox, transform, canvas, listShape);
+            // TODO other WKB shapes????
+            case GEOMETRYCOLLECTION:
+                GeometryCollection<Geometry> geometryCollection = (GeometryCollection) geometry;
+                List<Geometry> geometries = geometryCollection.getGeometries();
+                for (Geometry geometryFromCollection : geometries) {
+                    drawShape(boundingBox, canvas, geometryFromCollection);
                 }
                 break;
         }
@@ -217,23 +203,23 @@ public class MapFeatureTiles extends FeatureTiles {
     }
 
     /**
-     * Add the polyline to the path
+     * Add the linestring to the path
      *
      * @param boundingBox
      * @param path
-     * @param polyline
+     * @param lineString
      */
-    private void addPolyline(BoundingBox boundingBox, ProjectionTransform transform, Path path, PolylineOptions polyline) {
-        List<LatLng> points = polyline.getPoints();
+    private void addLineString(BoundingBox boundingBox, Path path, LineString lineString) {
+        List<Point> points = lineString.getPoints();
         if (points.size() >= 2) {
 
             for (int i = 0; i < points.size(); i++) {
-                LatLng latLng = points.get(i);
-                Point point = getPoint(transform, latLng);
+                Point point = points.get(i);
+                Point webMercatorPoint = getPoint(point);
                 float x = TileBoundingBoxUtils.getXPixel(tileWidth, boundingBox,
-                        point.getX());
+                        webMercatorPoint.getX());
                 float y = TileBoundingBoxUtils.getYPixel(tileHeight, boundingBox,
-                        point.getY());
+                        webMercatorPoint.getY());
                 if (i == 0) {
                     path.moveTo(x, y);
                 } else {
@@ -247,19 +233,26 @@ public class MapFeatureTiles extends FeatureTiles {
      * Add the polygon on the canvas
      *
      * @param boundingBox
-     * @param transform
      * @param path
      * @param polygon
      */
-    private void addPolygon(BoundingBox boundingBox, ProjectionTransform transform, Path path, PolygonOptions polygon) {
-        List<LatLng> points = polygon.getPoints();
-        if (points.size() >= 2) {
-            addRing(boundingBox, transform, path, points);
+    private void addPolygon(BoundingBox boundingBox, Path path, Polygon polygon) {
+        List<LineString> rings = polygon.getRings();
+        if (!rings.isEmpty()) {
 
-            // Add the holes
-            for (List<LatLng> hole : polygon.getHoles()) {
-                if (hole.size() >= 2) {
-                    addRing(boundingBox, transform, path, hole);
+            // Add the polygon points
+            LineString polygonLineString = rings.get(0);
+            List<Point> polygonPoints = polygonLineString.getPoints();
+            if (polygonPoints.size() >= 2) {
+                addRing(boundingBox, path, polygonPoints);
+
+                // Add the holes
+                for (int i = 1; i < rings.size(); i++) {
+                    LineString holeLineString = rings.get(i);
+                    List<Point> holePoints = holeLineString.getPoints();
+                    if (holePoints.size() >= 2) {
+                        addRing(boundingBox, path, holePoints);
+                    }
                 }
             }
         }
@@ -269,19 +262,18 @@ public class MapFeatureTiles extends FeatureTiles {
      * Add a ring
      *
      * @param boundingBox
-     * @param transform
      * @param path
      * @param points
      */
-    private void addRing(BoundingBox boundingBox, ProjectionTransform transform, Path path, List<LatLng> points) {
+    private void addRing(BoundingBox boundingBox, Path path, List<Point> points) {
 
         for (int i = 0; i < points.size(); i++) {
-            LatLng latLng = points.get(i);
-            Point point = getPoint(transform, latLng);
+            Point point = points.get(i);
+            Point webMercatorPoint = getPoint(point);
             float x = TileBoundingBoxUtils.getXPixel(tileWidth, boundingBox,
-                    point.getX());
+                    webMercatorPoint.getX());
             float y = TileBoundingBoxUtils.getYPixel(tileHeight, boundingBox,
-                    point.getY());
+                    webMercatorPoint.getY());
             if (i == 0) {
                 path.moveTo(x, y);
             } else {
@@ -292,21 +284,20 @@ public class MapFeatureTiles extends FeatureTiles {
     }
 
     /**
-     * Draw the lat lng on the canvas
+     * Draw the point on the canvas
      *
      * @param boundingBox
-     * @param transform
      * @param canvas
      * @param paint
-     * @param latLng
+     * @param point
      */
-    private void drawLatLng(BoundingBox boundingBox, ProjectionTransform transform, Canvas canvas, Paint paint, LatLng latLng) {
+    private void drawPoint(BoundingBox boundingBox, Canvas canvas, Paint paint, Point point) {
 
-        Point point = getPoint(transform, latLng);
+        Point webMercatorPoint = getPoint(point);
         float x = TileBoundingBoxUtils.getXPixel(tileWidth, boundingBox,
-                point.getX());
+                webMercatorPoint.getX());
         float y = TileBoundingBoxUtils.getYPixel(tileHeight, boundingBox,
-                point.getY());
+                webMercatorPoint.getY());
 
         if (pointIcon != null) {
             if (x >= 0 - pointIcon.getWidth() && x <= tileWidth + pointIcon.getWidth() && y >= 0 - pointIcon.getHeight() && y <= tileHeight + pointIcon.getHeight()) {
@@ -323,13 +314,11 @@ public class MapFeatureTiles extends FeatureTiles {
     /**
      * Get the web mercator point
      *
-     * @param transform
      * @param point
-     * @return
+     * @return web mercator point
      */
-    private Point getPoint(ProjectionTransform transform, LatLng point) {
-        double[] lonLat = transform.transform(point.longitude, point.latitude);
-        return new Point(lonLat[0], lonLat[1]);
+    private Point getPoint(Point point) {
+        return transform.transform(point);
     }
 
 }
