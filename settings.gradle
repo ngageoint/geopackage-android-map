@@ -1,2 +1,2 @@
 include ':geopackage-map'
-include ':geopackage-sdk' // uncomment me to build locally TODO
+//include ':geopackage-sdk' // uncomment me to build locally

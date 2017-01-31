@@ -155,8 +155,7 @@ android {
 dependencies {
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.google.maps.android:android-maps-utils:0.4.4'
-    //compile 'mil.nga.geopackage:geopackage-android:1.3.1'
-    compile project(':geopackage-sdk') // TODO
+    compile 'mil.nga.geopackage:geopackage-android:1.3.1'
     javadocDeps 'mil.nga.geopackage:geopackage-android:1.3.1'
     testCompile 'com.android.support:multidex:1.0.1'
 }
