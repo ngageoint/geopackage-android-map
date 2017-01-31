@@ -1,0 +1,161 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = "mil.nga.geopackage.map"
+archivesBaseName = "geopackage-android-map"
+version = "1.3.1"
+def remotePublish = false
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+        multiDexEnabled true
+
+        testApplicationId 'mil.nga.geopackage.map.test'
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+
+    configurations {
+        javadocDeps
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+        }
+
+        lintOptions {
+            abortOnError false
+        }
+    }
+
+    task javadoc(type: Javadoc) {
+        title = "$archivesBaseName $version API"
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        classpath += configurations.javadocDeps
+        classpath += files("${android.sdkDirectory}/extras/google/google_play_services/libproject/google-play-services_lib/libs/google-play-services.jar")
+        classpath += files("${android.sdkDirectory}/extras/android/support/v4/android-support-v4.jar")
+        options.links("http://ngageoint.github.io/geopackage-android/docs/api/");
+        options.links("http://ngageoint.github.io/geopackage-core-java/docs/api/");
+        options.links("http://ngageoint.github.io/geopackage-wkb-java/docs/api/");
+        options.links("http://ngageoint.github.io/geopackage-tiff-java/docs/api/");
+        options.links("http://ormlite.com/javadoc/ormlite-core/");
+        options.links("http://ormlite.com/javadoc/ormlite-android/");
+        options.links("http://docs.oracle.com/javase/7/docs/api/");
+        options.links("http://hjg.com.ar/pngj/apidocs/");
+        options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/docs/reference");
+        options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/extras/google/google_play_services/docs/reference");
+        destinationDir = file("../javadoc/")
+        failOnError false
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.java.srcDirs
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    signing {
+        required {remotePublish}
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+
+                if (!remotePublish) {
+
+                    repository url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository')
+
+                } else {
+
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+
+                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+
+                    pom.project {
+                        name 'GeoPackage Android Map'
+                        packaging 'aar'
+                        description 'GeoPackage Android Map implementation'
+                        url 'https://github.com/ngageoint/geopackage-android-map'
+
+                        scm {
+                            url 'git@github.com:ngageoint/geopackage-android-map.git'
+                            connection 'scm:git:git@github.com:ngageoint/geopackage-android-map.git'
+                            developerConnection 'scm:git:git@github.com:ngageoint/geopackage-android-map.git'
+                        }
+
+                        licenses {
+                            license {
+                                name 'The MIT License (MIT)'
+                                url 'https://github.com/ngageoint/geopackage-android-map/blob/master/LICENSE.txt'
+                                distribution 'repo'
+                            }
+                        }
+
+                        organization {
+                            name 'National Geospatial-Intelligence Agency'
+                            url 'https://www.nga.mil'
+                        }
+
+                        developers {
+                            developer {
+                                id 'bosborn'
+                                name 'Brian Osborn'
+                                email 'osbornb@bit-sys.com'
+                                organizationUrl 'https://www.bit-sys.com'
+                                roles {
+                                    role 'developer'
+                                }
+                                timezone 'UTC-07'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+dependencies {
+    compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.google.maps.android:android-maps-utils:0.4.4'
+    compile 'mil.nga.geopackage:geopackage-android:1.3.1'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:1.3.1'
+    testCompile 'com.android.support:multidex:1.0.1'
+}
