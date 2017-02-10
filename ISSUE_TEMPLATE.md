@@ -7,6 +7,7 @@ Please fill out as much known and relevant information as possible.
   * Device or Emulator: 
   * Android Studio Version: 
   * Android Version Number: 
+  * Google Play services Version: 
   * Android SDK Version: 
   * Platform & OS: 
   * Other Relevant Libraries: 
