@@ -55,6 +55,15 @@ public class GoogleMapShapeConverter {
     private final ProjectionTransform fromWgs84;
 
     /**
+     * Constructor
+     *
+     * @since 1.3.2
+     */
+    public GoogleMapShapeConverter() {
+        this(null);
+    }
+
+    /**
      * Constructor with specified projection, see
      * {@link FeatureDao#getProjection}
      *

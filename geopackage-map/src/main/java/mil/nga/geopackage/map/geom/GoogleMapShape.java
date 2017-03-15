@@ -153,6 +153,55 @@ public class GoogleMapShape {
     }
 
     /**
+     * Updates visibility of all objects
+     */
+    public void setVisible(boolean visible) {
+
+        switch (shapeType) {
+
+            case MARKER:
+                ((Marker) shape).setVisible(visible);
+                break;
+            case POLYGON:
+                ((Polygon) shape).setVisible(visible);
+                break;
+            case POLYLINE:
+                ((Polyline) shape).setVisible(visible);
+                break;
+            case MULTI_MARKER:
+                ((MultiMarker) shape).setVisible(visible);
+                break;
+            case MULTI_POLYLINE:
+                ((MultiPolyline) shape).setVisible(visible);
+                break;
+            case MULTI_POLYGON:
+                ((MultiPolygon) shape).setVisible(visible);
+                break;
+            case POLYLINE_MARKERS:
+                ((PolylineMarkers) shape).setVisible(visible);
+                break;
+            case POLYGON_MARKERS:
+                ((PolygonMarkers) shape).setVisible(visible);
+                break;
+            case MULTI_POLYLINE_MARKERS:
+                ((MultiPolylineMarkers) shape).setVisible(visible);
+                break;
+            case MULTI_POLYGON_MARKERS:
+                ((MultiPolygonMarkers) shape).setVisible(visible);
+                break;
+            case COLLECTION:
+                @SuppressWarnings("unchecked")
+                List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shape;
+                for (GoogleMapShape shapeListItem : shapeList) {
+                    shapeListItem.setVisible(visible);
+                }
+                break;
+            default:
+        }
+
+    }
+
+    /**
      * Updates all objects that could have changed from moved markers
      */
     public void update() {
