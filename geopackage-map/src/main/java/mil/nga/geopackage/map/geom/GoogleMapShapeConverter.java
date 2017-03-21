@@ -1518,7 +1518,7 @@ public class GoogleMapShapeConverter {
         for (int i = 0; i < points.size(); i++) {
             LatLng latLng = points.get(i);
 
-            if (i + 1 == points.size() && ignoreIdenticalEnds) {
+            if (points.size() > 1 && i + 1 == points.size() && ignoreIdenticalEnds) {
                 LatLng firstLatLng = points.get(0);
                 if (latLng.latitude == firstLatLng.latitude
                         && latLng.longitude == firstLatLng.longitude) {

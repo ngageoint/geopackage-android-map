@@ -154,6 +154,9 @@ public class GoogleMapShape {
 
     /**
      * Updates visibility of all objects
+     *
+     * @param visible visible flag
+     * @since 1.3.2
      */
     public void setVisible(boolean visible) {
 
