@@ -14,6 +14,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Google Map Shape Converter default constructor
 * Google Map Shape visible setters
 * Google Map Shape Markers size and is empty methods
+* Close Polygons converting from Google Map Shapes to Geometries
 
 ## [1.3.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/1.3.1) (02-02-2017)
 

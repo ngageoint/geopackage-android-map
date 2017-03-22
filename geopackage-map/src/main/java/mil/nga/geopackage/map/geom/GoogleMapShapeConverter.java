@@ -428,6 +428,7 @@ public class GoogleMapShapeConverter {
             Point point = toPoint(latLng);
             polygonLineString.addPoint(point);
         }
+        closePolygonRing(polygonLineString);
         polygon.addRing(polygonLineString);
 
         // Add the holes
@@ -439,11 +440,26 @@ public class GoogleMapShapeConverter {
                     Point point = toPoint(latLng);
                     holeLineString.addPoint(point);
                 }
+                closePolygonRing(holeLineString);
                 polygon.addRing(holeLineString);
             }
         }
 
         return polygon;
+    }
+
+    /**
+     * Close the polygon ring (exterior or hole) if needed
+     *
+     * @param ring polygon ring
+     */
+    private void closePolygonRing(LineString ring) {
+        List<Point> points = ring.getPoints();
+        Point firstPoint = points.get(0);
+        Point lastPoint = points.get(points.size() - 1);
+        if (firstPoint.getX() != lastPoint.getX() || firstPoint.getY() != lastPoint.getY()) {
+            ring.addPoint(new Point(firstPoint.hasZ(), firstPoint.hasM(), firstPoint.getX(), firstPoint.getY()));
+        }
     }
 
     /**
