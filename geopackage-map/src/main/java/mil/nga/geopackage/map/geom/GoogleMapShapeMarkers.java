@@ -86,12 +86,32 @@ public class GoogleMapShapeMarkers {
         shapeMarkersMap.putAll(googleShapeMarkers.shapeMarkersMap);
     }
 
+    /**
+     * Get the map shape
+     *
+     * @return map shape
+     */
     public GoogleMapShape getShape() {
         return shape;
     }
 
+    /**
+     * Set the map shape
+     *
+     * @param shape map shape
+     */
     public void setShape(GoogleMapShape shape) {
         this.shape = shape;
+    }
+
+    /**
+     * Get the shape markers map
+     *
+     * @return shape markers map
+     * @since 1.3.2
+     */
+    public Map<String, ShapeMarkers> getShapeMarkersMap() {
+        return shapeMarkersMap;
     }
 
     /**
