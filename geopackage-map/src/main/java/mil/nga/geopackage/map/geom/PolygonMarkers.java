@@ -109,11 +109,9 @@ public class PolygonMarkers implements ShapeWithChildrenMarkers {
     }
 
     /**
-     * Set visibility on the map
-     *
-     * @param visible visibility flag
-     * @since 1.3.2
+     * {@inheritDoc}
      */
+    @Override
     public void setVisible(boolean visible) {
         if (polygon != null) {
             polygon.setVisible(visible);
@@ -123,6 +121,19 @@ public class PolygonMarkers implements ShapeWithChildrenMarkers {
         }
         for (PolygonHoleMarkers hole : holes) {
             hole.setVisible(visible);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setVisibleMarkers(boolean visible) {
+        for (Marker marker : markers) {
+            marker.setVisible(visible);
+        }
+        for (PolygonHoleMarkers hole : holes) {
+            hole.setVisibleMarkers(visible);
         }
     }
 

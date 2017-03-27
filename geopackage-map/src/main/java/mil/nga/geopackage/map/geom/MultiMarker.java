@@ -40,12 +40,17 @@ public class MultiMarker implements ShapeMarkers {
     }
 
     /**
-     * Set visibility on the map
-     *
-     * @param visible visibility flag
-     * @since 1.3.2
+     * {@inheritDoc}
      */
     public void setVisible(boolean visible) {
+        setVisibleMarkers(visible);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setVisibleMarkers(boolean visible) {
         for (Marker marker : markers) {
             marker.setVisible(visible);
         }

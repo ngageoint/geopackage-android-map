@@ -294,6 +294,29 @@ public class GoogleMapShapeMarkers {
     }
 
     /**
+     * Updates visibility of all objects
+     *
+     * @param visible visible flag
+     * @since 1.3.2
+     */
+    public void setVisible(boolean visible) {
+        shape.setVisible(visible);
+        setVisibleMarkers(visible);
+    }
+
+    /**
+     * Updates visibility of the shape representing markers
+     *
+     * @param visible visible flag
+     * @since 1.3.2
+     */
+    public void setVisibleMarkers(boolean visible) {
+        for (ShapeMarkers shapeMarkers : shapeMarkersMap.values()) {
+            shapeMarkers.setVisibleMarkers(visible);
+        }
+    }
+
+    /**
      * Get the shape markers size
      *
      * @return size
