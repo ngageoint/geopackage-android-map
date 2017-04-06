@@ -322,7 +322,7 @@ public class GoogleMapShapeMarkers {
      * @return size
      * @since 1.3.2
      */
-    public int getSize() {
+    public int size() {
         return shapeMarkersMap.size();
     }
 

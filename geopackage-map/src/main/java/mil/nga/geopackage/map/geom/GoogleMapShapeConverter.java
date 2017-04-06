@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,16 @@ public class GoogleMapShapeConverter {
     private final ProjectionTransform fromWgs84;
 
     /**
+     * Convert polygon exteriors to specified orientation
+     */
+    private PolygonOrientation exteriorOrientation = PolygonOrientation.COUNTERCLOCKWISE;
+
+    /**
+     * Convert polygon holes to specified orientation
+     */
+    private PolygonOrientation holeOrientation = PolygonOrientation.CLOCKWISE;
+
+    /**
      * Constructor
      *
      * @since 1.3.2
@@ -90,6 +102,46 @@ public class GoogleMapShapeConverter {
      */
     public Projection getProjection() {
         return projection;
+    }
+
+    /**
+     * Get exterior orientation for conversions. Defaults to PolygonOrientation.COUNTERCLOCKWISE
+     *
+     * @return exterior orientation
+     * @since 1.3.2
+     */
+    public PolygonOrientation getExteriorOrientation() {
+        return exteriorOrientation;
+    }
+
+    /**
+     * Set the exterior orientation for conversions, set to null to maintain orientation
+     *
+     * @param exteriorOrientation orientation
+     * @since 1.3.2
+     */
+    public void setExteriorOrientation(PolygonOrientation exteriorOrientation) {
+        this.exteriorOrientation = exteriorOrientation;
+    }
+
+    /**
+     * Get polygon hole orientation for conversions. Defaults to PolygonOrientation.CLOCKWISE
+     *
+     * @return hole orientation
+     * @since 1.3.2
+     */
+    public PolygonOrientation getHoleOrientation() {
+        return holeOrientation;
+    }
+
+    /**
+     * Set the polygon hole orientation for conversions, set to null to maintain orientation
+     *
+     * @param holeOrientation orientation
+     * @since 1.3.2
+     */
+    public void setHoleOrientation(PolygonOrientation holeOrientation) {
+        this.holeOrientation = holeOrientation;
     }
 
     /**
@@ -422,25 +474,41 @@ public class GoogleMapShapeConverter {
 
         Polygon polygon = new Polygon(hasZ, hasM);
 
+        // Close the ring if needed and determine orientation
+        closePolygonRing(latLngs);
+        PolygonOrientation ringOrientation = getOrientation(latLngs);
+
         // Add the polygon points
         LineString polygonLineString = new LineString(hasZ, hasM);
         for (LatLng latLng : latLngs) {
             Point point = toPoint(latLng);
-            polygonLineString.addPoint(point);
+            // Add exterior in desired orientation order
+            if (exteriorOrientation == null || exteriorOrientation == ringOrientation) {
+                polygonLineString.addPoint(point);
+            } else {
+                polygonLineString.getPoints().add(0, point);
+            }
         }
-        closePolygonRing(polygonLineString);
         polygon.addRing(polygonLineString);
 
         // Add the holes
         if (holes != null) {
             for (List<LatLng> hole : holes) {
 
+                // Close the hole if needed and determine orientation
+                closePolygonRing(hole);
+                PolygonOrientation ringHoleOrientation = getOrientation(hole);
+
                 LineString holeLineString = new LineString(hasZ, hasM);
                 for (LatLng latLng : hole) {
                     Point point = toPoint(latLng);
-                    holeLineString.addPoint(point);
+                    // Add holes in desired orientation order
+                    if (holeOrientation == null || holeOrientation == ringHoleOrientation) {
+                        holeLineString.addPoint(point);
+                    } else {
+                        holeLineString.getPoints().add(0, point);
+                    }
                 }
-                closePolygonRing(holeLineString);
                 polygon.addRing(holeLineString);
             }
         }
@@ -449,17 +517,27 @@ public class GoogleMapShapeConverter {
     }
 
     /**
-     * Close the polygon ring (exterior or hole) if needed
+     * Close the polygon ring (exterior or hole) points if needed
      *
-     * @param ring polygon ring
+     * @param points ring points
+     * @since 1.3.2
      */
-    private void closePolygonRing(LineString ring) {
-        List<Point> points = ring.getPoints();
-        Point firstPoint = points.get(0);
-        Point lastPoint = points.get(points.size() - 1);
-        if (firstPoint.getX() != lastPoint.getX() || firstPoint.getY() != lastPoint.getY()) {
-            ring.addPoint(new Point(firstPoint.hasZ(), firstPoint.hasM(), firstPoint.getX(), firstPoint.getY()));
+    public void closePolygonRing(List<LatLng> points) {
+        if (!PolyUtil.isClosedPolygon(points)) {
+            LatLng first = points.get(0);
+            points.add(new LatLng(first.latitude, first.longitude));
         }
+    }
+
+    /**
+     * Determine the closed points orientation
+     *
+     * @param points closed points
+     * @return orientation
+     * @since 1.3.2
+     */
+    public PolygonOrientation getOrientation(List<LatLng> points) {
+        return SphericalUtil.computeSignedArea(points) >= 0 ? PolygonOrientation.COUNTERCLOCKWISE : PolygonOrientation.CLOCKWISE;
     }
 
     /**
