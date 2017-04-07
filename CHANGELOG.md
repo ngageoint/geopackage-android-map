@@ -12,6 +12,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Android Manifest cleanup
 * Google Map Shape Converter fix for single point polygon markers at creation time
 * Google Map Shape Converter default constructor
+* Google Map Shape Converter preserves geodesic shape options setting
 * Google Map Shape visible setters
 * Google Map Shape Markers size and is empty methods
 * Close Polygons converting from Google Map Shapes to Geometries

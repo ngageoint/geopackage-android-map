@@ -1422,6 +1422,7 @@ public class GoogleMapShapeConverter {
         for (PolylineOptions polylineOption : polylines.getPolylineOptions()) {
             if (polylines.getOptions() != null) {
                 polylineOption.color(polylines.getOptions().getColor());
+                polylineOption.geodesic(polylines.getOptions().isGeodesic());
             }
             Polyline polyline = addPolylineToMap(map, polylineOption);
             multiPolyline.add(polyline);
@@ -1446,6 +1447,7 @@ public class GoogleMapShapeConverter {
                 polygonOption.fillColor(polygons.getOptions().getFillColor());
                 polygonOption.strokeColor(polygons.getOptions()
                         .getStrokeColor());
+                polygonOption.geodesic(polygons.getOptions().isGeodesic());
             }
             multiPolygon.add(polygon);
         }
@@ -1651,6 +1653,7 @@ public class GoogleMapShapeConverter {
 
         if (globalPolylineOptions != null) {
             polylineOptions.color(globalPolylineOptions.getColor());
+            polylineOptions.geodesic(globalPolylineOptions.isGeodesic());
         }
 
         Polyline polyline = addPolylineToMap(map, polylineOptions);
@@ -1685,6 +1688,7 @@ public class GoogleMapShapeConverter {
         if (globalPolygonOptions != null) {
             polygonOptions.fillColor(globalPolygonOptions.getFillColor());
             polygonOptions.strokeColor(globalPolygonOptions.getStrokeColor());
+            polygonOptions.geodesic(globalPolygonOptions.isGeodesic());
         }
 
         com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(
