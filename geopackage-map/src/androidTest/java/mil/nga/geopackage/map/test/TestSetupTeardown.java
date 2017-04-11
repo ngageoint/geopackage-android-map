@@ -369,7 +369,7 @@ public class TestSetupTeardown {
 		point2dContents.setDataType(ContentsDataType.FEATURES);
 		point2dContents.setIdentifier("point2d");
 		// point2dContents.setDescription("");
-		point2dContents.setLastChange(new Date());
+		// point2dContents.setLastChange(new Date());
 		point2dContents.setMinX(-180.0);
 		point2dContents.setMinY(-90.0);
 		point2dContents.setMaxX(180.0);
@@ -381,7 +381,7 @@ public class TestSetupTeardown {
 		polygon2dContents.setDataType(ContentsDataType.FEATURES);
 		polygon2dContents.setIdentifier("polygon2d");
 		// polygon2dContents.setDescription("");
-		polygon2dContents.setLastChange(new Date());
+		// polygon2dContents.setLastChange(new Date());
 		polygon2dContents.setMinX(0.0);
 		polygon2dContents.setMinY(0.0);
 		polygon2dContents.setMaxX(10.0);
@@ -393,7 +393,7 @@ public class TestSetupTeardown {
 		point3dContents.setDataType(ContentsDataType.FEATURES);
 		point3dContents.setIdentifier("point3d");
 		// point3dContents.setDescription("");
-		point3dContents.setLastChange(new Date());
+		// point3dContents.setLastChange(new Date());
 		point3dContents.setMinX(-180.0);
 		point3dContents.setMinY(-90.0);
 		point3dContents.setMaxX(180.0);
@@ -405,7 +405,7 @@ public class TestSetupTeardown {
 		lineString3dMContents.setDataType(ContentsDataType.FEATURES);
 		lineString3dMContents.setIdentifier("lineString3dM");
 		// lineString3dMContents.setDescription("");
-		lineString3dMContents.setLastChange(new Date());
+		// lineString3dMContents.setLastChange(new Date());
 		lineString3dMContents.setMinX(-180.0);
 		lineString3dMContents.setMinY(-90.0);
 		lineString3dMContents.setMaxX(180.0);
@@ -522,7 +522,7 @@ public class TestSetupTeardown {
 		contents.setDataType(ContentsDataType.TILES);
 		contents.setIdentifier("test_tiles");
 		// contents.setDescription("");
-		contents.setLastChange(new Date());
+		// contents.setLastChange(new Date());
 		contents.setMinX(-180.0);
 		contents.setMinY(-90.0);
 		contents.setMaxX(180.0);
