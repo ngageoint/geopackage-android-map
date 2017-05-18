@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.List;
 
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.wkb.geom.GeometryType;
 
 /**
@@ -278,7 +279,7 @@ public class GoogleMapShape {
      * @return
      */
     public BoundingBox boundingBox() {
-        BoundingBox boundingBox = new BoundingBox(180, -180, 90, -90);
+        BoundingBox boundingBox = new BoundingBox(Double.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE);
         expandBoundingBox(boundingBox);
         return boundingBox;
     }
@@ -391,17 +392,34 @@ public class GoogleMapShape {
      */
     private void expandBoundingBox(BoundingBox boundingBox, LatLng latLng) {
 
-        if (latLng.latitude < boundingBox.getMinLatitude()) {
-            boundingBox.setMinLatitude(latLng.latitude);
+        double latitude = latLng.latitude;
+        double longitude = latLng.longitude;
+
+        if (boundingBox.getMinLongitude() <= 3 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH && boundingBox.getMaxLongitude() >= 3 * -ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH) {
+            if (longitude < boundingBox.getMinLongitude()) {
+                if (boundingBox.getMinLongitude()
+                        - longitude > (longitude + (2 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH)) - boundingBox.getMaxLongitude()) {
+                    longitude += (2 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
+                }
+            } else if (longitude > boundingBox.getMaxLongitude()) {
+                if (longitude - boundingBox.getMaxLongitude() > boundingBox.getMinLongitude()
+                        - (longitude - (2 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH))) {
+                    longitude -= (2 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
+                }
+            }
         }
-        if (latLng.latitude > boundingBox.getMaxLatitude()) {
-            boundingBox.setMaxLatitude(latLng.latitude);
+
+        if (latitude < boundingBox.getMinLatitude()) {
+            boundingBox.setMinLatitude(latitude);
         }
-        if (latLng.longitude < boundingBox.getMinLongitude()) {
-            boundingBox.setMinLongitude(latLng.longitude);
+        if (latitude > boundingBox.getMaxLatitude()) {
+            boundingBox.setMaxLatitude(latitude);
         }
-        if (latLng.longitude > boundingBox.getMaxLongitude()) {
-            boundingBox.setMaxLongitude(latLng.longitude);
+        if (longitude < boundingBox.getMinLongitude()) {
+            boundingBox.setMinLongitude(longitude);
+        }
+        if (longitude > boundingBox.getMaxLongitude()) {
+            boundingBox.setMaxLongitude(longitude);
         }
 
     }
