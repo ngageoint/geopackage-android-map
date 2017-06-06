@@ -10,6 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * android-maps-utils version updated to 0.5
 * build tools version updated to 25.0.3
 * play-services version updated to 10.2.6
+* gradle plugin updated to 2.3.2
 * Android Manifest cleanup
 * Google Map Shape Converter fix for single point polygon markers at creation time
 * Google Map Shape Converter default constructor
