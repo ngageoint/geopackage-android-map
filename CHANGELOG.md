@@ -8,7 +8,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * geopackage-android version updated to 1.3.2
 * android-maps-utils version updated to 0.5
-* min SDK lowered from 14 to 13
+* build tools version updated to 25.0.3
+* play-services version updated to 10.2.6
 * Android Manifest cleanup
 * Google Map Shape Converter fix for single point polygon markers at creation time
 * Google Map Shape Converter default constructor
