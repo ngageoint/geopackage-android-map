@@ -53,7 +53,7 @@ android {
         classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
         classpath += configurations.javadocDeps
         classpath += files("${android.sdkDirectory}/extras/google/google_play_services/libproject/google-play-services_lib/libs/google-play-services.jar")
-        classpath += files("${android.sdkDirectory}/extras/android/support/v4/android-support-v4.jar")
+        classpath += files("${android.sdkDirectory}/extras/android/support/v13/android-support-v13.jar")
         options.links("http://ngageoint.github.io/geopackage-android/docs/api/");
         options.links("http://ngageoint.github.io/geopackage-core-java/docs/api/");
         options.links("http://ngageoint.github.io/geopackage-wkb-java/docs/api/");
