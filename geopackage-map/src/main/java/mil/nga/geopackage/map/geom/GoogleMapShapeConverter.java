@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,25 @@ public class GoogleMapShapeConverter {
     private final ProjectionTransform fromWgs84;
 
     /**
+     * Convert polygon exteriors to specified orientation
+     */
+    private PolygonOrientation exteriorOrientation = PolygonOrientation.COUNTERCLOCKWISE;
+
+    /**
+     * Convert polygon holes to specified orientation
+     */
+    private PolygonOrientation holeOrientation = PolygonOrientation.CLOCKWISE;
+
+    /**
+     * Constructor
+     *
+     * @since 1.3.2
+     */
+    public GoogleMapShapeConverter() {
+        this(null);
+    }
+
+    /**
      * Constructor with specified projection, see
      * {@link FeatureDao#getProjection}
      *
@@ -81,6 +102,46 @@ public class GoogleMapShapeConverter {
      */
     public Projection getProjection() {
         return projection;
+    }
+
+    /**
+     * Get exterior orientation for conversions. Defaults to PolygonOrientation.COUNTERCLOCKWISE
+     *
+     * @return exterior orientation
+     * @since 1.3.2
+     */
+    public PolygonOrientation getExteriorOrientation() {
+        return exteriorOrientation;
+    }
+
+    /**
+     * Set the exterior orientation for conversions, set to null to maintain orientation
+     *
+     * @param exteriorOrientation orientation
+     * @since 1.3.2
+     */
+    public void setExteriorOrientation(PolygonOrientation exteriorOrientation) {
+        this.exteriorOrientation = exteriorOrientation;
+    }
+
+    /**
+     * Get polygon hole orientation for conversions. Defaults to PolygonOrientation.CLOCKWISE
+     *
+     * @return hole orientation
+     * @since 1.3.2
+     */
+    public PolygonOrientation getHoleOrientation() {
+        return holeOrientation;
+    }
+
+    /**
+     * Set the polygon hole orientation for conversions, set to null to maintain orientation
+     *
+     * @param holeOrientation orientation
+     * @since 1.3.2
+     */
+    public void setHoleOrientation(PolygonOrientation holeOrientation) {
+        this.holeOrientation = holeOrientation;
     }
 
     /**
@@ -413,11 +474,20 @@ public class GoogleMapShapeConverter {
 
         Polygon polygon = new Polygon(hasZ, hasM);
 
+        // Close the ring if needed and determine orientation
+        closePolygonRing(latLngs);
+        PolygonOrientation ringOrientation = getOrientation(latLngs);
+
         // Add the polygon points
         LineString polygonLineString = new LineString(hasZ, hasM);
         for (LatLng latLng : latLngs) {
             Point point = toPoint(latLng);
-            polygonLineString.addPoint(point);
+            // Add exterior in desired orientation order
+            if (exteriorOrientation == null || exteriorOrientation == ringOrientation) {
+                polygonLineString.addPoint(point);
+            } else {
+                polygonLineString.getPoints().add(0, point);
+            }
         }
         polygon.addRing(polygonLineString);
 
@@ -425,16 +495,49 @@ public class GoogleMapShapeConverter {
         if (holes != null) {
             for (List<LatLng> hole : holes) {
 
+                // Close the hole if needed and determine orientation
+                closePolygonRing(hole);
+                PolygonOrientation ringHoleOrientation = getOrientation(hole);
+
                 LineString holeLineString = new LineString(hasZ, hasM);
                 for (LatLng latLng : hole) {
                     Point point = toPoint(latLng);
-                    holeLineString.addPoint(point);
+                    // Add holes in desired orientation order
+                    if (holeOrientation == null || holeOrientation == ringHoleOrientation) {
+                        holeLineString.addPoint(point);
+                    } else {
+                        holeLineString.getPoints().add(0, point);
+                    }
                 }
                 polygon.addRing(holeLineString);
             }
         }
 
         return polygon;
+    }
+
+    /**
+     * Close the polygon ring (exterior or hole) points if needed
+     *
+     * @param points ring points
+     * @since 1.3.2
+     */
+    public void closePolygonRing(List<LatLng> points) {
+        if (!PolyUtil.isClosedPolygon(points)) {
+            LatLng first = points.get(0);
+            points.add(new LatLng(first.latitude, first.longitude));
+        }
+    }
+
+    /**
+     * Determine the closed points orientation
+     *
+     * @param points closed points
+     * @return orientation
+     * @since 1.3.2
+     */
+    public PolygonOrientation getOrientation(List<LatLng> points) {
+        return SphericalUtil.computeSignedArea(points) >= 0 ? PolygonOrientation.COUNTERCLOCKWISE : PolygonOrientation.CLOCKWISE;
     }
 
     /**
@@ -1319,6 +1422,7 @@ public class GoogleMapShapeConverter {
         for (PolylineOptions polylineOption : polylines.getPolylineOptions()) {
             if (polylines.getOptions() != null) {
                 polylineOption.color(polylines.getOptions().getColor());
+                polylineOption.geodesic(polylines.getOptions().isGeodesic());
             }
             Polyline polyline = addPolylineToMap(map, polylineOption);
             multiPolyline.add(polyline);
@@ -1343,6 +1447,7 @@ public class GoogleMapShapeConverter {
                 polygonOption.fillColor(polygons.getOptions().getFillColor());
                 polygonOption.strokeColor(polygons.getOptions()
                         .getStrokeColor());
+                polygonOption.geodesic(polygons.getOptions().isGeodesic());
             }
             multiPolygon.add(polygon);
         }
@@ -1509,7 +1614,7 @@ public class GoogleMapShapeConverter {
         for (int i = 0; i < points.size(); i++) {
             LatLng latLng = points.get(i);
 
-            if (i + 1 == points.size() && ignoreIdenticalEnds) {
+            if (points.size() > 1 && i + 1 == points.size() && ignoreIdenticalEnds) {
                 LatLng firstLatLng = points.get(0);
                 if (latLng.latitude == firstLatLng.latitude
                         && latLng.longitude == firstLatLng.longitude) {
@@ -1548,6 +1653,7 @@ public class GoogleMapShapeConverter {
 
         if (globalPolylineOptions != null) {
             polylineOptions.color(globalPolylineOptions.getColor());
+            polylineOptions.geodesic(globalPolylineOptions.isGeodesic());
         }
 
         Polyline polyline = addPolylineToMap(map, polylineOptions);
@@ -1582,6 +1688,7 @@ public class GoogleMapShapeConverter {
         if (globalPolygonOptions != null) {
             polygonOptions.fillColor(globalPolygonOptions.getFillColor());
             polygonOptions.strokeColor(globalPolygonOptions.getStrokeColor());
+            polygonOptions.geodesic(globalPolygonOptions.isGeodesic());
         }
 
         com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(

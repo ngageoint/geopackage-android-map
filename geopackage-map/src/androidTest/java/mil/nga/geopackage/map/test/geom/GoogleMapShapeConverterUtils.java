@@ -60,6 +60,8 @@ public class GoogleMapShapeConverterUtils {
 
 				GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
 						dao.getProjection());
+				converter.setExteriorOrientation(null);
+				converter.setHoleOrientation(null);
 
 				// Query for all
 				FeatureCursor cursor = dao.queryForAll();
