@@ -1,2 +1,4 @@
 include ':geopackage-map'
-//include ':geopackage-sdk' // uncomment me to build locally
+// uncomment below to build locally
+//include ':geopackage-sdk'
+//project(':geopackage-sdk').projectDir = new File('../geopackage-android/geopackage-sdk')

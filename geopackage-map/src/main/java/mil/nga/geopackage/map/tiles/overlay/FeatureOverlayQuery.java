@@ -825,21 +825,21 @@ public class FeatureOverlayQuery {
             try {
                 SpatialReferenceSystemDao srsDao = DaoManager.createDao(featureTiles.getFeatureDao().getDb().getConnectionSource(), SpatialReferenceSystem.class);
                 int srsId = geometryData.getSrsId();
-                SpatialReferenceSystem srs = srsDao.getOrCreate(srsId);
+                SpatialReferenceSystem srs = srsDao.queryForId((long)srsId);
 
-                long epsg = srs.getOrganizationCoordsysId();
-
-                if (projection.getEpsg() != epsg) {
+                if (!projection.equals(srs.getOrganization(), srs.getOrganizationCoordsysId())) {
 
                     mil.nga.geopackage.projection.Projection geomProjection = ProjectionFactory.getProjection(srs);
                     ProjectionTransform transform = geomProjection.getTransformation(projection);
 
                     Geometry projectedGeometry = transform.transform(geometryData.getGeometry());
                     geometryData.setGeometry(projectedGeometry);
-                    geometryData.setSrsId((int) projection.getEpsg());
+                    SpatialReferenceSystem projectionSrs = srsDao.getOrCreateCode(projection.getAuthority(), Long.parseLong(projection.getCode()));
+                    geometryData.setSrsId((int)projectionSrs.getSrsId());
                 }
             } catch (SQLException e) {
-                throw new GeoPackageException("Failed to project geometry to projection with EPSG: " + projection.getEpsg(), e);
+                throw new GeoPackageException("Failed to project geometry to projection with Authority: "
+                        + projection.getAuthority() + ", Code: " + projection.getCode(), e);
             }
         }
 
