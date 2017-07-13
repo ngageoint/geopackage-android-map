@@ -157,6 +157,6 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.5'
     compile 'mil.nga.geopackage:geopackage-android:1.4.1'
     //compile project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:1.4.0'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:1.4.1'
     testCompile 'com.android.support:multidex:1.0.1'
 }
