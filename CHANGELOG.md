@@ -4,9 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.4.1 (TBD)
+## [1.4.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/1.4.1) (07-13-2017)
 
-* TBD
+* geopackage-android version updated to 1.4.1
+* Curve Polygon to Android polygon support (drawn as straight lines)
 
 ## [1.4.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/1.4.0) (06-27-2017)
 

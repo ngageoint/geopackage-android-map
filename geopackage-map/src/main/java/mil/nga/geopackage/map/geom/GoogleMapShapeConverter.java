@@ -20,6 +20,8 @@ import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.wkb.geom.CircularString;
 import mil.nga.wkb.geom.CompoundCurve;
+import mil.nga.wkb.geom.Curve;
+import mil.nga.wkb.geom.CurvePolygon;
 import mil.nga.wkb.geom.Geometry;
 import mil.nga.wkb.geom.GeometryCollection;
 import mil.nga.wkb.geom.GeometryType;
@@ -391,6 +393,92 @@ public class GoogleMapShapeConverter {
             }
 
             if (polygon.hasZ() && z != null) {
+                polygonOptions.zIndex(z.floatValue());
+            }
+        }
+
+        return polygonOptions;
+    }
+
+    /**
+     * Convert a {@link CurvePolygon} to a {@link PolygonOptions}
+     *
+     * @param curvePolygon curve polygon
+     * @return polygon options
+     * @since 1.4.1
+     */
+    public PolygonOptions toCurvePolygon(CurvePolygon curvePolygon) {
+
+        PolygonOptions polygonOptions = new PolygonOptions();
+
+        List<Curve> rings = curvePolygon.getRings();
+
+        if (!rings.isEmpty()) {
+
+            Double z = null;
+
+            // Add the polygon points
+            Curve curve = rings.get(0);
+            if (curve instanceof CompoundCurve) {
+                CompoundCurve compoundCurve = (CompoundCurve) curve;
+                for (LineString lineString : compoundCurve.getLineStrings()) {
+                    for (Point point : lineString.getPoints()) {
+                        LatLng latLng = toLatLng(point);
+                        polygonOptions.add(latLng);
+                        if (point.hasZ()) {
+                            z = (z == null) ? point.getZ() : Math.max(z, point.getZ());
+                        }
+                    }
+                }
+            } else if (curve instanceof LineString) {
+                LineString lineString = (LineString) curve;
+                for (Point point : lineString.getPoints()) {
+                    LatLng latLng = toLatLng(point);
+                    polygonOptions.add(latLng);
+                    if (point.hasZ()) {
+                        z = (z == null) ? point.getZ() : Math.max(z, point.getZ());
+                    }
+                }
+            } else {
+                throw new GeoPackageException("Unsupported Curve Type: "
+                        + curve.getClass().getSimpleName());
+            }
+
+            // Add the holes
+            for (int i = 1; i < rings.size(); i++) {
+                Curve hole = rings.get(i);
+                List<LatLng> holeLatLngs = new ArrayList<LatLng>();
+                if (hole instanceof CompoundCurve) {
+                    CompoundCurve holeCompoundCurve = (CompoundCurve) hole;
+                    for (LineString holeLineString : holeCompoundCurve.getLineStrings()) {
+                        for (Point point : holeLineString.getPoints()) {
+                            LatLng latLng = toLatLng(point);
+                            holeLatLngs.add(latLng);
+                            if (point.hasZ()) {
+                                z = (z == null) ? point.getZ() : Math.max(z,
+                                        point.getZ());
+                            }
+                        }
+                    }
+                } else if (hole instanceof LineString) {
+                    LineString holeLineString = (LineString) hole;
+                    for (Point point : holeLineString.getPoints()) {
+                        LatLng latLng = toLatLng(point);
+                        holeLatLngs.add(latLng);
+                        if (point.hasZ()) {
+                            z = (z == null) ? point.getZ() : Math.max(z,
+                                    point.getZ());
+                        }
+                    }
+                } else {
+                    throw new GeoPackageException("Unsupported Curve Hole Type: "
+                            + hole.getClass().getSimpleName());
+                }
+
+                polygonOptions.addHole(holeLatLngs);
+            }
+
+            if (curvePolygon.hasZ() && z != null) {
                 polygonOptions.zIndex(z.floatValue());
             }
         }
@@ -1128,6 +1216,11 @@ public class GoogleMapShapeConverter {
                         GoogleMapShapeType.MULTI_POLYLINE_OPTIONS,
                         toPolylines((CompoundCurve) geometry));
                 break;
+            case CURVEPOLYGON:
+                shape = new GoogleMapShape(geometryType,
+                        GoogleMapShapeType.POLYGON_OPTIONS,
+                        toCurvePolygon((CurvePolygon) geometry));
+                break;
             case POLYHEDRALSURFACE:
                 shape = new GoogleMapShape(geometryType,
                         GoogleMapShapeType.MULTI_POLYGON_OPTIONS,
@@ -1227,6 +1320,11 @@ public class GoogleMapShapeConverter {
                 shape = new GoogleMapShape(geometryType,
                         GoogleMapShapeType.MULTI_POLYLINE, addPolylinesToMap(map,
                         toPolylines((CompoundCurve) geometry)));
+                break;
+            case CURVEPOLYGON:
+                shape = new GoogleMapShape(geometryType,
+                        GoogleMapShapeType.POLYGON, addPolygonToMap(map,
+                        toCurvePolygon((CurvePolygon) geometry)));
                 break;
             case POLYHEDRALSURFACE:
                 shape = new GoogleMapShape(geometryType,
