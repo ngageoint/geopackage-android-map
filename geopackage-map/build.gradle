@@ -8,8 +8,8 @@ version = "1.4.2"
 def remotePublish = false
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 26
         multiDexEnabled true
 
         testApplicationId 'mil.nga.geopackage.map.test'
@@ -153,10 +153,10 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services:10.2.6'
+    compile 'com.google.android.gms:play-services-maps:11.2.0'
     compile 'com.google.maps.android:android-maps-utils:0.5'
     compile 'mil.nga.geopackage:geopackage-android:1.4.2'
     //compile project(':geopackage-sdk') // uncomment me to build locally
     javadocDeps 'mil.nga.geopackage:geopackage-android:1.4.1'
-    testCompile 'com.android.support:multidex:1.0.1'
+    testCompile 'com.android.support:multidex:1.0.2'
 }
