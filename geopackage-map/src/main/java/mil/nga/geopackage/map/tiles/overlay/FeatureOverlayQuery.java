@@ -27,6 +27,7 @@ import mil.nga.geopackage.features.index.FeatureIndexResults;
 import mil.nga.geopackage.features.user.FeatureDao;
 import mil.nga.geopackage.features.user.FeatureRow;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
+import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.map.R;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
 import mil.nga.geopackage.projection.ProjectionConstants;
@@ -308,16 +309,6 @@ public class FeatureOverlayQuery {
     }
 
     /**
-     * Get the current zoom level of the map
-     *
-     * @param map
-     * @return current zoom level
-     */
-    public float getCurrentZoom(GoogleMap map) {
-        return map.getCameraPosition().zoom;
-    }
-
-    /**
      * Determine if the the feature overlay is on for the current zoom level of the map at the location
      *
      * @param map
@@ -326,7 +317,7 @@ public class FeatureOverlayQuery {
      * @since 1.2.6
      */
     public boolean isOnAtCurrentZoom(GoogleMap map, LatLng latLng) {
-        float zoom = getCurrentZoom(map);
+        float zoom = MapUtils.getCurrentZoom(map);
         boolean on = isOnAtCurrentZoom(zoom, latLng);
         return on;
     }
@@ -870,7 +861,7 @@ public class FeatureOverlayQuery {
     public String buildMapClickMessage(LatLng latLng, View view, GoogleMap map, mil.nga.geopackage.projection.Projection projection) {
 
         // Get the zoom level
-        double zoom = getCurrentZoom(map);
+        double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
         BoundingBox boundingBox = buildClickBoundingBox(latLng, view, map);
@@ -983,7 +974,7 @@ public class FeatureOverlayQuery {
     public FeatureTableData buildMapClickTableData(LatLng latLng, View view, GoogleMap map, mil.nga.geopackage.projection.Projection projection) {
 
         // Get the zoom level
-        double zoom = getCurrentZoom(map);
+        double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
         BoundingBox boundingBox = buildClickBoundingBox(latLng, view, map);

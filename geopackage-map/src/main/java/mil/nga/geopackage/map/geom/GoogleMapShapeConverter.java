@@ -10,6 +10,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 
+import org.osgeo.proj4j.units.Units;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,7 @@ import mil.nga.wkb.geom.Polygon;
 import mil.nga.wkb.geom.PolyhedralSurface;
 import mil.nga.wkb.geom.TIN;
 import mil.nga.wkb.geom.Triangle;
+import mil.nga.wkb.util.GeometryUtils;
 
 /**
  * Provides conversions methods between geometry object and Google Maps Android
@@ -59,6 +62,16 @@ public class GoogleMapShapeConverter {
     private final ProjectionTransform fromWgs84;
 
     /**
+     * Transformation to Web Mercator
+     */
+    private final ProjectionTransform toWebMercator;
+
+    /**
+     * Transformation from Web Mercator
+     */
+    private final ProjectionTransform fromWebMercator;
+
+    /**
      * Convert polygon exteriors to specified orientation
      */
     private PolygonOrientation exteriorOrientation = PolygonOrientation.COUNTERCLOCKWISE;
@@ -67,6 +80,12 @@ public class GoogleMapShapeConverter {
      * Convert polygon holes to specified orientation
      */
     private PolygonOrientation holeOrientation = PolygonOrientation.CLOCKWISE;
+
+    /**
+     * Tolerance in meters for simplifying lines and polygons to a similar curve with fewer points.
+     * Default is null resulting in no simplification
+     */
+    private Double simplifyTolerance;
 
     /**
      * Constructor
@@ -90,12 +109,16 @@ public class GoogleMapShapeConverter {
                     .getTransformation(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
             Projection wgs84 = toWgs84.getToProjection();
             fromWgs84 = wgs84.getTransformation(projection);
+            toWebMercator = projection.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+            Projection webMercator = toWebMercator.getToProjection();
+            fromWebMercator = webMercator.getTransformation(projection);
         } else {
             toWgs84 = null;
             fromWgs84 = null;
+            toWebMercator = null;
+            fromWebMercator = null;
         }
     }
-
 
     /**
      * Get the projection
@@ -144,6 +167,24 @@ public class GoogleMapShapeConverter {
      */
     public void setHoleOrientation(PolygonOrientation holeOrientation) {
         this.holeOrientation = holeOrientation;
+    }
+
+    /**
+     * Get the simplify tolerance in meters to simplify lines and polygons to similar curves with fewer points
+     *
+     * @return simplify tolerance in meters, null for no simplification
+     */
+    public Double getSimplifyTolerance() {
+        return simplifyTolerance;
+    }
+
+    /**
+     * Set the simplify tolerance in meters to simplify lines and polygons to similar curves with fewer points
+     *
+     * @param simplifyTolerance simplify tolerance in meters, null for no simplification
+     */
+    public void setSimplifyTolerance(Double simplifyTolerance) {
+        this.simplifyTolerance = simplifyTolerance;
     }
 
     /**
@@ -221,7 +262,10 @@ public class GoogleMapShapeConverter {
         PolylineOptions polylineOptions = new PolylineOptions();
         Double z = null;
 
-        for (Point point : lineString.getPoints()) {
+        // Try to simplify the number of points in the line string
+        List<Point> points = simplifyPoints(lineString.getPoints());
+
+        for (Point point : points) {
             LatLng latLng = toLatLng(point);
             polylineOptions.add(latLng);
             if (point.hasZ()) {
@@ -369,7 +413,11 @@ public class GoogleMapShapeConverter {
 
             // Add the polygon points
             LineString polygonLineString = rings.get(0);
-            for (Point point : polygonLineString.getPoints()) {
+
+            // Try to simplify the number of points in the polygon ring
+            List<Point> points = simplifyPoints(polygonLineString.getPoints());
+
+            for (Point point : points) {
                 LatLng latLng = toLatLng(point);
                 polygonOptions.add(latLng);
                 if (point.hasZ()) {
@@ -380,8 +428,12 @@ public class GoogleMapShapeConverter {
             // Add the holes
             for (int i = 1; i < rings.size(); i++) {
                 LineString hole = rings.get(i);
+
+                // Try to simplify the number of points in the polygon hole
+                List<Point> holePoints = simplifyPoints(hole.getPoints());
+
                 List<LatLng> holeLatLngs = new ArrayList<LatLng>();
-                for (Point point : hole.getPoints()) {
+                for (Point point : holePoints) {
                     LatLng latLng = toLatLng(point);
                     holeLatLngs.add(latLng);
                     if (point.hasZ()) {
@@ -422,7 +474,11 @@ public class GoogleMapShapeConverter {
             if (curve instanceof CompoundCurve) {
                 CompoundCurve compoundCurve = (CompoundCurve) curve;
                 for (LineString lineString : compoundCurve.getLineStrings()) {
-                    for (Point point : lineString.getPoints()) {
+
+                    // Try to simplify the number of points in the compound curve
+                    List<Point> points = simplifyPoints(lineString.getPoints());
+
+                    for (Point point : points) {
                         LatLng latLng = toLatLng(point);
                         polygonOptions.add(latLng);
                         if (point.hasZ()) {
@@ -432,7 +488,11 @@ public class GoogleMapShapeConverter {
                 }
             } else if (curve instanceof LineString) {
                 LineString lineString = (LineString) curve;
-                for (Point point : lineString.getPoints()) {
+
+                // Try to simplify the number of points in the curve
+                List<Point> points = simplifyPoints(lineString.getPoints());
+
+                for (Point point : points) {
                     LatLng latLng = toLatLng(point);
                     polygonOptions.add(latLng);
                     if (point.hasZ()) {
@@ -451,7 +511,11 @@ public class GoogleMapShapeConverter {
                 if (hole instanceof CompoundCurve) {
                     CompoundCurve holeCompoundCurve = (CompoundCurve) hole;
                     for (LineString holeLineString : holeCompoundCurve.getLineStrings()) {
-                        for (Point point : holeLineString.getPoints()) {
+
+                        // Try to simplify the number of points in the hole
+                        List<Point> holePoints = simplifyPoints(holeLineString.getPoints());
+
+                        for (Point point : holePoints) {
                             LatLng latLng = toLatLng(point);
                             holeLatLngs.add(latLng);
                             if (point.hasZ()) {
@@ -462,7 +526,11 @@ public class GoogleMapShapeConverter {
                     }
                 } else if (hole instanceof LineString) {
                     LineString holeLineString = (LineString) hole;
-                    for (Point point : holeLineString.getPoints()) {
+
+                    // Try to simplify the number of points in the hole
+                    List<Point> holePoints = simplifyPoints(holeLineString.getPoints());
+
+                    for (Point point : holePoints) {
                         LatLng latLng = toLatLng(point);
                         holeLatLngs.add(latLng);
                         if (point.hasZ()) {
@@ -484,6 +552,38 @@ public class GoogleMapShapeConverter {
         }
 
         return polygonOptions;
+    }
+
+    /**
+     * When the simplify tolerance is set, simplify the points to a similar
+     * curve with fewer points.
+     *
+     * @param points ordered points
+     * @return simplified points
+     */
+    private List<Point> simplifyPoints(List<Point> points) {
+
+        List<Point> simplifiedPoints = null;
+        if (simplifyTolerance != null) {
+
+            // Reproject to web mercator if not in meters
+            if (projection != null && projection.getUnit() != Units.METRES) {
+                points = toWebMercator.transform(points);
+            }
+
+            // Simplify the points
+            simplifiedPoints = GeometryUtils.simplifyPoints(points,
+                    simplifyTolerance);
+
+            // Reproject back to the original projection
+            if (projection != null && projection.getUnit() != Units.METRES) {
+                simplifiedPoints = fromWebMercator.transform(simplifiedPoints);
+            }
+        } else {
+            simplifiedPoints = points;
+        }
+
+        return simplifiedPoints;
     }
 
     /**
