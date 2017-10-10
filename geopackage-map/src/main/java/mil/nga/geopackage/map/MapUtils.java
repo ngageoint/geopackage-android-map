@@ -42,10 +42,18 @@ public class MapUtils {
         double boundingBoxWidth = TileBoundingBoxMapUtils.getLongitudeDistance(boundingBox);
         double boundingBoxHeight = TileBoundingBoxMapUtils.getLatitudeDistance(boundingBox);
 
-        double widthMeters = boundingBoxWidth / view.getWidth();
-        double heightMeters = boundingBoxHeight / view.getHeight();
+        int viewWidth = view.getWidth();
+        int viewHeight = view.getHeight();
 
-        double meters = Math.min(widthMeters, heightMeters);
+        double meters = 0;
+
+        if(viewWidth > 0 && viewHeight > 0) {
+
+            double widthMeters = boundingBoxWidth / viewWidth;
+            double heightMeters = boundingBoxHeight / viewHeight;
+
+            meters = Math.min(widthMeters, heightMeters);
+        }
 
         return meters;
     }
