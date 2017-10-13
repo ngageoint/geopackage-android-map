@@ -2,7 +2,7 @@
 
     <bool name="map_feature_overlay_max_features_info">true</bool>
     <bool name="map_feature_overlay_features_info">true</bool>
-    <bool name="map_feature_overlay_detailed_info_print_points">true</bool>
-    <bool name="map_feature_overlay_detailed_info_print_features">false</bool>
+    <bool name="map_feature_detailed_info_print_points">true</bool>
+    <bool name="map_feature_detailed_info_print_features">false</bool>
 
 </resources>

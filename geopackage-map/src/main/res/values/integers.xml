@@ -1,6 +1,6 @@
 <resources>
 
-    <integer name="map_feature_overlay_max_point_detailed_info">10</integer>
-    <integer name="map_feature_overlay_max_feature_detailed_info">10</integer>
+    <integer name="map_feature_max_point_detailed_info">10</integer>
+    <integer name="map_feature_max_feature_detailed_info">10</integer>
 
 </resources>

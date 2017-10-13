@@ -21,6 +21,9 @@ import mil.nga.wkb.geom.GeometryType;
  */
 public class FeatureShapes {
 
+    /**
+     * Mapping between databases, feature tables, feature ids, and shapes
+     */
     private Map<String, Map<String, Map<Long, List<GoogleMapShape>>>> databases = new HashMap<>();
 
     /**

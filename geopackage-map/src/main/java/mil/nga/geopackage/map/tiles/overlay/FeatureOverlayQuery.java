@@ -2,48 +2,29 @@ package mil.nga.geopackage.map.tiles.overlay;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
-import com.j256.ormlite.dao.DaoManager;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
-import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.features.index.FeatureIndexManager;
 import mil.nga.geopackage.features.index.FeatureIndexResults;
 import mil.nga.geopackage.features.user.FeatureDao;
-import mil.nga.geopackage.features.user.FeatureRow;
-import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.map.R;
+import mil.nga.geopackage.map.features.FeatureInfoBuilder;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
 import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.projection.ProjectionFactory;
-import mil.nga.geopackage.projection.ProjectionTransform;
-import mil.nga.geopackage.schema.columns.DataColumns;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.geopackage.tiles.TileGrid;
 import mil.nga.geopackage.tiles.features.FeatureTiles;
-import mil.nga.geopackage.tiles.overlay.FeatureRowData;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
-import mil.nga.wkb.geom.Geometry;
-import mil.nga.wkb.geom.GeometryType;
 import mil.nga.wkb.geom.Point;
-import mil.nga.wkb.util.GeometryPrinter;
 
 /**
  * Used to query the features represented by tiles, either being drawn from or linked to the features
@@ -54,11 +35,6 @@ import mil.nga.wkb.util.GeometryPrinter;
 public class FeatureOverlayQuery {
 
     /**
-     * Context
-     */
-    private final Context context;
-
-    /**
      * Bounded Overlay
      */
     private final BoundedOverlay boundedOverlay;
@@ -67,16 +43,6 @@ public class FeatureOverlayQuery {
      * Feature Tiles
      */
     private final FeatureTiles featureTiles;
-
-    /**
-     * Geometry Type
-     */
-    private final GeometryType geometryType;
-
-    /**
-     * Table name used when building text
-     */
-    private String name;
 
     /**
      * Screen click percentage between 0.0 and 1.0 for how close a feature on the screen must be
@@ -95,24 +61,9 @@ public class FeatureOverlayQuery {
     private boolean featuresInfo;
 
     /**
-     * Max number of points clicked to return detailed information about
+     * Feature info builder
      */
-    private int maxPointDetailedInfo;
-
-    /**
-     * Max number of features clicked to return detailed information about
-     */
-    private int maxFeatureDetailedInfo;
-
-    /**
-     * Print Point geometries within detailed info when true
-     */
-    private boolean detailedInfoPrintPoints;
-
-    /**
-     * Print Feature geometries within detailed info when true
-     */
-    private boolean detailedInfoPrintFeatures;
+    private FeatureInfoBuilder featureInfoBuilder;
 
     /**
      * Constructor
@@ -133,13 +84,8 @@ public class FeatureOverlayQuery {
      * @since 1.2.5
      */
     public FeatureOverlayQuery(Context context, BoundedOverlay boundedOverlay, FeatureTiles featureTiles) {
-        this.context = context;
         this.boundedOverlay = boundedOverlay;
         this.featureTiles = featureTiles;
-
-        FeatureDao featureDao = featureTiles.getFeatureDao();
-        geometryType = featureDao.getGeometryType();
-        name = featureDao.getDatabase() + " - " + featureDao.getTableName();
 
         Resources resources = context.getResources();
 
@@ -151,11 +97,8 @@ public class FeatureOverlayQuery {
         maxFeaturesInfo = resources.getBoolean(R.bool.map_feature_overlay_max_features_info);
         featuresInfo = resources.getBoolean(R.bool.map_feature_overlay_features_info);
 
-        maxPointDetailedInfo = resources.getInteger(R.integer.map_feature_overlay_max_point_detailed_info);
-        maxFeatureDetailedInfo = resources.getInteger(R.integer.map_feature_overlay_max_feature_detailed_info);
-
-        detailedInfoPrintPoints = resources.getBoolean(R.bool.map_feature_overlay_detailed_info_print_points);
-        detailedInfoPrintFeatures = resources.getBoolean(R.bool.map_feature_overlay_detailed_info_print_features);
+        FeatureDao featureDao = featureTiles.getFeatureDao();
+        featureInfoBuilder = new FeatureInfoBuilder(context, featureDao);
     }
 
     /**
@@ -189,30 +132,12 @@ public class FeatureOverlayQuery {
     }
 
     /**
-     * Get the geometry type
+     * Get the feature info builder
      *
-     * @return geometry type
+     * @return feature info builder
      */
-    public GeometryType getGeometryType() {
-        return geometryType;
-    }
-
-    /**
-     * Get the name used in text
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name used in text
-     *
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
+    public FeatureInfoBuilder getFeatureInfoBuilder() {
+        return featureInfoBuilder;
     }
 
     /**
@@ -234,78 +159,6 @@ public class FeatureOverlayQuery {
             throw new GeoPackageException("Screen click percentage must be a float between 0.0 and 1.0, not " + screenClickPercentage);
         }
         this.screenClickPercentage = screenClickPercentage;
-    }
-
-    /**
-     * Get the max points in a query to print detailed results about
-     *
-     * @return max point detailed info
-     */
-    public int getMaxPointDetailedInfo() {
-        return maxPointDetailedInfo;
-    }
-
-    /**
-     * Set the max points in a query to print detailed results about
-     *
-     * @param maxPointDetailedInfo
-     */
-    public void setMaxPointDetailedInfo(int maxPointDetailedInfo) {
-        this.maxPointDetailedInfo = maxPointDetailedInfo;
-    }
-
-    /**
-     * Get the max features in a query to print detailed results about
-     *
-     * @return max feature detailed info
-     */
-    public int getMaxFeatureDetailedInfo() {
-        return maxFeatureDetailedInfo;
-    }
-
-    /**
-     * Set the max features in a query to print detailed results about
-     *
-     * @param maxFeatureDetailedInfo
-     */
-    public void setMaxFeatureDetailedInfo(int maxFeatureDetailedInfo) {
-        this.maxFeatureDetailedInfo = maxFeatureDetailedInfo;
-    }
-
-    /**
-     * Is the detailed info going to print point geometries
-     *
-     * @return detailed info print points flag
-     */
-    public boolean isDetailedInfoPrintPoints() {
-        return detailedInfoPrintPoints;
-    }
-
-    /**
-     * Set the detailed info to print point geometries
-     *
-     * @param detailedInfoPrintPoints
-     */
-    public void setDetailedInfoPrintPoints(boolean detailedInfoPrintPoints) {
-        this.detailedInfoPrintPoints = detailedInfoPrintPoints;
-    }
-
-    /**
-     * Is the detailed info going to print feature geometries
-     *
-     * @return detailed info print features flag
-     */
-    public boolean isDetailedInfoPrintFeatures() {
-        return detailedInfoPrintFeatures;
-    }
-
-    /**
-     * Set the detailed info to print feature geometries
-     *
-     * @param detailedInfoPrintFeatures
-     */
-    public void setDetailedInfoPrintFeatures(boolean detailedInfoPrintFeatures) {
-        this.detailedInfoPrintFeatures = detailedInfoPrintFeatures;
     }
 
     /**
@@ -401,51 +254,6 @@ public class FeatureOverlayQuery {
     }
 
     /**
-     * Build a bounding box using the click location, map view, and map. The bounding box can be
-     * used to query for features that were clicked
-     *
-     * @param latLng click location
-     * @param view   view
-     * @param map    Google map
-     * @return bounding box
-     */
-    public BoundingBox buildClickBoundingBox(LatLng latLng, View view, GoogleMap map) {
-
-        // Get the screen width and height a click occurs from a feature
-        int width = (int) Math.round(view.getWidth() * screenClickPercentage);
-        int height = (int) Math.round(view.getHeight() * screenClickPercentage);
-
-        // Get the screen click location
-        Projection projection = map.getProjection();
-        android.graphics.Point clickLocation = projection.toScreenLocation(latLng);
-
-        // Get the screen click locations in each width or height direction
-        android.graphics.Point left = new android.graphics.Point(clickLocation);
-        android.graphics.Point up = new android.graphics.Point(clickLocation);
-        android.graphics.Point right = new android.graphics.Point(clickLocation);
-        android.graphics.Point down = new android.graphics.Point(clickLocation);
-        left.offset(-width, 0);
-        up.offset(0, -height);
-        right.offset(width, 0);
-        down.offset(0, height);
-
-        // Get the coordinates of the bounding box points
-        LatLng leftCoordinate = projection.fromScreenLocation(left);
-        LatLng upCoordinate = projection.fromScreenLocation(up);
-        LatLng rightCoordinate = projection.fromScreenLocation(right);
-        LatLng downCoordinate = projection.fromScreenLocation(down);
-
-        // Create the bounding box to query for features
-        BoundingBox boundingBox = new BoundingBox(
-                leftCoordinate.longitude,
-                rightCoordinate.longitude,
-                downCoordinate.latitude,
-                upCoordinate.latitude);
-
-        return boundingBox;
-    }
-
-    /**
      * Build a bounding box using the location coordinate click location and map view bounds
      *
      * @param latLng    click location
@@ -519,321 +327,7 @@ public class FeatureOverlayQuery {
      * @return max features message
      */
     public String buildMaxFeaturesInfoMessage(long tileFeaturesCount) {
-        return name + "\n\t" + tileFeaturesCount + " features";
-    }
-
-    /**
-     * Build a feature results information message and close the results
-     *
-     * @param results feature index results
-     * @return results message or null if no results
-     */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results) {
-        return buildResultsInfoMessageAndClose(results, null, null);
-    }
-
-    /**
-     * Build a feature results information message and close the results
-     *
-     * @param results    feature index results
-     * @param projection desired geometry projection
-     * @return results message or null if no results
-     * @since 1.2.7
-     */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, mil.nga.geopackage.projection.Projection projection) {
-        return buildResultsInfoMessageAndClose(results, null, projection);
-    }
-
-    /**
-     * Build a feature results information message and close the results
-     *
-     * @param results
-     * @param clickLocation
-     * @return results message or null if no results
-     */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, LatLng clickLocation) {
-        return buildResultsInfoMessageAndClose(results, clickLocation, null);
-    }
-
-    /**
-     * Build a feature results information message and close the results
-     *
-     * @param results
-     * @param clickLocation
-     * @param projection    desired geometry projection
-     * @return results message or null if no results
-     * @since 1.2.7
-     */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, LatLng clickLocation, mil.nga.geopackage.projection.Projection projection) {
-        String message = null;
-
-        try {
-            message = buildResultsInfoMessage(results, clickLocation, projection);
-        } finally {
-            results.close();
-        }
-
-        return message;
-    }
-
-    /**
-     * Build a feature results information message
-     *
-     * @param results
-     * @return results message or null if no results
-     */
-    public String buildResultsInfoMessage(FeatureIndexResults results) {
-        return buildResultsInfoMessage(results, null, null);
-    }
-
-    /**
-     * Build a feature results information message
-     *
-     * @param results
-     * @param projection desired geometry projection
-     * @return results message or null if no results
-     * @since 1.2.7
-     */
-    public String buildResultsInfoMessage(FeatureIndexResults results, mil.nga.geopackage.projection.Projection projection) {
-        return buildResultsInfoMessage(results, null, projection);
-    }
-
-    /**
-     * Build a feature results information message
-     *
-     * @param results
-     * @param clickLocation
-     * @return results message or null if no results
-     */
-    public String buildResultsInfoMessage(FeatureIndexResults results, LatLng clickLocation) {
-        return buildResultsInfoMessage(results, clickLocation, null);
-    }
-
-    /**
-     * Build a feature results information message
-     *
-     * @param results
-     * @param clickLocation
-     * @param projection    desired geometry projection
-     * @return results message or null if no results
-     * @since 1.2.7
-     */
-    public String buildResultsInfoMessage(FeatureIndexResults results, LatLng clickLocation, mil.nga.geopackage.projection.Projection projection) {
-
-        String message = null;
-
-        long featureCount = results.count();
-        if (featureCount > 0) {
-
-            int maxFeatureInfo = 0;
-            if (geometryType == GeometryType.POINT) {
-                maxFeatureInfo = maxPointDetailedInfo;
-            } else {
-                maxFeatureInfo = maxFeatureDetailedInfo;
-            }
-
-            if (featureCount <= maxFeatureInfo) {
-                StringBuilder messageBuilder = new StringBuilder();
-                messageBuilder.append(name)
-                        .append("\n");
-
-                int featureNumber = 0;
-
-                DataColumnsDao dataColumnsDao = getDataColumnsDao();
-
-                for (FeatureRow featureRow : results) {
-
-                    featureNumber++;
-                    if (featureNumber > maxFeatureInfo) {
-                        break;
-                    }
-
-                    if (featureCount > 1) {
-                        if (featureNumber > 1) {
-                            messageBuilder.append("\n");
-                        } else {
-                            messageBuilder.append("\n")
-                                    .append(featureCount)
-                                    .append(" Features")
-                                    .append("\n");
-                        }
-                        messageBuilder.append("\n")
-                                .append("Feature ")
-                                .append(featureNumber)
-                                .append(":")
-                                .append("\n");
-                    }
-
-                    int geometryColumn = featureRow.getGeometryColumnIndex();
-                    for (int i = 0; i < featureRow.columnCount(); i++) {
-                        if (i != geometryColumn) {
-                            Object value = featureRow.getValue(i);
-                            if (value != null) {
-                                String columnName = featureRow.getColumnName(i);
-                                columnName = getColumnName(dataColumnsDao, featureRow, columnName);
-                                messageBuilder.append("\n")
-                                        .append(columnName)
-                                        .append(": ")
-                                        .append(value);
-                            }
-                        }
-                    }
-
-                    GeoPackageGeometryData geomData = featureRow.getGeometry();
-                    if (geomData != null && geomData.getGeometry() != null) {
-
-                        boolean printFeatures = false;
-                        if (geomData.getGeometry().getGeometryType() == GeometryType.POINT) {
-                            printFeatures = detailedInfoPrintPoints;
-                        } else {
-                            printFeatures = detailedInfoPrintFeatures;
-                        }
-
-                        if (printFeatures) {
-                            if (projection != null) {
-                                projectGeometry(geomData, projection);
-                            }
-                            messageBuilder.append("\n\n");
-                            messageBuilder.append(GeometryPrinter.getGeometryString(geomData.getGeometry()));
-                        }
-                    }
-
-                }
-
-                message = messageBuilder.toString();
-            } else {
-                StringBuilder messageBuilder = new StringBuilder();
-                messageBuilder.append(getName())
-                        .append("\n\t")
-                        .append(featureCount)
-                        .append(" features");
-                if (clickLocation != null) {
-                    messageBuilder.append(" near location:\n");
-                    Point point = new Point(clickLocation.longitude, clickLocation.latitude);
-                    messageBuilder.append(GeometryPrinter.getGeometryString(point));
-                }
-                message = messageBuilder.toString();
-            }
-        }
-
-        return message;
-    }
-
-    /**
-     * Build a feature results information message
-     *
-     * @param results
-     * @param clickLocation
-     * @return feature table data or null if not results
-     * @since 1.2.7
-     */
-    public FeatureTableData buildTableDataAndClose(FeatureIndexResults results, LatLng clickLocation) {
-        return buildTableDataAndClose(results, clickLocation, null);
-    }
-
-    /**
-     * Build a feature results information message
-     *
-     * @param results
-     * @param clickLocation
-     * @param projection    desired geometry projection
-     * @return feature table data or null if not results
-     * @since 1.2.7
-     */
-    public FeatureTableData buildTableDataAndClose(FeatureIndexResults results, LatLng clickLocation, mil.nga.geopackage.projection.Projection projection) {
-
-        FeatureTableData tableData = null;
-
-        long featureCount = results.count();
-        if (featureCount > 0) {
-
-            int maxFeatureInfo = 0;
-            if (geometryType == GeometryType.POINT) {
-                maxFeatureInfo = maxPointDetailedInfo;
-            } else {
-                maxFeatureInfo = maxFeatureDetailedInfo;
-            }
-
-            if (featureCount <= maxFeatureInfo) {
-
-                DataColumnsDao dataColumnsDao = getDataColumnsDao();
-
-                List<FeatureRowData> rows = new ArrayList<>();
-
-                for (FeatureRow featureRow : results) {
-
-                    Map<String, Object> values = new HashMap<>();
-                    String geometryColumnName = null;
-
-                    int geometryColumn = featureRow.getGeometryColumnIndex();
-                    for (int i = 0; i < featureRow.columnCount(); i++) {
-
-                        Object value = featureRow.getValue(i);
-
-                        String columnName = featureRow.getColumnName(i);
-
-                        columnName = getColumnName(dataColumnsDao, featureRow, columnName);
-
-                        if (i == geometryColumn) {
-                            geometryColumnName = columnName;
-                            if (projection != null && value != null) {
-                                GeoPackageGeometryData geomData = (GeoPackageGeometryData) value;
-                                projectGeometry(geomData, projection);
-                            }
-                        }
-
-                        if (value != null) {
-                            values.put(columnName, value);
-                        }
-                    }
-
-                    FeatureRowData featureRowData = new FeatureRowData(values, geometryColumnName);
-                    rows.add(featureRowData);
-                }
-
-                tableData = new FeatureTableData(featureTiles.getFeatureDao().getTableName(), featureCount, rows);
-            } else {
-                tableData = new FeatureTableData(featureTiles.getFeatureDao().getTableName(), featureCount);
-            }
-        }
-
-        results.close();
-
-        return tableData;
-    }
-
-    /**
-     * Project the geometry into the provided projection
-     *
-     * @param geometryData
-     * @param projection
-     * @since 1.2.7
-     */
-    public void projectGeometry(GeoPackageGeometryData geometryData, mil.nga.geopackage.projection.Projection projection) {
-
-        if (geometryData.getGeometry() != null) {
-
-            try {
-                SpatialReferenceSystemDao srsDao = DaoManager.createDao(featureTiles.getFeatureDao().getDb().getConnectionSource(), SpatialReferenceSystem.class);
-                int srsId = geometryData.getSrsId();
-                SpatialReferenceSystem srs = srsDao.queryForId((long)srsId);
-
-                if (!projection.equals(srs.getOrganization(), srs.getOrganizationCoordsysId())) {
-
-                    mil.nga.geopackage.projection.Projection geomProjection = ProjectionFactory.getProjection(srs);
-                    ProjectionTransform transform = geomProjection.getTransformation(projection);
-
-                    Geometry projectedGeometry = transform.transform(geometryData.getGeometry());
-                    geometryData.setGeometry(projectedGeometry);
-                    SpatialReferenceSystem projectionSrs = srsDao.getOrCreateCode(projection.getAuthority(), Long.parseLong(projection.getCode()));
-                    geometryData.setSrsId((int)projectionSrs.getSrsId());
-                }
-            } catch (SQLException e) {
-                throw new GeoPackageException("Failed to project geometry to projection with Authority: "
-                        + projection.getAuthority() + ", Code: " + projection.getCode(), e);
-            }
-        }
-
+        return featureInfoBuilder.getName() + "\n\t" + tileFeaturesCount + " features";
     }
 
     /**
@@ -864,7 +358,7 @@ public class FeatureOverlayQuery {
         double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = buildClickBoundingBox(latLng, view, map);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, view, map, screenClickPercentage);
 
         String message = buildMapClickMessage(latLng, zoom, boundingBox, projection);
 
@@ -938,7 +432,7 @@ public class FeatureOverlayQuery {
 
                     // Query for results and build the message
                     FeatureIndexResults results = queryFeatures(boundingBox, projection);
-                    message = buildResultsInfoMessageAndClose(results, latLng, projection);
+                    message = featureInfoBuilder.buildResultsInfoMessageAndClose(results, latLng, projection);
 
                 }
 
@@ -977,7 +471,7 @@ public class FeatureOverlayQuery {
         double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = buildClickBoundingBox(latLng, view, map);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, view, map, screenClickPercentage);
 
         FeatureTableData tableData = buildMapClickTableData(latLng, zoom, boundingBox, projection);
 
@@ -1051,60 +545,13 @@ public class FeatureOverlayQuery {
 
                     // Query for results and build the message
                     FeatureIndexResults results = queryFeatures(boundingBox, projection);
-                    tableData = buildTableDataAndClose(results, latLng, projection);
+                    tableData = featureInfoBuilder.buildTableDataAndClose(results, latLng, projection);
                 }
 
             }
         }
 
         return tableData;
-    }
-
-    /**
-     * Get a Data Columns DAO
-     *
-     * @return data columns dao
-     */
-    private DataColumnsDao getDataColumnsDao() {
-        DataColumnsDao dataColumnsDao = null;
-        try {
-            dataColumnsDao = DaoManager.createDao(featureTiles.getFeatureDao().getDb().getConnectionSource(), DataColumns.class);
-            if (!dataColumnsDao.isTableExists()) {
-                dataColumnsDao = null;
-            }
-        } catch (SQLException e) {
-            dataColumnsDao = null;
-            Log.e(FeatureOverlayQuery.class.getSimpleName(), "Failed to get a Data Columns DAO", e);
-        }
-        return dataColumnsDao;
-    }
-
-    /**
-     * Get the column name by checkign for a DataColumns name, otherwise returns the provided column name
-     *
-     * @param dataColumnsDao data columns dao
-     * @param featureRow     feature row
-     * @param columnName     column name
-     * @return column name
-     */
-    private String getColumnName(DataColumnsDao dataColumnsDao, FeatureRow featureRow, String columnName) {
-
-        String newColumnName = columnName;
-
-        if (dataColumnsDao != null) {
-            try {
-                DataColumns dataColumn = dataColumnsDao.getDataColumn(featureRow.getTable().getTableName(), columnName);
-                if (dataColumn != null) {
-                    newColumnName = dataColumn.getName();
-                }
-            } catch (SQLException e) {
-                Log.e(FeatureOverlayQuery.class.getSimpleName(),
-                        "Failed to search for Data Column name for column: " + columnName
-                                + ", Feature Table: " + featureRow.getTable().getTableName(), e);
-            }
-        }
-
-        return newColumnName;
     }
 
 }

@@ -3,6 +3,7 @@ package mil.nga.geopackage.map;
 import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -47,7 +48,7 @@ public class MapUtils {
 
         double meters = 0;
 
-        if(viewWidth > 0 && viewHeight > 0) {
+        if (viewWidth > 0 && viewHeight > 0) {
 
             double widthMeters = boundingBoxWidth / viewWidth;
             double heightMeters = boundingBoxHeight / viewHeight;
@@ -82,6 +83,53 @@ public class MapUtils {
         }
 
         BoundingBox boundingBox = new BoundingBox(minLongitude, maxLongitude, minLatitude, maxLatitude);
+
+        return boundingBox;
+    }
+
+    /**
+     * Build a bounding box using the click location, map view, and map. The bounding box can be
+     * used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param view                  view
+     * @param map                   Google map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     */
+    public static BoundingBox buildClickBoundingBox(LatLng latLng, View view, GoogleMap map, float screenClickPercentage) {
+
+        // Get the screen width and height a click occurs from a feature
+        int width = (int) Math.round(view.getWidth() * screenClickPercentage);
+        int height = (int) Math.round(view.getHeight() * screenClickPercentage);
+
+        // Get the screen click location
+        Projection projection = map.getProjection();
+        android.graphics.Point clickLocation = projection.toScreenLocation(latLng);
+
+        // Get the screen click locations in each width or height direction
+        android.graphics.Point left = new android.graphics.Point(clickLocation);
+        android.graphics.Point up = new android.graphics.Point(clickLocation);
+        android.graphics.Point right = new android.graphics.Point(clickLocation);
+        android.graphics.Point down = new android.graphics.Point(clickLocation);
+        left.offset(-width, 0);
+        up.offset(0, -height);
+        right.offset(width, 0);
+        down.offset(0, height);
+
+        // Get the coordinates of the bounding box points
+        LatLng leftCoordinate = projection.fromScreenLocation(left);
+        LatLng upCoordinate = projection.fromScreenLocation(up);
+        LatLng rightCoordinate = projection.fromScreenLocation(right);
+        LatLng downCoordinate = projection.fromScreenLocation(down);
+
+        // Create the bounding box to query for features
+        BoundingBox boundingBox = new BoundingBox(
+                leftCoordinate.longitude,
+                rightCoordinate.longitude,
+                downCoordinate.latitude,
+                upCoordinate.latitude);
 
         return boundingBox;
     }
