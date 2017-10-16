@@ -18,6 +18,7 @@ import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.map.R;
 import mil.nga.geopackage.map.features.FeatureInfoBuilder;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
+import mil.nga.geopackage.projection.Projection;
 import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.projection.ProjectionFactory;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
@@ -295,7 +296,7 @@ public class FeatureOverlayQuery {
      * @param projection  bounding box projection
      * @return feature index results, must be closed
      */
-    public FeatureIndexResults queryFeatures(BoundingBox boundingBox, mil.nga.geopackage.projection.Projection projection) {
+    public FeatureIndexResults queryFeatures(BoundingBox boundingBox, Projection projection) {
 
         if (projection == null) {
             projection = ProjectionFactory.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
@@ -352,7 +353,7 @@ public class FeatureOverlayQuery {
      * @return information message on what was clicked, or null
      * @since 1.2.7
      */
-    public String buildMapClickMessage(LatLng latLng, View view, GoogleMap map, mil.nga.geopackage.projection.Projection projection) {
+    public String buildMapClickMessage(LatLng latLng, View view, GoogleMap map, Projection projection) {
 
         // Get the zoom level
         double zoom = MapUtils.getCurrentZoom(map);
@@ -388,7 +389,7 @@ public class FeatureOverlayQuery {
      * @return information message on what was clicked, or nil
      * @since 1.2.7
      */
-    public String buildMapClickMessageWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, mil.nga.geopackage.projection.Projection projection) {
+    public String buildMapClickMessageWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, Projection projection) {
 
         // Build a bounding box to represent the click location
         BoundingBox boundingBox = buildClickBoundingBox(latLng, mapBounds);
@@ -407,7 +408,7 @@ public class FeatureOverlayQuery {
      * @param projection  desired geometry projection
      * @return information message on what was clicked, or null
      */
-    private String buildMapClickMessage(LatLng latLng, double zoom, BoundingBox boundingBox, mil.nga.geopackage.projection.Projection projection) {
+    private String buildMapClickMessage(LatLng latLng, double zoom, BoundingBox boundingBox, Projection projection) {
         String message = null;
 
         // Verify the features are indexed and we are getting information
@@ -465,7 +466,7 @@ public class FeatureOverlayQuery {
      * @return table data on what was clicked, or null
      * @since 1.2.7
      */
-    public FeatureTableData buildMapClickTableData(LatLng latLng, View view, GoogleMap map, mil.nga.geopackage.projection.Projection projection) {
+    public FeatureTableData buildMapClickTableData(LatLng latLng, View view, GoogleMap map, Projection projection) {
 
         // Get the zoom level
         double zoom = MapUtils.getCurrentZoom(map);
@@ -501,7 +502,7 @@ public class FeatureOverlayQuery {
      * @return table data on what was clicked, or null
      * @since 1.2.7
      */
-    public FeatureTableData buildMapClickTableDataWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, mil.nga.geopackage.projection.Projection projection) {
+    public FeatureTableData buildMapClickTableDataWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, Projection projection) {
 
         // Build a bounding box to represent the click location
         BoundingBox boundingBox = buildClickBoundingBox(latLng, mapBounds);
@@ -520,7 +521,7 @@ public class FeatureOverlayQuery {
      * @param projection  desired geometry projection
      * @return table data on what was clicked, or null
      */
-    private FeatureTableData buildMapClickTableData(LatLng latLng, double zoom, BoundingBox boundingBox, mil.nga.geopackage.projection.Projection projection) {
+    private FeatureTableData buildMapClickTableData(LatLng latLng, double zoom, BoundingBox boundingBox, Projection projection) {
         FeatureTableData tableData = null;
 
         // Verify the features are indexed and we are getting information
