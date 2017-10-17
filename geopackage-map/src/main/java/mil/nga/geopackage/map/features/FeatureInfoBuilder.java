@@ -16,11 +16,14 @@ import java.util.Map;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystemDao;
+import mil.nga.geopackage.features.index.FeatureIndexListResults;
 import mil.nga.geopackage.features.index.FeatureIndexResults;
 import mil.nga.geopackage.features.user.FeatureDao;
 import mil.nga.geopackage.features.user.FeatureRow;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.map.R;
+import mil.nga.geopackage.map.geom.GoogleMapShape;
+import mil.nga.geopackage.map.geom.GoogleMapShapeConverter;
 import mil.nga.geopackage.map.tiles.overlay.FeatureOverlayQuery;
 import mil.nga.geopackage.projection.Projection;
 import mil.nga.geopackage.projection.ProjectionFactory;
@@ -76,6 +79,11 @@ public class FeatureInfoBuilder {
      * Print Feature geometries within detailed info when true
      */
     private boolean detailedInfoPrintFeatures;
+
+    /**
+     * Geodesic check flag
+     */
+    private boolean geodesic = false;
 
     /**
      * Constructor
@@ -190,50 +198,72 @@ public class FeatureInfoBuilder {
     }
 
     /**
+     * Is geodesic checking enabled
+     *
+     * @return true if geodesic
+     */
+    public boolean isGeodesic() {
+        return geodesic;
+    }
+
+    /**
+     * Set the geodesic check flag
+     *
+     * @param geodesic true for geodesic checking
+     */
+    public void setGeodesic(boolean geodesic) {
+        this.geodesic = geodesic;
+    }
+
+    /**
      * Build a feature results information message and close the results
      *
-     * @param results feature index results
+     * @param results   feature index results
+     * @param tolerance distance tolerance
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results) {
-        return buildResultsInfoMessageAndClose(results, null, null);
+    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, double tolerance) {
+        return buildResultsInfoMessageAndClose(results, tolerance, null, null);
     }
 
     /**
      * Build a feature results information message and close the results
      *
      * @param results    feature index results
+     * @param tolerance  distance tolerance
      * @param projection desired geometry projection
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, Projection projection) {
-        return buildResultsInfoMessageAndClose(results, null, projection);
+    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, double tolerance, Projection projection) {
+        return buildResultsInfoMessageAndClose(results, tolerance, null, projection);
     }
 
     /**
      * Build a feature results information message and close the results
      *
      * @param results       feature index results
+     * @param tolerance     distance tolerance
      * @param clickLocation map click location
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, LatLng clickLocation) {
-        return buildResultsInfoMessageAndClose(results, clickLocation, null);
+    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, double tolerance, LatLng clickLocation) {
+        return buildResultsInfoMessageAndClose(results, tolerance, clickLocation, null);
     }
 
     /**
      * Build a feature results information message and close the results
      *
      * @param results       feature index results
+     * @param tolerance     distance tolerance
      * @param clickLocation map click location
      * @param projection    desired geometry projection
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, LatLng clickLocation, Projection projection) {
+    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, double tolerance, LatLng clickLocation, Projection projection) {
         String message = null;
 
         try {
-            message = buildResultsInfoMessage(results, clickLocation, projection);
+            message = buildResultsInfoMessage(results, tolerance, clickLocation, projection);
         } finally {
             results.close();
         }
@@ -244,48 +274,55 @@ public class FeatureInfoBuilder {
     /**
      * Build a feature results information message
      *
-     * @param results feature index results
+     * @param results   feature index results
+     * @param tolerance distance tolerance
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessage(FeatureIndexResults results) {
-        return buildResultsInfoMessage(results, null, null);
+    public String buildResultsInfoMessage(FeatureIndexResults results, double tolerance) {
+        return buildResultsInfoMessage(results, tolerance, null, null);
     }
 
     /**
      * Build a feature results information message
      *
      * @param results    feature index results
+     * @param tolerance  distance tolerance
      * @param projection desired geometry projection
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessage(FeatureIndexResults results, Projection projection) {
-        return buildResultsInfoMessage(results, null, projection);
+    public String buildResultsInfoMessage(FeatureIndexResults results, double tolerance, Projection projection) {
+        return buildResultsInfoMessage(results, tolerance, null, projection);
     }
 
     /**
      * Build a feature results information message
      *
      * @param results       feature index results
+     * @param tolerance     distance tolerance
      * @param clickLocation map click location
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessage(FeatureIndexResults results, LatLng clickLocation) {
-        return buildResultsInfoMessage(results, clickLocation, null);
+    public String buildResultsInfoMessage(FeatureIndexResults results, double tolerance, LatLng clickLocation) {
+        return buildResultsInfoMessage(results, tolerance, clickLocation, null);
     }
 
     /**
      * Build a feature results information message
      *
      * @param results       feature index results
+     * @param tolerance     distance tolerance
      * @param clickLocation map click location
      * @param projection    desired geometry projection
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessage(FeatureIndexResults results, LatLng clickLocation, Projection projection) {
+    public String buildResultsInfoMessage(FeatureIndexResults results, double tolerance, LatLng clickLocation, Projection projection) {
 
         String message = null;
 
-        long featureCount = results.count();
+        // Fine filter results so that the click location is within the tolerance of each feature row result
+        FeatureIndexResults filteredResults = fineFilterResults(results, tolerance, clickLocation);
+
+        long featureCount = filteredResults.count();
         if (featureCount > 0) {
 
             int maxFeatureInfo = 0;
@@ -304,7 +341,7 @@ public class FeatureInfoBuilder {
 
                 DataColumnsDao dataColumnsDao = getDataColumnsDao();
 
-                for (FeatureRow featureRow : results) {
+                for (FeatureRow featureRow : filteredResults) {
 
                     featureNumber++;
                     if (featureNumber > maxFeatureInfo) {
@@ -386,26 +423,31 @@ public class FeatureInfoBuilder {
      * Build a feature results information message
      *
      * @param results       feature index results
+     * @param tolerance     distance tolerance
      * @param clickLocation map click location
      * @return feature table data or null if not results
      */
-    public FeatureTableData buildTableDataAndClose(FeatureIndexResults results, LatLng clickLocation) {
-        return buildTableDataAndClose(results, clickLocation, null);
+    public FeatureTableData buildTableDataAndClose(FeatureIndexResults results, double tolerance, LatLng clickLocation) {
+        return buildTableDataAndClose(results, tolerance, clickLocation, null);
     }
 
     /**
      * Build a feature results information message
      *
      * @param results       feature index results
+     * @param tolerance     distance tolerance
      * @param clickLocation map click location
      * @param projection    desired geometry projection
      * @return feature table data or null if not results
      */
-    public FeatureTableData buildTableDataAndClose(FeatureIndexResults results, LatLng clickLocation, Projection projection) {
+    public FeatureTableData buildTableDataAndClose(FeatureIndexResults results, double tolerance, LatLng clickLocation, Projection projection) {
 
         FeatureTableData tableData = null;
 
-        long featureCount = results.count();
+        // Fine filter results so that the click location is within the tolerance of each feature row result
+        FeatureIndexResults filteredResults = fineFilterResults(results, tolerance, clickLocation);
+
+        long featureCount = filteredResults.count();
         if (featureCount > 0) {
 
             int maxFeatureInfo = 0;
@@ -421,7 +463,7 @@ public class FeatureInfoBuilder {
 
                 List<FeatureRowData> rows = new ArrayList<>();
 
-                for (FeatureRow featureRow : results) {
+                for (FeatureRow featureRow : filteredResults) {
 
                     Map<String, Object> values = new HashMap<>();
                     String geometryColumnName = null;
@@ -541,6 +583,51 @@ public class FeatureInfoBuilder {
         }
 
         return newColumnName;
+    }
+
+    /**
+     * Fine filter the index results verying the click location is within the tolerance of each feature row
+     *
+     * @param results       feature index results
+     * @param tolerance     distance tolerance
+     * @param clickLocation click location
+     * @return filtered feature index results
+     */
+    private FeatureIndexResults fineFilterResults(FeatureIndexResults results, double tolerance, LatLng clickLocation) {
+
+        FeatureIndexResults filteredResults = null;
+        if (geometryType == GeometryType.POINT) {
+            filteredResults = results;
+        } else {
+
+            FeatureIndexListResults filteredListResults = new FeatureIndexListResults();
+
+            GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
+                    featureDao.getProjection());
+
+            for (FeatureRow featureRow : results) {
+
+                GeoPackageGeometryData geomData = featureRow.getGeometry();
+                if (geomData != null) {
+                    Geometry geometry = geomData.getGeometry();
+                    if (geometry != null) {
+
+                        GoogleMapShape mapShape = converter.toShape(geometry);
+                        if (converter.isPointOnShape(clickLocation, mapShape, geodesic, tolerance)) {
+
+                            filteredListResults.addRow(featureRow);
+
+                        }
+
+                    }
+                }
+
+            }
+
+            filteredResults = filteredListResults;
+        }
+
+        return filteredResults;
     }
 
 }
