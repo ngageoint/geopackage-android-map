@@ -2302,7 +2302,7 @@ public class GoogleMapShapeConverter {
                 onShape = isPointOnPolyline(point, (PolylineOptions) shape.getShape(), geodesic, tolerance);
                 break;
             case POLYGON_OPTIONS:
-                onShape = isPointOnPolygon(point, (PolygonOptions) shape.getShape(), geodesic);
+                onShape = isPointOnPolygon(point, (PolygonOptions) shape.getShape(), geodesic, tolerance);
                 break;
             case MULTI_LAT_LNG:
                 onShape = isPointNearMultiLatLng(point, (MultiLatLng) shape.getShape(), tolerance);
@@ -2311,7 +2311,7 @@ public class GoogleMapShapeConverter {
                 onShape = isPointOnMultiPolyline(point, (MultiPolylineOptions) shape.getShape(), geodesic, tolerance);
                 break;
             case MULTI_POLYGON_OPTIONS:
-                onShape = isPointOnMultiPolygon(point, (MultiPolygonOptions) shape.getShape(), geodesic);
+                onShape = isPointOnMultiPolygon(point, (MultiPolygonOptions) shape.getShape(), geodesic, tolerance);
                 break;
             case COLLECTION:
                 @SuppressWarnings("unchecked")
@@ -2412,14 +2412,16 @@ public class GoogleMapShapeConverter {
     /**
      * Is the point of the polygon
      *
-     * @param point    point
-     * @param polygon  polygon
-     * @param geodesic geodesic check flag
+     * @param point     point
+     * @param polygon   polygon
+     * @param geodesic  geodesic check flag
+     * @param tolerance distance tolerance
      * @return true if on the polygon
      */
-    private static boolean isPointOnPolygon(LatLng point, PolygonOptions polygon, boolean geodesic) {
+    private static boolean isPointOnPolygon(LatLng point, PolygonOptions polygon, boolean geodesic, double tolerance) {
 
-        boolean onPolygon = PolyUtil.containsLocation(point, polygon.getPoints(), geodesic);
+        boolean onPolygon = PolyUtil.containsLocation(point, polygon.getPoints(), geodesic) ||
+                PolyUtil.isLocationOnEdge(point, polygon.getPoints(), geodesic, tolerance);
 
         if (onPolygon) {
             for (List<LatLng> hole : polygon.getHoles()) {
@@ -2439,12 +2441,13 @@ public class GoogleMapShapeConverter {
      * @param point        point
      * @param multiPolygon multi polygon
      * @param geodesic     geodesic check flag
+     * @param tolerance    distance tolerance
      * @return true if on the multi polygon
      */
-    private static boolean isPointOnMultiPolygon(LatLng point, MultiPolygonOptions multiPolygon, boolean geodesic) {
+    private static boolean isPointOnMultiPolygon(LatLng point, MultiPolygonOptions multiPolygon, boolean geodesic, double tolerance) {
         boolean near = false;
         for (PolygonOptions polygon : multiPolygon.getPolygonOptions()) {
-            near = isPointOnPolygon(point, polygon, geodesic);
+            near = isPointOnPolygon(point, polygon, geodesic, tolerance);
             if (near) {
                 break;
             }
