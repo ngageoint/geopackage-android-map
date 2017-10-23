@@ -2283,7 +2283,7 @@ public class GoogleMapShapeConverter {
      * @param geodesic  geodesic check flag
      * @param tolerance distance tolerance
      * @return true if point is on shape
-     * @since 1.4.2
+     * @since 1.5.0
      */
     public static boolean isPointOnShape(LatLng point,
                                          GoogleMapShape shape, boolean geodesic, double tolerance) {

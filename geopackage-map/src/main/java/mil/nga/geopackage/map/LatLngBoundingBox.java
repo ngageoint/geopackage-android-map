@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
  * the LatLngBounds two corners
  *
  * @author osbornb
- * @since 1.4.2
+ * @since 1.5.0
  */
 public class LatLngBoundingBox {
 

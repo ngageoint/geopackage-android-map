@@ -16,7 +16,7 @@ import mil.nga.geopackage.projection.ProjectionConstants;
  * Map utilities
  *
  * @author osbornb
- * @since 1.4.2
+ * @since 1.5.0
  */
 public class MapUtils {
 

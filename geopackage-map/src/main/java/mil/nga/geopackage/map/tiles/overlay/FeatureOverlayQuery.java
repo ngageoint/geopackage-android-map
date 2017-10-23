@@ -377,7 +377,7 @@ public class FeatureOverlayQuery {
      * @param mapBounds map view bounds
      * @param tolerance tolerance distance
      * @return information message on what was clicked, or nil
-     * @since 1.4.2
+     * @since 1.5.0
      */
     public String buildMapClickMessageWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, double tolerance) {
         return buildMapClickMessageWithMapBounds(latLng, zoom, mapBounds, tolerance, null);
@@ -392,7 +392,7 @@ public class FeatureOverlayQuery {
      * @param tolerance  tolerance distance
      * @param projection desired geometry projection
      * @return information message on what was clicked, or nil
-     * @since 1.4.2
+     * @since 1.5.0
      */
     public String buildMapClickMessageWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, double tolerance, Projection projection) {
 
@@ -496,7 +496,7 @@ public class FeatureOverlayQuery {
      * @param mapBounds map view bounds
      * @param tolerance distance tolerance
      * @return table data on what was clicked, or null
-     * @since 1.4.2
+     * @since 1.5.0
      */
     public FeatureTableData buildMapClickTableDataWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, double tolerance) {
         return buildMapClickTableDataWithMapBounds(latLng, zoom, mapBounds, tolerance, null);
@@ -511,7 +511,7 @@ public class FeatureOverlayQuery {
      * @param tolerance  distance tolerance
      * @param projection desired geometry projection
      * @return table data on what was clicked, or null
-     * @since 1.4.2
+     * @since 1.5.0
      */
     public FeatureTableData buildMapClickTableDataWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, double tolerance, Projection projection) {
 
