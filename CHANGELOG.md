@@ -6,7 +6,20 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.5.0 (TBD)
 
-* TBD
+* geopackage-android version updated to 1.5.0
+* MapUtils for zoom, tolerance distance, map bounds, and click bounds utilities
+* FeatureShapes for maintaining active map Shapes
+* GoogleMapShapeConverter geometry simplifications and point on shape determinations
+* FeatureInfoBuilder for common feature creating result messages and data
+* LatLngBoundingBox container of left, right, up, down coordinates
+* gradle plugin updated to 2.3.3
+* android maven gradle plugin updated to 2.0
+* maven google dependency
+* compile SDK version 26
+* build tools version updated to 26.0.1
+* target SDK version updated to 26
+* play-services-maps version 11.2.0 (removed full play-services dependency)
+* test compile of multidex 1.0.2
 
 ## [1.4.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/1.4.1) (07-13-2017)
 
