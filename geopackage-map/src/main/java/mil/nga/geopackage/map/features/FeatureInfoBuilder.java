@@ -21,6 +21,7 @@ import mil.nga.geopackage.features.index.FeatureIndexResults;
 import mil.nga.geopackage.features.user.FeatureDao;
 import mil.nga.geopackage.features.user.FeatureRow;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
+import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.map.R;
 import mil.nga.geopackage.map.geom.GoogleMapShape;
 import mil.nga.geopackage.map.geom.GoogleMapShapeConverter;
@@ -219,23 +220,21 @@ public class FeatureInfoBuilder {
      * Build a feature results information message and close the results
      *
      * @param results   feature index results
-     * @param tolerance distance tolerance
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, double tolerance) {
-        return buildResultsInfoMessageAndClose(results, tolerance, null, null);
+    public String buildResultsInfoMessageAndClose(FeatureIndexResults results) {
+        return buildResultsInfoMessageAndClose(results, 0, null, null);
     }
 
     /**
      * Build a feature results information message and close the results
      *
      * @param results    feature index results
-     * @param tolerance  distance tolerance
      * @param projection desired geometry projection
      * @return results message or null if no results
      */
-    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, double tolerance, Projection projection) {
-        return buildResultsInfoMessageAndClose(results, tolerance, null, projection);
+    public String buildResultsInfoMessageAndClose(FeatureIndexResults results, Projection projection) {
+        return buildResultsInfoMessageAndClose(results, 0, null, projection);
     }
 
     /**
@@ -586,7 +585,7 @@ public class FeatureInfoBuilder {
     }
 
     /**
-     * Fine filter the index results verying the click location is within the tolerance of each feature row
+     * Fine filter the index results verifying the click location is within the tolerance of each feature row
      *
      * @param results       feature index results
      * @param tolerance     distance tolerance
@@ -596,7 +595,7 @@ public class FeatureInfoBuilder {
     private FeatureIndexResults fineFilterResults(FeatureIndexResults results, double tolerance, LatLng clickLocation) {
 
         FeatureIndexResults filteredResults = null;
-        if (geometryType == GeometryType.POINT) {
+        if (geometryType == GeometryType.POINT || clickLocation == null) {
             filteredResults = results;
         } else {
 
@@ -613,7 +612,7 @@ public class FeatureInfoBuilder {
                     if (geometry != null) {
 
                         GoogleMapShape mapShape = converter.toShape(geometry);
-                        if (converter.isPointOnShape(clickLocation, mapShape, geodesic, tolerance)) {
+                        if (MapUtils.isPointOnShape(clickLocation, mapShape, geodesic, tolerance)) {
 
                             filteredListResults.addRow(featureRow);
 

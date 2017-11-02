@@ -6,9 +6,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 
+import java.util.List;
+
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.GeoPackageException;
+import mil.nga.geopackage.map.geom.GoogleMapShape;
+import mil.nga.geopackage.map.geom.MultiLatLng;
+import mil.nga.geopackage.map.geom.MultiPolygonOptions;
+import mil.nga.geopackage.map.geom.MultiPolylineOptions;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
 import mil.nga.geopackage.projection.ProjectionConstants;
 
@@ -200,6 +211,185 @@ public class MapUtils {
         LatLngBoundingBox latLngBoundingBox = new LatLngBoundingBox(leftCoordinate, upCoordinate, rightCoordinate, downCoordinate);
 
         return latLngBoundingBox;
+    }
+
+    /**
+     * Is the point on or near the shape
+     *
+     * @param point     lat lng point
+     * @param shape     map shape
+     * @param geodesic  geodesic check flag
+     * @param tolerance distance tolerance
+     * @return true if point is on shape
+     */
+    public static boolean isPointOnShape(LatLng point,
+                                         GoogleMapShape shape, boolean geodesic, double tolerance) {
+
+        boolean onShape = false;
+
+        switch (shape.getShapeType()) {
+
+            case LAT_LNG:
+                onShape = isPointNearPoint(point, (LatLng) shape.getShape(), tolerance);
+                break;
+            case MARKER_OPTIONS:
+                onShape = isPointNearMarker(point, (MarkerOptions) shape.getShape(), tolerance);
+                break;
+            case POLYLINE_OPTIONS:
+                onShape = isPointOnPolyline(point, (PolylineOptions) shape.getShape(), geodesic, tolerance);
+                break;
+            case POLYGON_OPTIONS:
+                onShape = isPointOnPolygon(point, (PolygonOptions) shape.getShape(), geodesic, tolerance);
+                break;
+            case MULTI_LAT_LNG:
+                onShape = isPointNearMultiLatLng(point, (MultiLatLng) shape.getShape(), tolerance);
+                break;
+            case MULTI_POLYLINE_OPTIONS:
+                onShape = isPointOnMultiPolyline(point, (MultiPolylineOptions) shape.getShape(), geodesic, tolerance);
+                break;
+            case MULTI_POLYGON_OPTIONS:
+                onShape = isPointOnMultiPolygon(point, (MultiPolygonOptions) shape.getShape(), geodesic, tolerance);
+                break;
+            case COLLECTION:
+                @SuppressWarnings("unchecked")
+                List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shape
+                        .getShape();
+                for (GoogleMapShape shapeListItem : shapeList) {
+                    onShape = isPointOnShape(point, shapeListItem, geodesic, tolerance);
+                    if (onShape) {
+                        break;
+                    }
+                }
+                break;
+            default:
+                throw new GeoPackageException("Unsupported Shape Type: "
+                        + shape.getShapeType());
+
+        }
+
+        return onShape;
+    }
+
+    /**
+     * Is the point near the shape marker
+     *
+     * @param point       point
+     * @param shapeMarker shape marker
+     * @param tolerance   distance tolerance
+     * @return true if near
+     */
+    public static boolean isPointNearMarker(LatLng point, MarkerOptions shapeMarker, double tolerance) {
+        return isPointNearPoint(point, shapeMarker.getPosition(), tolerance);
+    }
+
+    /**
+     * Is the point near the shape point
+     *
+     * @param point      point
+     * @param shapePoint shape point
+     * @param tolerance  distance tolerance
+     * @return true if near
+     */
+    public static boolean isPointNearPoint(LatLng point, LatLng shapePoint, double tolerance) {
+        return SphericalUtil.computeDistanceBetween(point, shapePoint) <= tolerance;
+    }
+
+    /**
+     * Is the point near any points in the multi lat lng
+     *
+     * @param point       point
+     * @param multiLatLng multi lat lng
+     * @param tolerance   distance tolerance
+     * @return true if near
+     */
+    public static boolean isPointNearMultiLatLng(LatLng point, MultiLatLng multiLatLng, double tolerance) {
+        boolean near = false;
+        for (LatLng multiPoint : multiLatLng.getLatLngs()) {
+            near = isPointNearPoint(point, multiPoint, tolerance);
+            if (near) {
+                break;
+            }
+        }
+        return near;
+    }
+
+    /**
+     * Is the point on the polyline
+     *
+     * @param point     point
+     * @param polyline  polyline
+     * @param geodesic  geodesic check flag
+     * @param tolerance distance tolerance
+     * @return true if on the line
+     */
+    public static boolean isPointOnPolyline(LatLng point, PolylineOptions polyline, boolean geodesic, double tolerance) {
+        return PolyUtil.isLocationOnPath(point, polyline.getPoints(), geodesic, tolerance);
+    }
+
+    /**
+     * Is the point on the multi polyline
+     *
+     * @param point         point
+     * @param multiPolyline multi polyline
+     * @param geodesic      geodesic check flag
+     * @param tolerance     distance tolerance
+     * @return true if on the multi line
+     */
+    public static boolean isPointOnMultiPolyline(LatLng point, MultiPolylineOptions multiPolyline, boolean geodesic, double tolerance) {
+        boolean near = false;
+        for (PolylineOptions polyline : multiPolyline.getPolylineOptions()) {
+            near = isPointOnPolyline(point, polyline, geodesic, tolerance);
+            if (near) {
+                break;
+            }
+        }
+        return near;
+    }
+
+    /**
+     * Is the point of the polygon
+     *
+     * @param point     point
+     * @param polygon   polygon
+     * @param geodesic  geodesic check flag
+     * @param tolerance distance tolerance
+     * @return true if on the polygon
+     */
+    public static boolean isPointOnPolygon(LatLng point, PolygonOptions polygon, boolean geodesic, double tolerance) {
+
+        boolean onPolygon = PolyUtil.containsLocation(point, polygon.getPoints(), geodesic) ||
+                PolyUtil.isLocationOnEdge(point, polygon.getPoints(), geodesic, tolerance);
+
+        if (onPolygon) {
+            for (List<LatLng> hole : polygon.getHoles()) {
+                if (PolyUtil.containsLocation(point, hole, geodesic)) {
+                    onPolygon = false;
+                    break;
+                }
+            }
+        }
+
+        return onPolygon;
+    }
+
+    /**
+     * Is the point on the multi polygon
+     *
+     * @param point        point
+     * @param multiPolygon multi polygon
+     * @param geodesic     geodesic check flag
+     * @param tolerance    distance tolerance
+     * @return true if on the multi polygon
+     */
+    public static boolean isPointOnMultiPolygon(LatLng point, MultiPolygonOptions multiPolygon, boolean geodesic, double tolerance) {
+        boolean near = false;
+        for (PolygonOptions polygon : multiPolygon.getPolygonOptions()) {
+            near = isPointOnPolygon(point, polygon, geodesic, tolerance);
+            if (near) {
+                break;
+            }
+        }
+        return near;
     }
 
 }
