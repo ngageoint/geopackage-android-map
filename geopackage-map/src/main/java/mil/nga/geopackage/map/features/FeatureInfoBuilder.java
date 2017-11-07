@@ -10,8 +10,10 @@ import com.j256.ormlite.dao.DaoManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.core.srs.SpatialReferenceSystem;
@@ -55,6 +57,11 @@ public class FeatureInfoBuilder {
      * Geometry Type
      */
     private final GeometryType geometryType;
+
+    /**
+     * Geometry types to ignore
+     */
+    private Set<GeometryType> ignoreGeometryTypes = new HashSet<>();
 
     /**
      * Table name used when building text
@@ -217,9 +224,18 @@ public class FeatureInfoBuilder {
     }
 
     /**
+     * Ignore the provided geometry type
+     *
+     * @param geometryType geometry type
+     */
+    public void ignoreGeometryType(GeometryType geometryType) {
+        ignoreGeometryTypes.add(geometryType);
+    }
+
+    /**
      * Build a feature results information message and close the results
      *
-     * @param results   feature index results
+     * @param results feature index results
      * @return results message or null if no results
      */
     public String buildResultsInfoMessageAndClose(FeatureIndexResults results) {
@@ -595,7 +611,9 @@ public class FeatureInfoBuilder {
     private FeatureIndexResults fineFilterResults(FeatureIndexResults results, double tolerance, LatLng clickLocation) {
 
         FeatureIndexResults filteredResults = null;
-        if (geometryType == GeometryType.POINT || clickLocation == null) {
+        if(ignoreGeometryTypes.contains(geometryType)){
+            filteredResults = new FeatureIndexListResults();
+        }else if(clickLocation == null && ignoreGeometryTypes.isEmpty()){
             filteredResults = results;
         } else {
 
@@ -611,13 +629,21 @@ public class FeatureInfoBuilder {
                     Geometry geometry = geomData.getGeometry();
                     if (geometry != null) {
 
-                        GoogleMapShape mapShape = converter.toShape(geometry);
-                        if (MapUtils.isPointOnShape(clickLocation, mapShape, geodesic, tolerance)) {
+                        if(!ignoreGeometryTypes.contains(geometry.getGeometryType())) {
 
-                            filteredListResults.addRow(featureRow);
+                            if(clickLocation != null) {
+
+                                GoogleMapShape mapShape = converter.toShape(geometry);
+                                if (MapUtils.isPointOnShape(clickLocation, mapShape, geodesic, tolerance)) {
+
+                                    filteredListResults.addRow(featureRow);
+
+                                }
+                            }else{
+                                filteredListResults.addRow(featureRow);
+                            }
 
                         }
-
                     }
                 }
 
