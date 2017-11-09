@@ -1639,14 +1639,14 @@ public class GoogleMapShapeConverter {
             GoogleMap map, MultiPolygonOptions polygons) {
         mil.nga.geopackage.map.geom.MultiPolygon multiPolygon = new mil.nga.geopackage.map.geom.MultiPolygon();
         for (PolygonOptions polygonOption : polygons.getPolygonOptions()) {
-            com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(
-                    map, polygonOption);
             if (polygons.getOptions() != null) {
                 polygonOption.fillColor(polygons.getOptions().getFillColor());
                 polygonOption.strokeColor(polygons.getOptions()
                         .getStrokeColor());
                 polygonOption.geodesic(polygons.getOptions().isGeodesic());
             }
+            com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(
+                    map, polygonOption);
             multiPolygon.add(polygon);
         }
         return multiPolygon;

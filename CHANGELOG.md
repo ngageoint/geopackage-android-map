@@ -12,6 +12,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * GoogleMapShapeConverter geometry simplifications and point on shape determinations
 * FeatureInfoBuilder for common feature creating result messages and data
 * LatLngBoundingBox container of left, right, up, down coordinates
+* Polygon Options color fix when editing multi polygons
 * gradle plugin updated to 2.3.3
 * android maven gradle plugin updated to 2.0
 * maven google dependency
