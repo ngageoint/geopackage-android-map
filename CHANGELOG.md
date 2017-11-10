@@ -7,9 +7,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 1.5.0 (TBD)
 
 * geopackage-android version updated to 1.5.0
-* MapUtils for zoom, tolerance distance, map bounds, and click bounds utilities
+* MapUtils for zoom, tolerance distance, map bounds, click bounds utilities, and point on shape determinations
 * FeatureShapes for maintaining active map Shapes
-* GoogleMapShapeConverter geometry simplifications and point on shape determinations
+* GoogleMapShapeConverter geometry simplifications
 * FeatureInfoBuilder for common feature creating result messages and data
 * LatLngBoundingBox container of left, right, up, down coordinates
 * Polygon Options color fix when editing multi polygons
