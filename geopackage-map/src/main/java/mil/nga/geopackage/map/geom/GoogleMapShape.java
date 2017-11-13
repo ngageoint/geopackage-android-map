@@ -279,7 +279,7 @@ public class GoogleMapShape {
      * @return
      */
     public BoundingBox boundingBox() {
-        BoundingBox boundingBox = new BoundingBox(Double.MAX_VALUE, -Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE);
+        BoundingBox boundingBox = new BoundingBox(Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE, -Double.MAX_VALUE);
         expandBoundingBox(boundingBox);
         return boundingBox;
     }

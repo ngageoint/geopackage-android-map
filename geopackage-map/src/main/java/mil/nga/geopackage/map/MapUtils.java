@@ -27,7 +27,7 @@ import mil.nga.geopackage.projection.ProjectionConstants;
  * Map utilities
  *
  * @author osbornb
- * @since 1.5.0
+ * @since 2.0.0
  */
 public class MapUtils {
 
@@ -94,7 +94,7 @@ public class MapUtils {
             maxLongitude += (2 * ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH);
         }
 
-        BoundingBox boundingBox = new BoundingBox(minLongitude, maxLongitude, minLatitude, maxLatitude);
+        BoundingBox boundingBox = new BoundingBox(minLongitude, minLatitude, maxLongitude, maxLatitude);
 
         return boundingBox;
     }
@@ -117,8 +117,8 @@ public class MapUtils {
         // Create the bounding box to query for features
         BoundingBox boundingBox = new BoundingBox(
                 latLngBoundingBox.getLeftCoordinate().longitude,
-                latLngBoundingBox.getRightCoordinate().longitude,
                 latLngBoundingBox.getDownCoordinate().latitude,
+                latLngBoundingBox.getRightCoordinate().longitude,
                 latLngBoundingBox.getUpCoordinate().latitude);
 
         return boundingBox;

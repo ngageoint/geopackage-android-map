@@ -17,7 +17,7 @@ import mil.nga.wkb.geom.GeometryType;
  * Maintains a collection of feature map shapes by database, table name, and feature id
  *
  * @author osbornb
- * @since 1.5.0
+ * @since 2.0.0
  */
 public class FeatureShapes {
 

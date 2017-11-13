@@ -44,7 +44,7 @@ import mil.nga.wkb.util.GeometryPrinter;
  * Feature Info Builder for building feature result based info messages or table data from feature results
  *
  * @author osbornb
- * @since 1.5.0
+ * @since 2.0.0
  */
 public class FeatureInfoBuilder {
 

@@ -4,9 +4,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.5.0 (TBD)
+## 2.0.0 (TBD)
 
-* geopackage-android version updated to 1.5.0
+* WARNING - BoundingBox.java coordinate constructor arguments order changed to (min lon, min lat, max lon, max lat)
+  Pre-existing calls to BoundingBox coordinate constructor should swap the min lat and max lon values
+* geopackage-android version updated to 2.0.0
 * MapUtils for zoom, tolerance distance, map bounds, click bounds utilities, and point on shape determinations
 * FeatureShapes for maintaining active map Shapes
 * GoogleMapShapeConverter geometry simplifications
