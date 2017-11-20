@@ -4,9 +4,27 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 1.4.2 (TBD)
+## [2.0.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/2.0.0) (11-20-2017)
 
-* TBD
+* WARNING - BoundingBox.java (geopackage-core) coordinate constructor arguments order changed to (min lon, min lat, max lon, max lat)
+  Pre-existing calls to BoundingBox coordinate constructor should swap the min lat and max lon values
+* WARNING - TileGrid.java (geopackage-core) constructor arguments order changed to (minX, minY, maxX, maxY)
+  Pre-existing calls to TileGrid constructor should swap the minY and maxX values
+* geopackage-android version updated to 2.0.0
+* MapUtils for zoom, tolerance distance, map bounds, click bounds utilities, and point on shape determinations
+* FeatureShapes for maintaining active map Shapes
+* GoogleMapShapeConverter geometry simplifications
+* FeatureInfoBuilder for common feature creating result messages and data
+* LatLngBoundingBox container of left, right, up, down coordinates
+* Polygon Options color fix when editing multi polygons
+* gradle plugin updated to 2.3.3
+* android maven gradle plugin updated to 2.0
+* maven google dependency
+* compile SDK version 26
+* build tools version updated to 26.0.1
+* target SDK version updated to 26
+* play-services-maps version 11.2.0 (removed full play-services dependency)
+* test compile of multidex 1.0.2
 
 ## [1.4.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/1.4.1) (07-13-2017)
 
