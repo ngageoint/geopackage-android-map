@@ -1,39 +1,94 @@
 package mil.nga.geopackage.map.geom;
 
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.maps.model.PolylineOptions;
-
 /**
  * Multiple Polyline Options object
- * 
+ *
  * @author osbornb
  */
 public class MultiPolylineOptions {
 
-	private List<PolylineOptions> polylineOptions = new ArrayList<PolylineOptions>();
+    /**
+     * List of Polyline Options
+     */
+    private List<PolylineOptions> polylineOptions = new ArrayList<PolylineOptions>();
 
-	private PolylineOptions options;
+    /**
+     * Global Polyline Options
+     */
+    private PolylineOptions options;
 
-	public void add(PolylineOptions polylineOption) {
-		polylineOptions.add(polylineOption);
-	}
+    /**
+     * Add a polyline option
+     *
+     * @param polylineOption polyline option
+     */
+    public void add(PolylineOptions polylineOption) {
+        polylineOptions.add(polylineOption);
+    }
 
-	public List<PolylineOptions> getPolylineOptions() {
-		return polylineOptions;
-	}
+    /**
+     * Get the polyline options
+     *
+     * @return polyline options
+     */
+    public List<PolylineOptions> getPolylineOptions() {
+        return polylineOptions;
+    }
 
-	public PolylineOptions getOptions() {
-		return options;
-	}
+    /**
+     * Get the global polyline options
+     *
+     * @return global polyline options
+     */
+    public PolylineOptions getOptions() {
+        return options;
+    }
 
-	public void setOptions(PolylineOptions options) {
-		this.options = options;
-	}
+    /**
+     * Set the global polyline options
+     *
+     * @param options global polyline options
+     */
+    public void setOptions(PolylineOptions options) {
+        this.options = options;
+    }
 
-	public void setPolylineOptions(List<PolylineOptions> polylineOptions) {
-		this.polylineOptions = polylineOptions;
-	}
+    /**
+     * Set the polyline options
+     *
+     * @param polylineOptions polyline options
+     */
+    public void setPolylineOptions(List<PolylineOptions> polylineOptions) {
+        this.polylineOptions = polylineOptions;
+    }
+
+    /**
+     * Updates visibility of the shape
+     *
+     * @param visible visible flag
+     * @since 2.0.1
+     */
+    public void visible(boolean visible) {
+        for (PolylineOptions options : polylineOptions) {
+            options.visible(visible);
+        }
+    }
+
+    /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void zIndex(float zIndex) {
+        for (PolylineOptions options : polylineOptions) {
+            options.zIndex(zIndex);
+        }
+    }
 
 }

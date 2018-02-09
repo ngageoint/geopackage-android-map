@@ -10,16 +10,34 @@ import java.util.List;
  */
 public class MultiPolylineMarkers {
 
+    /**
+     * List of polyline markers
+     */
     private List<PolylineMarkers> polylineMarkers = new ArrayList<PolylineMarkers>();
 
+    /**
+     * Add a polyline marker
+     *
+     * @param polylineMarker polyline marker
+     */
     public void add(PolylineMarkers polylineMarker) {
         polylineMarkers.add(polylineMarker);
     }
 
+    /**
+     * Get the polyline markers
+     *
+     * @return polyline markers
+     */
     public List<PolylineMarkers> getPolylineMarkers() {
         return polylineMarkers;
     }
 
+    /**
+     * Set the polyline markers
+     *
+     * @param polylineMarkers polyline markers
+     */
     public void setPolylineMarkers(List<PolylineMarkers> polylineMarkers) {
         this.polylineMarkers = polylineMarkers;
     }
@@ -55,9 +73,21 @@ public class MultiPolylineMarkers {
     }
 
     /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void setZIndex(float zIndex) {
+        for (PolylineMarkers polylineMarker : polylineMarkers) {
+            polylineMarker.setZIndex(zIndex);
+        }
+    }
+
+    /**
      * Is it valid
      *
-     * @return
+     * @return true if valid
      */
     public boolean isValid() {
         boolean valid = true;
@@ -73,7 +103,7 @@ public class MultiPolylineMarkers {
     /**
      * Is it deleted
      *
-     * @return
+     * @return true if deleted
      */
     public boolean isDeleted() {
         boolean deleted = true;

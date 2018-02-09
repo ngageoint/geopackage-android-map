@@ -163,6 +163,21 @@ public class GoogleMapShape {
 
         switch (shapeType) {
 
+            case MARKER_OPTIONS:
+                ((MarkerOptions) shape).visible(visible);
+                break;
+            case POLYLINE_OPTIONS:
+                ((PolylineOptions) shape).visible(visible);
+                break;
+            case POLYGON_OPTIONS:
+                ((PolygonOptions) shape).visible(visible);
+                break;
+            case MULTI_POLYLINE_OPTIONS:
+                ((MultiPolylineOptions) shape).visible(visible);
+                break;
+            case MULTI_POLYGON_OPTIONS:
+                ((MultiPolygonOptions) shape).visible(visible);
+                break;
             case MARKER:
                 ((Marker) shape).setVisible(visible);
                 break;
@@ -198,6 +213,73 @@ public class GoogleMapShape {
                 List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shape;
                 for (GoogleMapShape shapeListItem : shapeList) {
                     shapeListItem.setVisible(visible);
+                }
+                break;
+            default:
+        }
+
+    }
+
+    /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void setZIndex(float zIndex) {
+
+        switch (shapeType) {
+
+            case MARKER_OPTIONS:
+                ((MarkerOptions) shape).zIndex(zIndex);
+                break;
+            case POLYLINE_OPTIONS:
+                ((PolylineOptions) shape).zIndex(zIndex);
+                break;
+            case POLYGON_OPTIONS:
+                ((PolygonOptions) shape).zIndex(zIndex);
+                break;
+            case MULTI_POLYLINE_OPTIONS:
+                ((MultiPolylineOptions) shape).zIndex(zIndex);
+                break;
+            case MULTI_POLYGON_OPTIONS:
+                ((MultiPolygonOptions) shape).zIndex(zIndex);
+                break;
+            case MARKER:
+                ((Marker) shape).setZIndex(zIndex);
+                break;
+            case POLYGON:
+                ((Polygon) shape).setZIndex(zIndex);
+                break;
+            case POLYLINE:
+                ((Polyline) shape).setZIndex(zIndex);
+                break;
+            case MULTI_MARKER:
+                ((MultiMarker) shape).setZIndex(zIndex);
+                break;
+            case MULTI_POLYLINE:
+                ((MultiPolyline) shape).setZIndex(zIndex);
+                break;
+            case MULTI_POLYGON:
+                ((MultiPolygon) shape).setZIndex(zIndex);
+                break;
+            case POLYLINE_MARKERS:
+                ((PolylineMarkers) shape).setZIndex(zIndex);
+                break;
+            case POLYGON_MARKERS:
+                ((PolygonMarkers) shape).setZIndex(zIndex);
+                break;
+            case MULTI_POLYLINE_MARKERS:
+                ((MultiPolylineMarkers) shape).setZIndex(zIndex);
+                break;
+            case MULTI_POLYGON_MARKERS:
+                ((MultiPolygonMarkers) shape).setZIndex(zIndex);
+                break;
+            case COLLECTION:
+                @SuppressWarnings("unchecked")
+                List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shape;
+                for (GoogleMapShape shapeListItem : shapeList) {
+                    shapeListItem.setZIndex(zIndex);
                 }
                 break;
             default:

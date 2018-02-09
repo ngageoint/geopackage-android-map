@@ -10,16 +10,34 @@ import java.util.List;
  */
 public class MultiPolygonMarkers {
 
+    /**
+     * List of Polygon Markers
+     */
     private List<PolygonMarkers> polygonMarkers = new ArrayList<PolygonMarkers>();
 
+    /**
+     * Add a Polygon Marker
+     *
+     * @param polygonMarker polygon marker
+     */
     public void add(PolygonMarkers polygonMarker) {
         polygonMarkers.add(polygonMarker);
     }
 
+    /**
+     * Get the polygon markers
+     *
+     * @return list of polygon markers
+     */
     public List<PolygonMarkers> getPolygonMarkers() {
         return polygonMarkers;
     }
 
+    /**
+     * Set the polygon markers
+     *
+     * @param polygonMarkers polygon markers
+     */
     public void setPolygonMarkers(List<PolygonMarkers> polygonMarkers) {
         this.polygonMarkers = polygonMarkers;
     }
@@ -55,9 +73,21 @@ public class MultiPolygonMarkers {
     }
 
     /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void setZIndex(float zIndex) {
+        for (PolygonMarkers polygonMarker : polygonMarkers) {
+            polygonMarker.setZIndex(zIndex);
+        }
+    }
+
+    /**
      * Is it valid
      *
-     * @return
+     * @return true if valid
      */
     public boolean isValid() {
         boolean valid = true;
@@ -73,7 +103,7 @@ public class MultiPolygonMarkers {
     /**
      * Is it deleted
      *
-     * @return
+     * @return true if deleted
      */
     public boolean isDeleted() {
         boolean deleted = true;

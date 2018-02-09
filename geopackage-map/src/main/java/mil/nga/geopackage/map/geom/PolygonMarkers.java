@@ -14,31 +14,58 @@ import java.util.List;
  */
 public class PolygonMarkers implements ShapeWithChildrenMarkers {
 
+    /**
+     * Shape converter
+     */
     private final GoogleMapShapeConverter converter;
 
+    /**
+     * Polygon
+     */
     private Polygon polygon;
 
+    /**
+     * List of markers
+     */
     private List<Marker> markers = new ArrayList<Marker>();
 
+    /**
+     * List of polygon hole markers
+     */
     private List<PolygonHoleMarkers> holes = new ArrayList<PolygonHoleMarkers>();
 
     /**
      * Constructor
      *
-     * @param converter
+     * @param converter shape converter
      */
     public PolygonMarkers(GoogleMapShapeConverter converter) {
         this.converter = converter;
     }
 
+    /**
+     * Get the polygon
+     *
+     * @return polygon
+     */
     public Polygon getPolygon() {
         return polygon;
     }
 
+    /**
+     * Set the polygon
+     *
+     * @param polygon polygon
+     */
     public void setPolygon(Polygon polygon) {
         this.polygon = polygon;
     }
 
+    /**
+     * Add a marker
+     *
+     * @param marker marker
+     */
     public void add(Marker marker) {
         markers.add(marker);
     }
@@ -51,18 +78,38 @@ public class PolygonMarkers implements ShapeWithChildrenMarkers {
         return markers;
     }
 
+    /**
+     * Set the markers
+     *
+     * @param markers markers
+     */
     public void setMarkers(List<Marker> markers) {
         this.markers = markers;
     }
 
+    /**
+     * Add a polygon hole
+     *
+     * @param hole polygon hole markers
+     */
     public void addHole(PolygonHoleMarkers hole) {
         holes.add(hole);
     }
 
+    /**
+     * Get the polygon holes
+     *
+     * @return list of polygon hole markers
+     */
     public List<PolygonHoleMarkers> getHoles() {
         return holes;
     }
 
+    /**
+     * Set the polygon holes
+     *
+     * @param holes list of polygone hole markers
+     */
     public void setHoles(List<PolygonHoleMarkers> holes) {
         this.holes = holes;
     }
@@ -138,9 +185,25 @@ public class PolygonMarkers implements ShapeWithChildrenMarkers {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setZIndex(float zIndex) {
+        if (polygon != null) {
+            polygon.setZIndex(zIndex);
+        }
+        for (Marker marker : markers) {
+            marker.setZIndex(zIndex);
+        }
+        for (PolygonHoleMarkers hole : holes) {
+            hole.setZIndex(zIndex);
+        }
+    }
+
+    /**
      * Is it valid
      *
-     * @return
+     * @return true if valid
      */
     public boolean isValid() {
         boolean valid = markers.isEmpty() || markers.size() >= 3;
@@ -158,7 +221,7 @@ public class PolygonMarkers implements ShapeWithChildrenMarkers {
     /**
      * Is it deleted
      *
-     * @return
+     * @return true if deleted
      */
     public boolean isDeleted() {
         return markers.isEmpty();

@@ -12,16 +12,34 @@ import java.util.List;
  */
 public class MultiPolygon {
 
+    /**
+     * List of polygons
+     */
     private List<Polygon> polygons = new ArrayList<Polygon>();
 
+    /**
+     * Add a polygon
+     *
+     * @param polygon polygon
+     */
     public void add(Polygon polygon) {
         polygons.add(polygon);
     }
 
+    /**
+     * Get the polygons
+     *
+     * @return list of polygons
+     */
     public List<Polygon> getPolygons() {
         return polygons;
     }
 
+    /**
+     * Set the polygons
+     *
+     * @param polygons list of polygons
+     */
     public void setPolygons(List<Polygon> polygons) {
         this.polygons = polygons;
     }
@@ -44,6 +62,18 @@ public class MultiPolygon {
     public void setVisible(boolean visible) {
         for (Polygon polygon : polygons) {
             polygon.setVisible(visible);
+        }
+    }
+
+    /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void setZIndex(float zIndex) {
+        for (Polygon polygon : polygons) {
+            polygon.setZIndex(zIndex);
         }
     }
 

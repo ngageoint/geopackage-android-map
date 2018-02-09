@@ -12,8 +12,16 @@ import java.util.List;
  */
 public class MultiMarker implements ShapeMarkers {
 
+    /**
+     * List of Markers
+     */
     private List<Marker> markers = new ArrayList<Marker>();
 
+    /**
+     * Add a Marker
+     *
+     * @param marker marker
+     */
     public void add(Marker marker) {
         markers.add(marker);
     }
@@ -26,6 +34,11 @@ public class MultiMarker implements ShapeMarkers {
         return markers;
     }
 
+    /**
+     * Set the Markers
+     *
+     * @param markers list of Markers
+     */
     public void setMarkers(List<Marker> markers) {
         this.markers = markers;
     }
@@ -42,6 +55,7 @@ public class MultiMarker implements ShapeMarkers {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setVisible(boolean visible) {
         setVisibleMarkers(visible);
     }
@@ -53,6 +67,16 @@ public class MultiMarker implements ShapeMarkers {
     public void setVisibleMarkers(boolean visible) {
         for (Marker marker : markers) {
             marker.setVisible(visible);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setZIndex(float zIndex) {
+        for (Marker marker : markers) {
+            marker.setZIndex(zIndex);
         }
     }
 
