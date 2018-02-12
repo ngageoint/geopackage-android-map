@@ -1621,6 +1621,8 @@ public class GoogleMapShapeConverter {
             if (polylines.getOptions() != null) {
                 polylineOption.color(polylines.getOptions().getColor());
                 polylineOption.geodesic(polylines.getOptions().isGeodesic());
+                polylineOption.visible(polylines.getOptions().isVisible());
+                polylineOption.zIndex(polylines.getOptions().getZIndex());
             }
             Polyline polyline = addPolylineToMap(map, polylineOption);
             multiPolyline.add(polyline);
@@ -1644,6 +1646,8 @@ public class GoogleMapShapeConverter {
                 polygonOption.strokeColor(polygons.getOptions()
                         .getStrokeColor());
                 polygonOption.geodesic(polygons.getOptions().isGeodesic());
+                polygonOption.visible(polygons.getOptions().isVisible());
+                polygonOption.zIndex(polygons.getOptions().getZIndex());
             }
             com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(
                     map, polygonOption);
@@ -1852,6 +1856,8 @@ public class GoogleMapShapeConverter {
         if (globalPolylineOptions != null) {
             polylineOptions.color(globalPolylineOptions.getColor());
             polylineOptions.geodesic(globalPolylineOptions.isGeodesic());
+            polylineOptions.visible(globalPolylineOptions.isVisible());
+            polylineOptions.zIndex(globalPolylineOptions.getZIndex());
         }
 
         Polyline polyline = addPolylineToMap(map, polylineOptions);
@@ -1887,6 +1893,8 @@ public class GoogleMapShapeConverter {
             polygonOptions.fillColor(globalPolygonOptions.getFillColor());
             polygonOptions.strokeColor(globalPolygonOptions.getStrokeColor());
             polygonOptions.geodesic(globalPolygonOptions.isGeodesic());
+            polygonOptions.visible(globalPolygonOptions.isVisible());
+            polygonOptions.zIndex(globalPolygonOptions.getZIndex());
         }
 
         com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(
