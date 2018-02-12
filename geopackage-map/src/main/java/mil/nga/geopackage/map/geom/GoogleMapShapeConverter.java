@@ -1600,6 +1600,8 @@ public class GoogleMapShapeConverter {
                         markerOptions.getAnchorV());
                 markerOptions.draggable(latLngs.getMarkerOptions()
                         .isDraggable());
+                markerOptions.visible(latLngs.getMarkerOptions().isVisible());
+                markerOptions.zIndex(latLngs.getMarkerOptions().getZIndex());
             }
             Marker marker = addLatLngToMap(map, latLng, markerOptions);
             multiMarker.add(marker);
@@ -1720,6 +1722,8 @@ public class GoogleMapShapeConverter {
                     shapeMarkerOptions.anchor(markerOptions.getAnchorU(),
                             markerOptions.getAnchorV());
                     shapeMarkerOptions.draggable(markerOptions.isDraggable());
+                    shapeMarkerOptions.visible(markerOptions.isVisible());
+                    shapeMarkerOptions.zIndex(markerOptions.getZIndex());
                 }
                 Marker markerOptionsMarker = addMarkerOptionsToMap(map,
                         shapeMarkerOptions);
@@ -1830,6 +1834,8 @@ public class GoogleMapShapeConverter {
                 markerOptions.anchor(customMarkerOptions.getAnchorU(),
                         customMarkerOptions.getAnchorV());
                 markerOptions.draggable(customMarkerOptions.isDraggable());
+                markerOptions.visible(customMarkerOptions.isVisible());
+                markerOptions.zIndex(customMarkerOptions.getZIndex());
             }
             Marker marker = addLatLngToMap(map, latLng, markerOptions);
             markers.add(marker);
