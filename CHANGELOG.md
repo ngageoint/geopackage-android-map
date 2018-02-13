@@ -9,6 +9,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * geopackage-android version updated to 2.0.1
 * Visible flag support for Option typed (pre map) Google Map Shapes
 * Z Index support for Google Map Shapes
+* Turn off Android auto backup
 
 ## [2.0.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/2.0.0) (11-20-2017)
 
