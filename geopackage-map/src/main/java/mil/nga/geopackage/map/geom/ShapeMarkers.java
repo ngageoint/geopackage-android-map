@@ -48,4 +48,12 @@ public interface ShapeMarkers {
      */
     public void setVisibleMarkers(boolean visible);
 
+    /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void setZIndex(float zIndex);
+
 }

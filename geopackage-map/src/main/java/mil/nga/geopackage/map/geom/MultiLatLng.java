@@ -1,40 +1,71 @@
 package mil.nga.geopackage.map.geom;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Multiple LatLng object
- * 
+ *
  * @author osbornb
  */
 public class MultiLatLng {
 
-	private List<LatLng> latLngs = new ArrayList<LatLng>();
+    /**
+     * List of LatLngs
+     */
+    private List<LatLng> latLngs = new ArrayList<LatLng>();
 
-	private MarkerOptions markerOptions;
+    /**
+     * Marker options
+     */
+    private MarkerOptions markerOptions;
 
-	public void add(LatLng latLng) {
-		latLngs.add(latLng);
-	}
+    /**
+     * Add a LatLng
+     *
+     * @param latLng LatLng
+     */
+    public void add(LatLng latLng) {
+        latLngs.add(latLng);
+    }
 
-	public List<LatLng> getLatLngs() {
-		return latLngs;
-	}
+    /**
+     * Get the LatLngs
+     *
+     * @return list of LatLng
+     */
+    public List<LatLng> getLatLngs() {
+        return latLngs;
+    }
 
-	public MarkerOptions getMarkerOptions() {
-		return markerOptions;
-	}
+    /**
+     * Get the marker options
+     *
+     * @return marker options
+     */
+    public MarkerOptions getMarkerOptions() {
+        return markerOptions;
+    }
 
-	public void setMarkerOptions(MarkerOptions markerOptions) {
-		this.markerOptions = markerOptions;
-	}
+    /**
+     * Set the marker options
+     *
+     * @param markerOptions marker options
+     */
+    public void setMarkerOptions(MarkerOptions markerOptions) {
+        this.markerOptions = markerOptions;
+    }
 
-	public void setLatLngs(List<LatLng> latLngs) {
-		this.latLngs = latLngs;
-	}
+    /**
+     * Set the LatLngs
+     *
+     * @param latLngs list of LatLng
+     */
+    public void setLatLngs(List<LatLng> latLngs) {
+        this.latLngs = latLngs;
+    }
 
 }

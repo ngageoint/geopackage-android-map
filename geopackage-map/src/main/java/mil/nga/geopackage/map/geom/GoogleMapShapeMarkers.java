@@ -317,6 +317,19 @@ public class GoogleMapShapeMarkers {
     }
 
     /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void setZIndex(float zIndex) {
+        shape.setZIndex(zIndex);
+        for (ShapeMarkers shapeMarkers : shapeMarkersMap.values()) {
+            shapeMarkers.setZIndex(zIndex);
+        }
+    }
+
+    /**
      * Get the shape markers size
      *
      * @return size

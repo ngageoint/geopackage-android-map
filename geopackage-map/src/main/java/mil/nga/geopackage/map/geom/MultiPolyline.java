@@ -12,16 +12,34 @@ import java.util.List;
  */
 public class MultiPolyline {
 
+    /**
+     * List of Polylines
+     */
     private List<Polyline> polylines = new ArrayList<Polyline>();
 
+    /**
+     * Add a polyline
+     *
+     * @param polyline polyline
+     */
     public void add(Polyline polyline) {
         polylines.add(polyline);
     }
 
+    /**
+     * Get the polylines
+     *
+     * @return list of polylines
+     */
     public List<Polyline> getPolylines() {
         return polylines;
     }
 
+    /**
+     * Set the polylines
+     *
+     * @param polylines list of polylines
+     */
     public void setPolylines(List<Polyline> polylines) {
         this.polylines = polylines;
     }
@@ -44,6 +62,18 @@ public class MultiPolyline {
     public void setVisible(boolean visible) {
         for (Polyline polyline : polylines) {
             polyline.setVisible(visible);
+        }
+    }
+
+    /**
+     * Set the z index
+     *
+     * @param zIndex z index
+     * @since 2.0.1
+     */
+    public void setZIndex(float zIndex) {
+        for (Polyline polyline : polylines) {
+            polyline.setZIndex(zIndex);
         }
     }
 

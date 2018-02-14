@@ -1600,6 +1600,8 @@ public class GoogleMapShapeConverter {
                         markerOptions.getAnchorV());
                 markerOptions.draggable(latLngs.getMarkerOptions()
                         .isDraggable());
+                markerOptions.visible(latLngs.getMarkerOptions().isVisible());
+                markerOptions.zIndex(latLngs.getMarkerOptions().getZIndex());
             }
             Marker marker = addLatLngToMap(map, latLng, markerOptions);
             multiMarker.add(marker);
@@ -1621,6 +1623,8 @@ public class GoogleMapShapeConverter {
             if (polylines.getOptions() != null) {
                 polylineOption.color(polylines.getOptions().getColor());
                 polylineOption.geodesic(polylines.getOptions().isGeodesic());
+                polylineOption.visible(polylines.getOptions().isVisible());
+                polylineOption.zIndex(polylines.getOptions().getZIndex());
             }
             Polyline polyline = addPolylineToMap(map, polylineOption);
             multiPolyline.add(polyline);
@@ -1644,6 +1648,8 @@ public class GoogleMapShapeConverter {
                 polygonOption.strokeColor(polygons.getOptions()
                         .getStrokeColor());
                 polygonOption.geodesic(polygons.getOptions().isGeodesic());
+                polygonOption.visible(polygons.getOptions().isVisible());
+                polygonOption.zIndex(polygons.getOptions().getZIndex());
             }
             com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(
                     map, polygonOption);
@@ -1716,6 +1722,8 @@ public class GoogleMapShapeConverter {
                     shapeMarkerOptions.anchor(markerOptions.getAnchorU(),
                             markerOptions.getAnchorV());
                     shapeMarkerOptions.draggable(markerOptions.isDraggable());
+                    shapeMarkerOptions.visible(markerOptions.isVisible());
+                    shapeMarkerOptions.zIndex(markerOptions.getZIndex());
                 }
                 Marker markerOptionsMarker = addMarkerOptionsToMap(map,
                         shapeMarkerOptions);
@@ -1826,6 +1834,8 @@ public class GoogleMapShapeConverter {
                 markerOptions.anchor(customMarkerOptions.getAnchorU(),
                         customMarkerOptions.getAnchorV());
                 markerOptions.draggable(customMarkerOptions.isDraggable());
+                markerOptions.visible(customMarkerOptions.isVisible());
+                markerOptions.zIndex(customMarkerOptions.getZIndex());
             }
             Marker marker = addLatLngToMap(map, latLng, markerOptions);
             markers.add(marker);
@@ -1852,6 +1862,8 @@ public class GoogleMapShapeConverter {
         if (globalPolylineOptions != null) {
             polylineOptions.color(globalPolylineOptions.getColor());
             polylineOptions.geodesic(globalPolylineOptions.isGeodesic());
+            polylineOptions.visible(globalPolylineOptions.isVisible());
+            polylineOptions.zIndex(globalPolylineOptions.getZIndex());
         }
 
         Polyline polyline = addPolylineToMap(map, polylineOptions);
@@ -1887,6 +1899,8 @@ public class GoogleMapShapeConverter {
             polygonOptions.fillColor(globalPolygonOptions.getFillColor());
             polygonOptions.strokeColor(globalPolygonOptions.getStrokeColor());
             polygonOptions.geodesic(globalPolygonOptions.isGeodesic());
+            polygonOptions.visible(globalPolygonOptions.isVisible());
+            polygonOptions.zIndex(globalPolygonOptions.getZIndex());
         }
 
         com.google.android.gms.maps.model.Polygon polygon = addPolygonToMap(

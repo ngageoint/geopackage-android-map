@@ -14,29 +14,53 @@ import java.util.List;
  */
 public class PolylineMarkers implements ShapeMarkers {
 
+    /**
+     * Shape converter
+     */
     private final GoogleMapShapeConverter converter;
 
+    /**
+     * Polyline
+     */
     private Polyline polyline;
 
+    /**
+     * List of Markers
+     */
     private List<Marker> markers = new ArrayList<Marker>();
 
     /**
      * Constructor
      *
-     * @param converter
+     * @param converter shape converter
      */
     public PolylineMarkers(GoogleMapShapeConverter converter) {
         this.converter = converter;
     }
 
+    /**
+     * Get the polyline
+     *
+     * @return
+     */
     public Polyline getPolyline() {
         return polyline;
     }
 
+    /**
+     * Set the polyline
+     *
+     * @param polyline
+     */
     public void setPolyline(Polyline polyline) {
         this.polyline = polyline;
     }
 
+    /**
+     * Add a marker
+     *
+     * @param marker marker
+     */
     public void add(Marker marker) {
         markers.add(marker);
     }
@@ -49,6 +73,11 @@ public class PolylineMarkers implements ShapeMarkers {
         return markers;
     }
 
+    /**
+     * Set the markers
+     *
+     * @param markers list of markers
+     */
     public void setMarkers(List<Marker> markers) {
         this.markers = markers;
     }
@@ -102,9 +131,22 @@ public class PolylineMarkers implements ShapeMarkers {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setZIndex(float zIndex) {
+        if (polyline != null) {
+            polyline.setZIndex(zIndex);
+        }
+        for (Marker marker : markers) {
+            marker.setZIndex(zIndex);
+        }
+    }
+
+    /**
      * Is it valid
      *
-     * @return
+     * @return true if valid
      */
     public boolean isValid() {
         return markers.isEmpty() || markers.size() >= 2;
@@ -113,7 +155,7 @@ public class PolylineMarkers implements ShapeMarkers {
     /**
      * Is it deleted
      *
-     * @return
+     * @return true if deleted
      */
     public boolean isDeleted() {
         return markers.isEmpty();

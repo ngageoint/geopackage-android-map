@@ -12,8 +12,14 @@ import java.util.List;
  */
 public class PolygonHoleMarkers implements ShapeMarkers {
 
+    /**
+     * Parent polygon
+     */
     final private PolygonMarkers parentPolygon;
 
+    /**
+     * List of Markers
+     */
     private List<Marker> markers = new ArrayList<Marker>();
 
     /**
@@ -25,6 +31,11 @@ public class PolygonHoleMarkers implements ShapeMarkers {
         parentPolygon = polygonMarkers;
     }
 
+    /**
+     * Add a marker
+     *
+     * @param marker marker
+     */
     public void add(Marker marker) {
         markers.add(marker);
     }
@@ -37,6 +48,11 @@ public class PolygonHoleMarkers implements ShapeMarkers {
         return markers;
     }
 
+    /**
+     * Set the markers
+     *
+     * @param markers markers
+     */
     public void setMarkers(List<Marker> markers) {
         this.markers = markers;
     }
@@ -69,9 +85,19 @@ public class PolygonHoleMarkers implements ShapeMarkers {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setZIndex(float zIndex) {
+        for (Marker marker : markers) {
+            marker.setZIndex(zIndex);
+        }
+    }
+
+    /**
      * Is it valid
      *
-     * @return
+     * @return true if valid
      */
     public boolean isValid() {
         return markers.isEmpty() || markers.size() >= 3;
@@ -80,7 +106,7 @@ public class PolygonHoleMarkers implements ShapeMarkers {
     /**
      * Is it deleted
      *
-     * @return
+     * @return true if deleted
      */
     public boolean isDeleted() {
         return markers.isEmpty();
