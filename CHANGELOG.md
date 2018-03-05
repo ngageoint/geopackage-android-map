@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 2.0.2 (TBD)
 
-* GeoPackage Overlay Tile Creator Options support for displaying missing tiles using nearby zoom levels
+* GeoPackage Overlay Tile Scaling extension support for displaying missing tiles using nearby zoom levels
 * geopackage-android version updated to 2.0.2
 
 ## [2.0.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/2.0.1) (02-14-2018)

@@ -2,9 +2,9 @@ package mil.nga.geopackage.map.tiles.overlay;
 
 import com.google.android.gms.maps.model.Tile;
 
+import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTile;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTileRetriever;
-import mil.nga.geopackage.tiles.retriever.TileCreatorOptions;
 import mil.nga.geopackage.tiles.retriever.TileRetriever;
 import mil.nga.geopackage.tiles.user.TileDao;
 
@@ -41,30 +41,30 @@ public class GeoPackageOverlay extends BoundedOverlay {
     }
 
     /**
-     * Constructor with tile creator options
+     * Constructor with tile scaling options
      *
      * @param tileDao tile dao
-     * @param options tile creator options
+     * @param scaling tile scaling options
      * @since 2.0.2
      */
-    public GeoPackageOverlay(TileDao tileDao, TileCreatorOptions options) {
+    public GeoPackageOverlay(TileDao tileDao, TileScaling scaling) {
         GeoPackageTileRetriever tileRetriever = new GeoPackageTileRetriever(tileDao);
-        tileRetriever.setOptions(options);
+        tileRetriever.setScaling(scaling);
         this.retriever = tileRetriever;
     }
 
     /**
-     * Constructor with specified tile size and tile creator options
+     * Constructor with specified tile size and tile scaling options
      *
      * @param tileDao tile dao
      * @param width   tile width
      * @param height  tile height
-     * @param options tile creator options
+     * @param scaling tile scaling options
      * @since 2.0.2
      */
-    public GeoPackageOverlay(TileDao tileDao, int width, int height, TileCreatorOptions options) {
+    public GeoPackageOverlay(TileDao tileDao, int width, int height, TileScaling scaling) {
         GeoPackageTileRetriever tileRetriever = new GeoPackageTileRetriever(tileDao, width, height);
-        tileRetriever.setOptions(options);
+        tileRetriever.setScaling(scaling);
         this.retriever = tileRetriever;
     }
 

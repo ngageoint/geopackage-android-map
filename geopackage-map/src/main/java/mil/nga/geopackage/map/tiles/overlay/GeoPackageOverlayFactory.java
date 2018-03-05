@@ -3,8 +3,8 @@ package mil.nga.geopackage.map.tiles.overlay;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
+import mil.nga.geopackage.extension.scale.TileScaling;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTile;
-import mil.nga.geopackage.tiles.retriever.TileCreatorOptions;
 import mil.nga.geopackage.tiles.user.TileDao;
 
 /**
@@ -28,12 +28,12 @@ public class GeoPackageOverlayFactory {
      * Get a Tile Provider for the Tile DAO with the tile creator options
      *
      * @param tileDao tile dao
-     * @param options tile creator options
+     * @param scaling tile scaling options
      * @return tile provider
      * @since 2.0.2
      */
-    public static TileProvider getTileProvider(TileDao tileDao, TileCreatorOptions options) {
-        return getBoundedOverlay(tileDao, options);
+    public static TileProvider getTileProvider(TileDao tileDao, TileScaling scaling) {
+        return getBoundedOverlay(tileDao, scaling);
     }
 
     /**
@@ -60,12 +60,12 @@ public class GeoPackageOverlayFactory {
      * Get a Bounded Overlay Tile Provider for the Tile DAO with the tile creator options
      *
      * @param tileDao tile dao
-     * @param options tile creator options
+     * @param scaling tile scaling options
      * @return bounded overlay
      * @since 2.0.2
      */
-    public static BoundedOverlay getBoundedOverlay(TileDao tileDao, TileCreatorOptions options) {
-        return new GeoPackageOverlay(tileDao, options);
+    public static BoundedOverlay getBoundedOverlay(TileDao tileDao, TileScaling scaling) {
+        return new GeoPackageOverlay(tileDao, scaling);
     }
 
     /**
