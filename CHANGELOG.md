@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 2.0.2 (TBD)
+## [2.0.2](https://github.com/ngageoint/geopackage-android-map/releases/tag/2.0.2) (03-20-2018)
 
 * GeoPackage Overlay Tile Scaling extension support for displaying missing tiles using nearby zoom levels
 * geopackage-android version updated to 2.0.2
