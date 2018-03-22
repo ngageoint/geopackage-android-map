@@ -15,6 +15,10 @@ Software source code previously released under an open source license and then m
 
 The GeoPackage Android Map SDK provides Google Map library implementations in addition to the inherited base [GeoPackage Android](https://github.com/ngageoint/geopackage-android/) functionality.  The library provides TileProvider overlay implementations and Google Map shape translations.
 
+<a href='http://www.opengeospatial.org/resource/products/details/?pid=1488'>
+    <img src="https://github.com/ngageoint/GeoPackage/raw/master/docs/images/ogc.gif" height=50>
+</a>
+
 ### Usage ###
 
 View the latest [Javadoc](http://ngageoint.github.io/geopackage-android-map/docs/api/)
