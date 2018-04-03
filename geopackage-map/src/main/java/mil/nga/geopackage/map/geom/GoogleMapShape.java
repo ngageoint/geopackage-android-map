@@ -12,7 +12,7 @@ import java.util.List;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.projection.ProjectionConstants;
-import mil.nga.wkb.geom.GeometryType;
+import mil.nga.sf.GeometryType;
 
 /**
  * Google Map Shape

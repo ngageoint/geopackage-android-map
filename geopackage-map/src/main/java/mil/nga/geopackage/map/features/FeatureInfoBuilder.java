@@ -35,10 +35,10 @@ import mil.nga.geopackage.schema.columns.DataColumns;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.tiles.overlay.FeatureRowData;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
-import mil.nga.wkb.geom.Geometry;
-import mil.nga.wkb.geom.GeometryType;
-import mil.nga.wkb.geom.Point;
-import mil.nga.wkb.util.GeometryPrinter;
+import mil.nga.sf.Geometry;
+import mil.nga.sf.GeometryType;
+import mil.nga.sf.Point;
+import mil.nga.sf.util.GeometryPrinter;
 
 /**
  * Feature Info Builder for building feature result based info messages or table data from feature results

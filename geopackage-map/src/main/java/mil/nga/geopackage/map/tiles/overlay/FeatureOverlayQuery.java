@@ -25,7 +25,7 @@ import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.geopackage.tiles.TileGrid;
 import mil.nga.geopackage.tiles.features.FeatureTiles;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
-import mil.nga.wkb.geom.Point;
+import mil.nga.sf.Point;
 
 /**
  * Used to query the features represented by tiles, either being drawn from or linked to the features
