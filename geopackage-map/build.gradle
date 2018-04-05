@@ -56,7 +56,9 @@ android {
         classpath += files("${android.sdkDirectory}/extras/android/support/v13/android-support-v13.jar")
         options.links("http://ngageoint.github.io/geopackage-android/docs/api/");
         options.links("http://ngageoint.github.io/geopackage-core-java/docs/api/");
-        options.links("http://ngageoint.github.io/geopackage-wkb-java/docs/api/");
+        options.links("http://ngageoint.github.io/simple-features-wkb-java/docs/api/");
+        options.links("http://ngageoint.github.io/simple-features-geojson-java/docs/api/");
+        options.links("http://ngageoint.github.io/simple-features-java/docs/api/");
         options.links("http://ngageoint.github.io/tiff-java/docs/api/");
         options.links("http://ormlite.com/javadoc/ormlite-core/");
         options.links("http://ormlite.com/javadoc/ormlite-android/");
@@ -148,6 +150,10 @@ android {
                 }
             }
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
     }
 
 }
