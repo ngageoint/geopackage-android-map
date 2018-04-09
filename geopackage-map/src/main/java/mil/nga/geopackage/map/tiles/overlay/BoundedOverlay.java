@@ -4,11 +4,11 @@ import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
 import mil.nga.geopackage.BoundingBox;
-import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionConstants;
-import mil.nga.geopackage.projection.ProjectionFactory;
-import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionFactory;
+import mil.nga.sf.proj.ProjectionTransform;
 
 /**
  * Abstract overlay which provides bounding returned tiles by zoom levels and/or a bounding box
@@ -85,8 +85,8 @@ public abstract class BoundedOverlay implements TileProvider {
     public void setBoundingBox(BoundingBox boundingBox, Projection projection) {
         ProjectionTransform projectionToWebMercator = projection
                 .getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
-        webMercatorBoundingBox = projectionToWebMercator
-                .transform(boundingBox);
+        webMercatorBoundingBox = boundingBox
+                .transform(projectionToWebMercator);
     }
 
     /**
@@ -107,8 +107,8 @@ public abstract class BoundedOverlay implements TileProvider {
         ProjectionTransform webMercatorToProjection = ProjectionFactory
                 .getProjection(ProjectionConstants.EPSG_WEB_MERCATOR)
                 .getTransformation(projection);
-        return webMercatorToProjection
-                .transform(webMercatorBoundingBox);
+        return webMercatorBoundingBox
+                .transform(webMercatorToProjection);
     }
 
     /**

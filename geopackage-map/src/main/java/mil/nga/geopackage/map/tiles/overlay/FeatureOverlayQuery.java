@@ -18,14 +18,14 @@ import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.map.R;
 import mil.nga.geopackage.map.features.FeatureInfoBuilder;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
-import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionConstants;
-import mil.nga.geopackage.projection.ProjectionFactory;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.geopackage.tiles.TileGrid;
 import mil.nga.geopackage.tiles.features.FeatureTiles;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
 import mil.nga.sf.Point;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionFactory;
 
 /**
  * Used to query the features represented by tiles, either being drawn from or linked to the features

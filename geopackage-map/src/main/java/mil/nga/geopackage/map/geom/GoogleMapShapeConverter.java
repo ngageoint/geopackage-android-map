@@ -17,9 +17,6 @@ import java.util.List;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.features.user.FeatureDao;
-import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionConstants;
-import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.sf.CircularString;
 import mil.nga.sf.CompoundCurve;
 import mil.nga.sf.Curve;
@@ -36,6 +33,9 @@ import mil.nga.sf.Polygon;
 import mil.nga.sf.PolyhedralSurface;
 import mil.nga.sf.TIN;
 import mil.nga.sf.Triangle;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.sf.proj.ProjectionTransform;
 import mil.nga.sf.util.GeometryUtils;
 
 /**

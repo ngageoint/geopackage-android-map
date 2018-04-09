@@ -9,9 +9,9 @@ import java.util.Map;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.map.MapUtils;
-import mil.nga.geopackage.projection.ProjectionConstants;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.sf.GeometryType;
+import mil.nga.sf.proj.ProjectionConstants;
 
 /**
  * Maintains a collection of feature map shapes by database, table name, and feature id

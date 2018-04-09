@@ -28,9 +28,6 @@ import mil.nga.geopackage.map.R;
 import mil.nga.geopackage.map.geom.GoogleMapShape;
 import mil.nga.geopackage.map.geom.GoogleMapShapeConverter;
 import mil.nga.geopackage.map.tiles.overlay.FeatureOverlayQuery;
-import mil.nga.geopackage.projection.Projection;
-import mil.nga.geopackage.projection.ProjectionFactory;
-import mil.nga.geopackage.projection.ProjectionTransform;
 import mil.nga.geopackage.schema.columns.DataColumns;
 import mil.nga.geopackage.schema.columns.DataColumnsDao;
 import mil.nga.geopackage.tiles.overlay.FeatureRowData;
@@ -38,6 +35,8 @@ import mil.nga.geopackage.tiles.overlay.FeatureTableData;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryType;
 import mil.nga.sf.Point;
+import mil.nga.sf.proj.Projection;
+import mil.nga.sf.proj.ProjectionTransform;
 import mil.nga.sf.util.GeometryPrinter;
 
 /**
@@ -537,7 +536,7 @@ public class FeatureInfoBuilder {
 
                 if (!projection.equals(srs.getOrganization(), srs.getOrganizationCoordsysId())) {
 
-                    Projection geomProjection = ProjectionFactory.getProjection(srs);
+                    Projection geomProjection = srs.getProjection();
                     ProjectionTransform transform = geomProjection.getTransformation(projection);
 
                     Geometry projectedGeometry = transform.transform(geometryData.getGeometry());
@@ -611,9 +610,9 @@ public class FeatureInfoBuilder {
     private FeatureIndexResults fineFilterResults(FeatureIndexResults results, double tolerance, LatLng clickLocation) {
 
         FeatureIndexResults filteredResults = null;
-        if(ignoreGeometryTypes.contains(geometryType)){
+        if (ignoreGeometryTypes.contains(geometryType)) {
             filteredResults = new FeatureIndexListResults();
-        }else if(clickLocation == null && ignoreGeometryTypes.isEmpty()){
+        } else if (clickLocation == null && ignoreGeometryTypes.isEmpty()) {
             filteredResults = results;
         } else {
 
@@ -629,9 +628,9 @@ public class FeatureInfoBuilder {
                     Geometry geometry = geomData.getGeometry();
                     if (geometry != null) {
 
-                        if(!ignoreGeometryTypes.contains(geometry.getGeometryType())) {
+                        if (!ignoreGeometryTypes.contains(geometry.getGeometryType())) {
 
-                            if(clickLocation != null) {
+                            if (clickLocation != null) {
 
                                 GoogleMapShape mapShape = converter.toShape(geometry);
                                 if (MapUtils.isPointOnShape(clickLocation, mapShape, geodesic, tolerance)) {
@@ -639,7 +638,7 @@ public class FeatureInfoBuilder {
                                     filteredListResults.addRow(featureRow);
 
                                 }
-                            }else{
+                            } else {
                                 filteredListResults.addRow(featureRow);
                             }
 
