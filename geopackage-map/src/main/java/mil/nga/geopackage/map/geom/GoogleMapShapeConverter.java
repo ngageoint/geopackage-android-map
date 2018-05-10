@@ -15,6 +15,7 @@ import org.osgeo.proj4j.units.Units;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.features.user.FeatureDao;
 import mil.nga.sf.CircularString;
@@ -2287,6 +2288,58 @@ public class GoogleMapShapeConverter {
         }
 
         return geometry;
+    }
+
+    /**
+     * Transform the bounding box in the feature projection to web mercator
+     *
+     * @param boundingBox bounding box in feature projection
+     * @return bounding box in web mercator
+     */
+    public BoundingBox boundingBoxToWebMercator(BoundingBox boundingBox) {
+        if (projection == null) {
+            throw new GeoPackageException("Shape Converter projection is null");
+        }
+        return boundingBox.transform(toWebMercator);
+    }
+
+    /**
+     * Transform the bounding box in the feature projection to WGS84
+     *
+     * @param boundingBox bounding box in feature projection
+     * @return bounding box in WGS84
+     */
+    public BoundingBox boundingBoxToWgs84(BoundingBox boundingBox) {
+        if (projection == null) {
+            throw new GeoPackageException("Shape Converter projection is null");
+        }
+        return boundingBox.transform(toWgs84);
+    }
+
+    /**
+     * Transform the bounding box in web mercator to the feature projection
+     *
+     * @param boundingBox bounding box in web mercator
+     * @return bounding box in the feature projection
+     */
+    public BoundingBox boundingBoxFromWebMercator(BoundingBox boundingBox) {
+        if (projection == null) {
+            throw new GeoPackageException("Shape Converter projection is null");
+        }
+        return boundingBox.transform(fromWebMercator);
+    }
+
+    /**
+     * Transform the bounding box in WGS84 to the feature projection
+     *
+     * @param boundingBox bounding box in WGS84
+     * @return bounding box in the feature projection
+     */
+    public BoundingBox boundingBoxFromWgs84(BoundingBox boundingBox) {
+        if (projection == null) {
+            throw new GeoPackageException("Shape Converter projection is null");
+        }
+        return boundingBox.transform(fromWgs84);
     }
 
 }
