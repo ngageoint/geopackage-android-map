@@ -1,13 +1,22 @@
-# GeoPackage To Go: Offline maps from web to mobile
-## FOSS4G NA 2018 - St. Louis, MO
+# GeoPackage To Go: Offline Maps from Web to Mobile
+## FOSS4G North America 2018 - St. Louis, MO
 
-A [GeoPackage](https://www.geopackage.org/) example using the [GeoPackage Android Map library](https://github.com/ngageoint/geopackage-android-map) from the session at [FOSS4G](https://2018.foss4g-na.org/session/geopackage-go-offline-maps-web-mobile). There are also examples for iOS and the web.
+A [GeoPackage](https://www.geopackage.org/) example using the [GeoPackage Android Map Library](https://github.com/ngageoint/geopackage-android-map) from the session at [FOSS4G](https://2018.foss4g-na.org/session/geopackage-go-offline-maps-web-mobile). There are also examples for [iOS](https://github.com/ngageoint/geopackage-ios/tree/master/docs/examples/swift/GeoPackage-to-go-iOS) and the [web](https://github.com/ngageoint/geopackage-js/tree/master/docs/examples/GeoPackageToGo).
 
 ![iOS GeoPackage Example Screenshot](Pixel2.png)
 
 Disclaimer: Some images appearing in this example app use map layers from [OpenStreetMap](https://www.openstreetmap.org/) or the native platform mapping services from the mobile device. Map layers from native platform mapping services are used in accordance with NGA’s developer license agreement with Google.
 
-This example page opens a GeoPackage with local landmarks, pizza restaurants, vectors of the parks, and OpenStreetMap tiles from St. Louis and displays them on a Leaflet map.
+This is a demo application that showcases how you might interact with a GeoPackage on Android using the GeoPackageAndroid Map Library. The [sample GeoPackage](https://github.com/ngageoint/geopackage-android-map/blob/master/docs/examples/kotlin/GeoPackageToGoAndroid/app/src/main/assets/StLouis.gpkg?raw=true) contains some information about pizza shops and points of interest near in the St. Louis area. Using the GeoPackage Android Map library, this app shows a map of those sites.
+
+You will need to set up your own [Google Maps API key](https://console.developers.google.com/) and add it to ~/.gradle/gradle.properties
+
+```
+DEBUG_MAPS_API_KEY=<AIza your Google Maps API key here>
+RELEASE_MAPS_API_KEY=<AIza your Google Maps API key here>
+```
+
+Want to learn more? See the full API [documentation](https://ngageoint.github.io/geopackage-android-map/docs/api/).
 
 ### Run
 
@@ -30,11 +39,9 @@ dependencies {
 }
 ```
 
-
-
 ### Code Walkthrough
 
-To view the full example code, see MapsActivity.kt
+To view the full example code, see [MapsActivity.kt](https://github.com/ngageoint/geopackage-android-map/blob/master/docs/examples/kotlin/GeoPackageToGoAndroid/app/src/main/java/mil/nga/geopackagetogoandroid/MapsActivity.kt).
 
 First we grab the GeoPackage out of the app bundle.
 
