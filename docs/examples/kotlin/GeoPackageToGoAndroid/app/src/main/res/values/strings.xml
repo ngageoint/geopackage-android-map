@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">GeoPackageToGoAndroid</string>
+    <string name="title_activity_maps">FOSS4G 2018 - GeoPackage To Go</string>
+</resources>
