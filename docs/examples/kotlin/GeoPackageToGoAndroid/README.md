@@ -7,7 +7,7 @@ A [GeoPackage](https://www.geopackage.org/) example using the [GeoPackage Androi
 
 Disclaimer: Some images appearing in this example app use map layers from [OpenStreetMap](https://www.openstreetmap.org/) or the native platform mapping services from the mobile device. Map layers from native platform mapping services are used in accordance with NGA’s developer license agreement with Google.
 
-This is a demo application that showcases how you might interact with a GeoPackage on Android using the GeoPackageAndroid Map Library. The [sample GeoPackage](https://github.com/ngageoint/geopackage-android-map/blob/master/docs/examples/kotlin/GeoPackageToGoAndroid/app/src/main/assets/StLouis.gpkg?raw=true) contains some information about pizza shops and points of interest near in the St. Louis area. Using the GeoPackage Android Map library, this app shows a map of those sites.
+This is a demo application that showcases how you might interact with a GeoPackage on Android using the GeoPackage Android Map Library. The [sample GeoPackage](https://github.com/ngageoint/geopackage-android-map/blob/master/docs/examples/kotlin/GeoPackageToGoAndroid/app/src/main/assets/StLouis.gpkg?raw=true) contains some information about pizza shops and points of interest near in the St. Louis area. Using the GeoPackage Android Map library, this app shows a map of those sites.
 
 You will need to set up your own [Google Maps API key](https://console.developers.google.com/) and add it to ~/.gradle/gradle.properties
 
