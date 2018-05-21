@@ -3,7 +3,6 @@ package mil.nga.geopackagetogoandroid
 import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -15,9 +14,8 @@ import mil.nga.geopackage.factory.GeoPackageFactory
 import mil.nga.geopackage.features.user.*
 import mil.nga.geopackage.map.geom.*
 import mil.nga.geopackage.map.tiles.overlay.GeoPackageOverlayFactory
-import mil.nga.geopackage.projection.ProjectionConstants
-import mil.nga.geopackage.projection.ProjectionFactory
-import mil.nga.geopackage.projection.ProjectionTransform
+import mil.nga.sf.proj.ProjectionConstants
+import mil.nga.sf.proj.ProjectionFactory
 import mil.nga.geopackage.tiles.user.TileDao
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -88,7 +86,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             .getProjection(ProjectionConstants.EPSG_WEB_MERCATOR.toLong())
                             .getTransformation(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM.toLong())
 
-        val projectedBoundingBox = transform.transform(boundingBox)
+        val projectedBoundingBox = boundingBox.transform(transform)
         val boundsBuilder = LatLngBounds.builder()
         boundsBuilder.include(LatLng(projectedBoundingBox.minLatitude, projectedBoundingBox.minLongitude))
         boundsBuilder.include(LatLng(projectedBoundingBox.minLatitude, projectedBoundingBox.maxLongitude))

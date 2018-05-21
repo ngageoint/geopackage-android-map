@@ -35,7 +35,7 @@ android {
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:26.0.2'
-    implementation "mil.nga.geopackage.map:geopackage-android-map:2.0.2"
+    implementation "mil.nga.geopackage.map:geopackage-android-map:3.0.0"
     implementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'com.android.support:multidex:1.0.3'
 }
