@@ -111,7 +111,7 @@ val transform = ProjectionFactory
                     .getProjection(ProjectionConstants.EPSG_WEB_MERCATOR.toLong())
                     .getTransformation(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM.toLong())
 
-val projectedBoundingBox = transform.transform(boundingBox)
+val projectedBoundingBox = boundingBox.transform(transform)
 val boundsBuilder = LatLngBounds.builder()
 boundsBuilder.include(LatLng(projectedBoundingBox.minLatitude, projectedBoundingBox.minLongitude))
 boundsBuilder.include(LatLng(projectedBoundingBox.minLatitude, projectedBoundingBox.maxLongitude))
