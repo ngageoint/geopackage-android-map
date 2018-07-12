@@ -6,7 +6,14 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.0.1 (TBD)
 
-* TBD
+* geopackage-android version 3.0.1
+* gradle plugin updated to 3.1.3
+* android maven gradle plugin updated to 2.1
+* google repository update
+* compile SDK version 27
+* play-services-maps version 15.0.1
+* multidex version 1.0.3 test implementation
+* gradle version 4.4
 
 ## [3.0.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.0.0) (05-17-2018)
 
