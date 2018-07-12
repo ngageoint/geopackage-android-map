@@ -69,8 +69,8 @@ public class FeatureOverlayQuery {
     /**
      * Constructor
      *
-     * @param context
-     * @param featureOverlay
+     * @param context        context
+     * @param featureOverlay feature overlay
      */
     public FeatureOverlayQuery(Context context, FeatureOverlay featureOverlay) {
         this(context, featureOverlay, featureOverlay.getFeatureTiles());
@@ -79,9 +79,9 @@ public class FeatureOverlayQuery {
     /**
      * Constructor
      *
-     * @param context
-     * @param boundedOverlay
-     * @param featureTiles
+     * @param context        context
+     * @param boundedOverlay bounded overlay
+     * @param featureTiles   feature tiles
      * @since 1.2.5
      */
     public FeatureOverlayQuery(Context context, BoundedOverlay boundedOverlay, FeatureTiles featureTiles) {
@@ -153,7 +153,7 @@ public class FeatureOverlayQuery {
     /**
      * Set the screen click percentage, between 0.0 and 1.0
      *
-     * @param screenClickPercentage
+     * @param screenClickPercentage screen click percentage
      */
     public void setScreenClickPercentage(float screenClickPercentage) {
         if (screenClickPercentage < 0.0 || screenClickPercentage > 1.0) {
@@ -165,7 +165,7 @@ public class FeatureOverlayQuery {
     /**
      * Determine if the the feature overlay is on for the current zoom level of the map at the location
      *
-     * @param map
+     * @param map    google map
      * @param latLng lat lon location
      * @return true if on
      * @since 1.2.6
@@ -198,7 +198,7 @@ public class FeatureOverlayQuery {
      *
      * @param latLng lat lng location
      * @param zoom   zoom level
-     * @return
+     * @return count
      */
     public long tileFeatureCount(LatLng latLng, double zoom) {
         int zoomValue = (int) zoom;
@@ -211,7 +211,7 @@ public class FeatureOverlayQuery {
      *
      * @param latLng lat lng location
      * @param zoom   zoom level
-     * @return
+     * @return count
      */
     public long tileFeatureCount(LatLng latLng, int zoom) {
         Point point = new Point(latLng.longitude, latLng.latitude);
@@ -224,7 +224,7 @@ public class FeatureOverlayQuery {
      *
      * @param point point location
      * @param zoom  zoom level
-     * @return
+     * @return count
      */
     public long tileFeatureCount(Point point, double zoom) {
         int zoomValue = (int) zoom;
@@ -237,7 +237,7 @@ public class FeatureOverlayQuery {
      *
      * @param point point location
      * @param zoom  zoom level
-     * @return
+     * @return count
      */
     public long tileFeatureCount(Point point, int zoom) {
         TileGrid tileGrid = TileBoundingBoxUtils.getTileGridFromWGS84(point, zoom);
@@ -247,7 +247,7 @@ public class FeatureOverlayQuery {
     /**
      * Determine if the provided count of features in the tile is more than the configured max features per tile
      *
-     * @param tileFeaturesCount
+     * @param tileFeaturesCount tile features count
      * @return true if more than the max features, false if less than or no configured max features
      */
     public boolean isMoreThanMaxFeatures(long tileFeaturesCount) {
@@ -324,7 +324,7 @@ public class FeatureOverlayQuery {
     /**
      * Get a max features information message
      *
-     * @param tileFeaturesCount
+     * @param tileFeaturesCount tile features count
      * @return max features message
      */
     public String buildMaxFeaturesInfoMessage(long tileFeaturesCount) {

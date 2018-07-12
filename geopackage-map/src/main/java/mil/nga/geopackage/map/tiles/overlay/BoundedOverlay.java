@@ -43,7 +43,7 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Get the min zoom
      *
-     * @return
+     * @return min zoom
      */
     public Integer getMinZoom() {
         return minZoom;
@@ -52,7 +52,7 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Set the min zoom
      *
-     * @param minZoom
+     * @param minZoom min zoom
      */
     public void setMinZoom(Integer minZoom) {
         this.minZoom = minZoom;
@@ -61,7 +61,7 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Get the max zoom
      *
-     * @return
+     * @return max zoom
      */
     public Integer getMaxZoom() {
         return maxZoom;
@@ -70,7 +70,7 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Set the max zoom
      *
-     * @param maxZoom
+     * @param maxZoom max zoom
      */
     public void setMaxZoom(Integer maxZoom) {
         this.maxZoom = maxZoom;
@@ -79,8 +79,8 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Set the bounding box, provided as the indicated projection
      *
-     * @param boundingBox
-     * @param projection
+     * @param boundingBox bounding box
+     * @param projection  projection
      */
     public void setBoundingBox(BoundingBox boundingBox, Projection projection) {
         ProjectionTransform projectionToWebMercator = projection
@@ -92,7 +92,7 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Get the web mercator bounding box
      *
-     * @return
+     * @return bounding box
      */
     public BoundingBox getWebMercatorBoundingBox() {
         return webMercatorBoundingBox;
@@ -101,7 +101,7 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Get the bounding box as the provided projection
      *
-     * @param projection
+     * @param projection projection
      */
     public BoundingBox getBoundingBox(Projection projection) {
         ProjectionTransform webMercatorToProjection = ProjectionFactory
@@ -163,9 +163,9 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Retrieve the tile
      *
-     * @param x
-     * @param y
-     * @param zoom
+     * @param x    x coordinate
+     * @param y    y coordinate
+     * @param zoom zoom value
      * @return tile
      */
     protected abstract Tile retrieveTile(int x, int y, int zoom);
@@ -173,9 +173,9 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Is the tile within the zoom and bounding box bounds
      *
-     * @param x
-     * @param y
-     * @param zoom
+     * @param x    x coordinate
+     * @param y    y coordinate
+     * @param zoom zoom value
      * @return true if within bounds
      */
     public boolean isWithinBounds(int x, int y, int zoom) {
@@ -185,8 +185,8 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Check if the zoom is within the overlay zoom range
      *
-     * @param zoom
-     * @return
+     * @param zoom zoom value
+     * @return true if within zoom
      */
     public boolean isWithinZoom(float zoom) {
         return (minZoom == null || zoom >= minZoom) && (maxZoom == null || zoom <= maxZoom);
@@ -195,10 +195,10 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Check if the tile request is within the desired tile bounds
      *
-     * @param x
-     * @param y
-     * @param zoom
-     * @return
+     * @param x    x coordinate
+     * @param y    y coordinate
+     * @param zoom zoom value
+     * @return true if within bounds
      */
     public boolean isWithinBoundingBox(int x, int y, int zoom) {
         boolean withinBounds = true;

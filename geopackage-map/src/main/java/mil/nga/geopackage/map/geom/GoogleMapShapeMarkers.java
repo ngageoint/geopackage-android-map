@@ -29,8 +29,8 @@ public class GoogleMapShapeMarkers {
     /**
      * Add the marker to the shape
      *
-     * @param marker
-     * @param shapeMarkers
+     * @param marker       marker
+     * @param shapeMarkers shape markers
      */
     public void add(Marker marker, ShapeMarkers shapeMarkers) {
         add(marker.getId(), shapeMarkers);
@@ -39,8 +39,8 @@ public class GoogleMapShapeMarkers {
     /**
      * Add the marker id to the shape
      *
-     * @param markerId
-     * @param shapeMarkers
+     * @param markerId     marker id
+     * @param shapeMarkers shape markers
      */
     public void add(String markerId, ShapeMarkers shapeMarkers) {
         shapeMarkersMap.put(markerId, shapeMarkers);
@@ -49,7 +49,7 @@ public class GoogleMapShapeMarkers {
     /**
      * Add all markers in the shape
      *
-     * @param shapeMarkers
+     * @param shapeMarkers shape markers
      */
     public void add(ShapeMarkers shapeMarkers) {
         for (Marker marker : shapeMarkers.getMarkers()) {
@@ -60,7 +60,7 @@ public class GoogleMapShapeMarkers {
     /**
      * Add a marker with no shape
      *
-     * @param marker
+     * @param marker marker
      */
     public void add(Marker marker) {
         add(marker, null);
@@ -69,7 +69,7 @@ public class GoogleMapShapeMarkers {
     /**
      * Add a list of markers with no shape
      *
-     * @param markers
+     * @param markers list of markers
      */
     public void add(List<Marker> markers) {
         for (Marker marker : markers) {
@@ -80,7 +80,7 @@ public class GoogleMapShapeMarkers {
     /**
      * Add an embedded shape markers
      *
-     * @param googleShapeMarkers
+     * @param googleShapeMarkers google map shape markers
      */
     public void add(GoogleMapShapeMarkers googleShapeMarkers) {
         shapeMarkersMap.putAll(googleShapeMarkers.shapeMarkersMap);
@@ -117,8 +117,8 @@ public class GoogleMapShapeMarkers {
     /**
      * Check if contains the marker
      *
-     * @param marker
-     * @return
+     * @param marker marker
+     * @return contains flag
      */
     public boolean contains(Marker marker) {
         return contains(marker.getId());
@@ -127,8 +127,8 @@ public class GoogleMapShapeMarkers {
     /**
      * Check if contains the marker id
      *
-     * @param markerId
-     * @return
+     * @param markerId marker id
+     * @return contains flag
      */
     public boolean contains(String markerId) {
         return shapeMarkersMap.containsKey(markerId);
@@ -138,8 +138,8 @@ public class GoogleMapShapeMarkers {
      * Get the shape markers for a marker, only returns a value of shapes that
      * can be edited
      *
-     * @param marker
-     * @return
+     * @param marker marker
+     * @return shape markers
      */
     public ShapeMarkers getShapeMarkers(Marker marker) {
         return getShapeMarkers(marker.getId());
@@ -149,8 +149,8 @@ public class GoogleMapShapeMarkers {
      * Get the shape markers for a marker id, only returns a value of shapes
      * that can be edited
      *
-     * @param markerId
-     * @return
+     * @param markerId marker id
+     * @return shape markers
      */
     public ShapeMarkers getShapeMarkers(String markerId) {
         return shapeMarkersMap.get(markerId);
@@ -160,8 +160,8 @@ public class GoogleMapShapeMarkers {
      * Get the shape markers for a marker, only returns a value of shapes that
      * can be edited
      *
-     * @param marker
-     * @return
+     * @param marker marker
+     * @return deleted flag
      */
     public boolean delete(Marker marker) {
         boolean deleted = false;
@@ -196,6 +196,8 @@ public class GoogleMapShapeMarkers {
 
     /**
      * Determines if the shape is in a valid state
+     *
+     * @return valid flag
      */
     public boolean isValid() {
         boolean valid = true;
@@ -209,8 +211,8 @@ public class GoogleMapShapeMarkers {
      * Polygon add a marker in the list of markers to where it is closest to the
      * the surrounding points
      *
-     * @param marker
-     * @param markers
+     * @param marker  marker
+     * @param markers list of markers
      */
     public static void addMarkerAsPolygon(Marker marker, List<Marker> markers) {
         LatLng position = marker.getPosition();
@@ -245,8 +247,8 @@ public class GoogleMapShapeMarkers {
      * Polyline add a marker in the list of markers to where it is closest to
      * the the surrounding points
      *
-     * @param marker
-     * @param markers
+     * @param marker  marker
+     * @param markers list of markers
      */
     public static void addMarkerAsPolyline(Marker marker, List<Marker> markers) {
         LatLng position = marker.getPosition();

@@ -101,7 +101,7 @@ public class GoogleMapShapeConverter {
      * Constructor with specified projection, see
      * {@link FeatureDao#getProjection}
      *
-     * @param projection
+     * @param projection projection
      */
     public GoogleMapShapeConverter(Projection projection) {
         this.projection = projection;
@@ -124,7 +124,7 @@ public class GoogleMapShapeConverter {
     /**
      * Get the projection
      *
-     * @return
+     * @return projection
      */
     public Projection getProjection() {
         return projection;
@@ -191,8 +191,8 @@ public class GoogleMapShapeConverter {
     /**
      * Transform a projection point to WGS84
      *
-     * @param point
-     * @return
+     * @param point projection point
+     * @return WGS84 point
      */
     public Point toWgs84(Point point) {
         if (projection != null) {
@@ -204,8 +204,8 @@ public class GoogleMapShapeConverter {
     /**
      * Transform a WGS84 point to the projection
      *
-     * @param point
-     * @return
+     * @param point WGS84 point
+     * @return projection point
      */
     public Point toProjection(Point point) {
         if (projection != null) {
@@ -217,8 +217,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link Point} to a {@link LatLng}
      *
-     * @param point
-     * @return
+     * @param point point
+     * @return lat lng
      */
     public LatLng toLatLng(Point point) {
         point = toWgs84(point);
@@ -229,8 +229,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link LatLng} to a {@link Point}
      *
-     * @param latLng
-     * @return
+     * @param latLng lat lng
+     * @return point
      */
     public Point toPoint(LatLng latLng) {
         return toPoint(latLng, false, false);
@@ -239,10 +239,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link LatLng} to a {@link Point}
      *
-     * @param latLng
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param latLng lat lng
+     * @param hasZ   has z flag
+     * @param hasM   has m flag
+     * @return point
      */
     public Point toPoint(LatLng latLng, boolean hasZ, boolean hasM) {
         double y = latLng.latitude;
@@ -255,8 +255,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link LineString} to a {@link PolylineOptions}
      *
-     * @param lineString
-     * @return
+     * @param lineString line string
+     * @return polyline options
      */
     public PolylineOptions toPolyline(LineString lineString) {
 
@@ -284,8 +284,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link Polyline} to a {@link LineString}
      *
-     * @param polyline
-     * @return
+     * @param polyline polyline
+     * @return line string
      */
     public LineString toLineString(Polyline polyline) {
         return toLineString(polyline, false, false);
@@ -294,10 +294,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link Polyline} to a {@link LineString}
      *
-     * @param polyline
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polyline polyline
+     * @param hasZ     has z flag
+     * @param hasM     has m flag
+     * @return line string
      */
     public LineString toLineString(Polyline polyline, boolean hasZ, boolean hasM) {
         return toLineString(polyline.getPoints(), hasZ, hasM);
@@ -306,8 +306,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link PolylineOptions} to a {@link LineString}
      *
-     * @param polyline
-     * @return
+     * @param polyline polyline options
+     * @return line string
      */
     public LineString toLineString(PolylineOptions polyline) {
         return toLineString(polyline, false, false);
@@ -316,10 +316,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link PolylineOptions} to a {@link LineString}
      *
-     * @param polyline
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polyline polyline options
+     * @param hasZ     has z flag
+     * @param hasM     has m flag
+     * @return line string
      */
     public LineString toLineString(PolylineOptions polyline, boolean hasZ,
                                    boolean hasM) {
@@ -329,8 +329,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link LatLng} to a {@link LineString}
      *
-     * @param latLngs
-     * @return
+     * @param latLngs lat lngs
+     * @return line string
      */
     public LineString toLineString(List<LatLng> latLngs) {
         return toLineString(latLngs, false, false);
@@ -339,10 +339,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link LatLng} to a {@link LineString}
      *
-     * @param latLngs
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param latLngs lat lngs
+     * @param hasZ    has z flag
+     * @param hasM    has m flag
+     * @return line string
      */
     public LineString toLineString(List<LatLng> latLngs, boolean hasZ,
                                    boolean hasM) {
@@ -357,8 +357,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link LatLng} to a {@link CircularString}
      *
-     * @param latLngs
-     * @return
+     * @param latLngs lat lngs
+     * @return circular string
      */
     public CircularString toCircularString(List<LatLng> latLngs) {
         return toCircularString(latLngs, false, false);
@@ -367,10 +367,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link LatLng} to a {@link CircularString}
      *
-     * @param latLngs
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param latLngs lat lngs
+     * @param hasZ    has z flag
+     * @param hasM    has m flag
+     * @return circular string
      */
     public CircularString toCircularString(List<LatLng> latLngs, boolean hasZ,
                                            boolean hasM) {
@@ -385,8 +385,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link LatLng} to a {@link LineString}
      *
-     * @param lineString
-     * @param latLngs
+     * @param lineString line string
+     * @param latLngs    lat lngs
      */
     public void populateLineString(LineString lineString, List<LatLng> latLngs) {
 
@@ -399,8 +399,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link Polygon} to a {@link PolygonOptions}
      *
-     * @param polygon
-     * @return
+     * @param polygon polygon
+     * @return polygon options
      */
     public PolygonOptions toPolygon(Polygon polygon) {
 
@@ -591,8 +591,8 @@ public class GoogleMapShapeConverter {
      * Convert a {@link com.google.android.gms.maps.model.Polygon} to a
      * {@link Polygon}
      *
-     * @param polygon
-     * @return
+     * @param polygon polygon
+     * @return polygon
      */
     public Polygon toPolygon(com.google.android.gms.maps.model.Polygon polygon) {
         return toPolygon(polygon, false, false);
@@ -602,10 +602,10 @@ public class GoogleMapShapeConverter {
      * Convert a {@link com.google.android.gms.maps.model.Polygon} to a
      * {@link Polygon}
      *
-     * @param polygon
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polygon polygon
+     * @param hasZ    has z flag
+     * @param hasM    has m flag
+     * @return polygon
      */
     public Polygon toPolygon(com.google.android.gms.maps.model.Polygon polygon,
                              boolean hasZ, boolean hasM) {
@@ -616,8 +616,8 @@ public class GoogleMapShapeConverter {
      * Convert a {@link com.google.android.gms.maps.model.Polygon} to a
      * {@link Polygon}
      *
-     * @param polygon
-     * @return
+     * @param polygon polygon options
+     * @return polygon
      */
     public Polygon toPolygon(PolygonOptions polygon) {
         return toPolygon(polygon, false, false);
@@ -627,10 +627,10 @@ public class GoogleMapShapeConverter {
      * Convert a {@link com.google.android.gms.maps.model.Polygon} to a
      * {@link Polygon}
      *
-     * @param polygon
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polygon polygon options
+     * @param hasZ    has z flag
+     * @param hasM    has m flag
+     * @return polygon
      */
     public Polygon toPolygon(PolygonOptions polygon, boolean hasZ, boolean hasM) {
         return toPolygon(polygon.getPoints(), polygon.getHoles(), hasZ, hasM);
@@ -640,9 +640,9 @@ public class GoogleMapShapeConverter {
      * Convert a list of {@link LatLng} and list of hole list {@link LatLng} to
      * a {@link Polygon}
      *
-     * @param latLngs
-     * @param holes
-     * @return
+     * @param latLngs lat lngs
+     * @param holes   list of holes
+     * @return polygon
      */
     public Polygon toPolygon(List<LatLng> latLngs, List<List<LatLng>> holes) {
         return toPolygon(latLngs, holes, false, false);
@@ -652,11 +652,11 @@ public class GoogleMapShapeConverter {
      * Convert a list of {@link LatLng} and list of hole list {@link LatLng} to
      * a {@link Polygon}
      *
-     * @param latLngs
-     * @param holes
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param latLngs lat lngs
+     * @param holes   list of holes
+     * @param hasZ    has z flag
+     * @param hasM    has m flag
+     * @return polygon
      */
     public Polygon toPolygon(List<LatLng> latLngs, List<List<LatLng>> holes,
                              boolean hasZ, boolean hasM) {
@@ -732,8 +732,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPoint} to a {@link MultiLatLng}
      *
-     * @param multiPoint
-     * @return
+     * @param multiPoint multi point
+     * @return multi lat lng
      */
     public MultiLatLng toLatLngs(MultiPoint multiPoint) {
 
@@ -750,8 +750,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiLatLng} to a {@link MultiPoint}
      *
-     * @param latLngs
-     * @return
+     * @param latLngs lat lngs
+     * @return multi point
      */
     public MultiPoint toMultiPoint(MultiLatLng latLngs) {
         return toMultiPoint(latLngs, false, false);
@@ -760,10 +760,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiLatLng} to a {@link MultiPoint}
      *
-     * @param latLngs
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param latLngs lat lngs
+     * @param hasZ    has z flag
+     * @param hasM    has m flag
+     * @return multi point
      */
     public MultiPoint toMultiPoint(MultiLatLng latLngs, boolean hasZ,
                                    boolean hasM) {
@@ -773,8 +773,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiLatLng} to a {@link MultiPoint}
      *
-     * @param latLngs
-     * @return
+     * @param latLngs lat lngs
+     * @return multi point
      */
     public MultiPoint toMultiPoint(List<LatLng> latLngs) {
         return toMultiPoint(latLngs, false, false);
@@ -783,10 +783,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiLatLng} to a {@link MultiPoint}
      *
-     * @param latLngs
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param latLngs lat lngs
+     * @param hasZ    has z flag
+     * @param hasM    has m flag
+     * @return multi point
      */
     public MultiPoint toMultiPoint(List<LatLng> latLngs, boolean hasZ,
                                    boolean hasM) {
@@ -804,8 +804,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiLineString} to a {@link MultiPolylineOptions}
      *
-     * @param multiLineString
-     * @return
+     * @param multiLineString multi line string
+     * @return multi polyline options
      */
     public MultiPolylineOptions toPolylines(MultiLineString multiLineString) {
 
@@ -822,8 +822,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polyline} to a {@link MultiLineString}
      *
-     * @param polylineList
-     * @return
+     * @param polylineList polyline list
+     * @return multi line string
      */
     public MultiLineString toMultiLineString(List<Polyline> polylineList) {
         return toMultiLineString(polylineList, false, false);
@@ -832,10 +832,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polyline} to a {@link MultiLineString}
      *
-     * @param polylineList
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polylineList polyline list
+     * @param hasZ         has z flag
+     * @param hasM         has m flag
+     * @return multi line string
      */
     public MultiLineString toMultiLineString(List<Polyline> polylineList,
                                              boolean hasZ, boolean hasM) {
@@ -853,8 +853,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of List<LatLng> to a {@link MultiLineString}
      *
-     * @param polylineList
-     * @return
+     * @param polylineList polyline list
+     * @return multi line string
      */
     public MultiLineString toMultiLineStringFromList(
             List<List<LatLng>> polylineList) {
@@ -864,10 +864,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of List<LatLng> to a {@link MultiLineString}
      *
-     * @param polylineList
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polylineList polyline list
+     * @param hasZ         has z flag
+     * @param hasM         has m flag
+     * @return multi line string
      */
     public MultiLineString toMultiLineStringFromList(
             List<List<LatLng>> polylineList, boolean hasZ, boolean hasM) {
@@ -885,8 +885,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of List<LatLng> to a {@link CompoundCurve}
      *
-     * @param polylineList
-     * @return
+     * @param polylineList polyline list
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurveFromList(List<List<LatLng>> polylineList) {
         return toCompoundCurveFromList(polylineList, false, false);
@@ -895,10 +895,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of List<LatLng> to a {@link CompoundCurve}
      *
-     * @param polylineList
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polylineList polyline list
+     * @param hasZ         has z flag
+     * @param hasM         has m flag
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurveFromList(
             List<List<LatLng>> polylineList, boolean hasZ, boolean hasM) {
@@ -916,8 +916,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolylineOptions} to a {@link MultiLineString}
      *
-     * @param multiPolylineOptions
-     * @return
+     * @param multiPolylineOptions multi polyline options
+     * @return multi line string
      */
     public MultiLineString toMultiLineStringFromOptions(
             MultiPolylineOptions multiPolylineOptions) {
@@ -927,10 +927,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolylineOptions} to a {@link MultiLineString}
      *
-     * @param multiPolylineOptions
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param multiPolylineOptions multi polyline options
+     * @param hasZ                 has z flag
+     * @param hasM                 has m flag
+     * @return multi line string
      */
     public MultiLineString toMultiLineStringFromOptions(
             MultiPolylineOptions multiPolylineOptions, boolean hasZ,
@@ -950,8 +950,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolylineOptions} to a {@link CompoundCurve}
      *
-     * @param multiPolylineOptions
-     * @return
+     * @param multiPolylineOptions multi polyline options
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurveFromOptions(
             MultiPolylineOptions multiPolylineOptions) {
@@ -961,10 +961,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolylineOptions} to a {@link CompoundCurve}
      *
-     * @param multiPolylineOptions
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param multiPolylineOptions multi polyline options
+     * @param hasZ                 has z flag
+     * @param hasM                 has m flag
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurveFromOptions(
             MultiPolylineOptions multiPolylineOptions, boolean hasZ,
@@ -984,8 +984,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolygon} to a {@link MultiPolygonOptions}
      *
-     * @param multiPolygon
-     * @return
+     * @param multiPolygon multi polygon
+     * @return multi polygon options
      */
     public MultiPolygonOptions toPolygons(MultiPolygon multiPolygon) {
 
@@ -1003,8 +1003,8 @@ public class GoogleMapShapeConverter {
      * Convert a list of {@link com.google.android.gms.maps.model.Polygon} to a
      * {@link MultiPolygon}
      *
-     * @param polygonList
-     * @return
+     * @param polygonList polygon list
+     * @return multi polygon
      */
     public MultiPolygon toMultiPolygon(
             List<com.google.android.gms.maps.model.Polygon> polygonList) {
@@ -1015,10 +1015,10 @@ public class GoogleMapShapeConverter {
      * Convert a list of {@link com.google.android.gms.maps.model.Polygon} to a
      * {@link MultiPolygon}
      *
-     * @param polygonList
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polygonList polygon list
+     * @param hasZ        has z flag
+     * @param hasM        has m flag
+     * @return multi polygon
      */
     public MultiPolygon toMultiPolygon(
             List<com.google.android.gms.maps.model.Polygon> polygonList,
@@ -1037,8 +1037,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polygon} to a {@link MultiPolygon}
      *
-     * @param polygonList
-     * @return
+     * @param polygonList polygon list
+     * @return multi polygon
      */
     public MultiPolygon createMultiPolygon(List<Polygon> polygonList) {
         return createMultiPolygon(polygonList, false, false);
@@ -1047,10 +1047,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polygon} to a {@link MultiPolygon}
      *
-     * @param polygonList
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polygonList polygon list
+     * @param hasZ        has z flag
+     * @param hasM        has m flag
+     * @return multi polygon
      */
     public MultiPolygon createMultiPolygon(List<Polygon> polygonList,
                                            boolean hasZ, boolean hasM) {
@@ -1067,8 +1067,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolygonOptions} to a {@link MultiPolygon}
      *
-     * @param multiPolygonOptions
-     * @return
+     * @param multiPolygonOptions multi polygon options
+     * @return multi polygon
      */
     public MultiPolygon toMultiPolygonFromOptions(
             MultiPolygonOptions multiPolygonOptions) {
@@ -1078,10 +1078,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link PolygonOptions} to a {@link MultiPolygon}
      *
-     * @param multiPolygonOptions
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param multiPolygonOptions multi polygon options
+     * @param hasZ                has z flag
+     * @param hasM                has m flag
+     * @return multi polygon
      */
     public MultiPolygon toMultiPolygonFromOptions(
             MultiPolygonOptions multiPolygonOptions, boolean hasZ, boolean hasM) {
@@ -1100,8 +1100,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link CompoundCurve} to a {@link MultiPolylineOptions}
      *
-     * @param compoundCurve
-     * @return
+     * @param compoundCurve compound curve
+     * @return multi polyline options
      */
     public MultiPolylineOptions toPolylines(CompoundCurve compoundCurve) {
 
@@ -1118,8 +1118,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polyline} to a {@link CompoundCurve}
      *
-     * @param polylineList
-     * @return
+     * @param polylineList polyline list
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurve(List<Polyline> polylineList) {
         return toCompoundCurve(polylineList, false, false);
@@ -1128,10 +1128,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polyline} to a {@link CompoundCurve}
      *
-     * @param polylineList
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polylineList polyline list
+     * @param hasZ         has z flag
+     * @param hasM         has m flag
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurve(List<Polyline> polylineList,
                                          boolean hasZ, boolean hasM) {
@@ -1149,8 +1149,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolylineOptions} to a {@link CompoundCurve}
      *
-     * @param multiPolylineOptions
-     * @return
+     * @param multiPolylineOptions multi polyline options
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurveWithOptions(
             MultiPolylineOptions multiPolylineOptions) {
@@ -1160,10 +1160,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolylineOptions} to a {@link CompoundCurve}
      *
-     * @param multiPolylineOptions
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param multiPolylineOptions multi polyline options
+     * @param hasZ                 has z flag
+     * @param hasM                 has m flag
+     * @return compound curve
      */
     public CompoundCurve toCompoundCurveWithOptions(
             MultiPolylineOptions multiPolylineOptions, boolean hasZ,
@@ -1183,8 +1183,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link PolyhedralSurface} to a {@link MultiPolygonOptions}
      *
-     * @param polyhedralSurface
-     * @return
+     * @param polyhedralSurface polyhedral surface
+     * @return multi polygon options
      */
     public MultiPolygonOptions toPolygons(PolyhedralSurface polyhedralSurface) {
 
@@ -1201,8 +1201,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polygon} to a {@link PolyhedralSurface}
      *
-     * @param polygonList
-     * @return
+     * @param polygonList polygon list
+     * @return polyhedral surface
      */
     public PolyhedralSurface toPolyhedralSurface(
             List<com.google.android.gms.maps.model.Polygon> polygonList) {
@@ -1212,10 +1212,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a list of {@link Polygon} to a {@link PolyhedralSurface}
      *
-     * @param polygonList
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param polygonList polygon list
+     * @param hasZ        has z flag
+     * @param hasM        has m flag
+     * @return polyhedral surface
      */
     public PolyhedralSurface toPolyhedralSurface(
             List<com.google.android.gms.maps.model.Polygon> polygonList,
@@ -1234,8 +1234,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolygonOptions} to a {@link PolyhedralSurface}
      *
-     * @param multiPolygonOptions
-     * @return
+     * @param multiPolygonOptions multi polygon options
+     * @return polyhedral surface
      */
     public PolyhedralSurface toPolyhedralSurfaceWithOptions(
             MultiPolygonOptions multiPolygonOptions) {
@@ -1245,10 +1245,10 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link MultiPolygonOptions} to a {@link PolyhedralSurface}
      *
-     * @param multiPolygonOptions
-     * @param hasZ
-     * @param hasM
-     * @return
+     * @param multiPolygonOptions multi polygon options
+     * @param hasZ                has z flag
+     * @param hasM                has m flag
+     * @return polyhedral surface
      */
     public PolyhedralSurface toPolyhedralSurfaceWithOptions(
             MultiPolygonOptions multiPolygonOptions, boolean hasZ, boolean hasM) {
@@ -1267,10 +1267,9 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link Geometry} to a Map shape
      *
-     * @param geometry
-     * @return
+     * @param geometry geometry
+     * @return google map shape
      */
-
     @SuppressWarnings("unchecked")
     public GoogleMapShape toShape(Geometry geometry) {
 
@@ -1353,8 +1352,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link GeometryCollection} to a list of Map shapes
      *
-     * @param geometryCollection
-     * @return
+     * @param geometryCollection geometry collection
+     * @return google map shapes
      */
     public List<GoogleMapShape> toShapes(
             GeometryCollection<Geometry> geometryCollection) {
@@ -1372,9 +1371,9 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a {@link Geometry} to a Map shape and add it
      *
-     * @param map
-     * @param geometry
-     * @return
+     * @param map      google map
+     * @param geometry geometry
+     * @return google map shape
      */
     @SuppressWarnings("unchecked")
     public GoogleMapShape addToMap(GoogleMap map, Geometry geometry) {
@@ -1458,9 +1457,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add a shape to the map
      *
-     * @param map
-     * @param shape
-     * @return
+     * @param map   google map
+     * @param shape google map shape
+     * @return google map shape
      */
     public static GoogleMapShape addShapeToMap(GoogleMap map,
                                                GoogleMapShape shape) {
@@ -1527,9 +1526,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add a LatLng to the map
      *
-     * @param map
-     * @param latLng
-     * @return
+     * @param map    google map
+     * @param latLng lat lng
+     * @return marker
      */
     public static Marker addLatLngToMap(GoogleMap map, LatLng latLng) {
         return addLatLngToMap(map, latLng, new MarkerOptions());
@@ -1538,9 +1537,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add MarkerOptions to the map
      *
-     * @param map
-     * @param options
-     * @return
+     * @param map     google map
+     * @param options marker options
+     * @return marker
      */
     public static Marker addMarkerOptionsToMap(GoogleMap map,
                                                MarkerOptions options) {
@@ -1550,10 +1549,10 @@ public class GoogleMapShapeConverter {
     /**
      * Add a LatLng to the map
      *
-     * @param map
-     * @param latLng
-     * @param options
-     * @return
+     * @param map     google map
+     * @param latLng  lat lng
+     * @param options marker options
+     * @return marker
      */
     public static Marker addLatLngToMap(GoogleMap map, LatLng latLng,
                                         MarkerOptions options) {
@@ -1563,9 +1562,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add a Polyline to the map
      *
-     * @param map
-     * @param polyline
-     * @return
+     * @param map      google map
+     * @param polyline polyline options
+     * @return polyline
      */
     public static Polyline addPolylineToMap(GoogleMap map,
                                             PolylineOptions polyline) {
@@ -1575,9 +1574,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add a Polygon to the map
      *
-     * @param map
-     * @param polygon
-     * @return
+     * @param map     google map
+     * @param polygon polygon options
+     * @return polygon
      */
     public static com.google.android.gms.maps.model.Polygon addPolygonToMap(
             GoogleMap map, PolygonOptions polygon) {
@@ -1587,9 +1586,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add a list of LatLngs to the map
      *
-     * @param map
-     * @param latLngs
-     * @return
+     * @param map     google map
+     * @param latLngs lat lngs
+     * @return multi marker
      */
     public static MultiMarker addLatLngsToMap(GoogleMap map, MultiLatLng latLngs) {
         MultiMarker multiMarker = new MultiMarker();
@@ -1613,9 +1612,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add a list of Polylines to the map
      *
-     * @param map
-     * @param polylines
-     * @return
+     * @param map       google map
+     * @param polylines multi polyline options
+     * @return multi polyline
      */
     public static MultiPolyline addPolylinesToMap(GoogleMap map,
                                                   MultiPolylineOptions polylines) {
@@ -1636,9 +1635,9 @@ public class GoogleMapShapeConverter {
     /**
      * Add a list of Polygons to the map
      *
-     * @param map
-     * @param polygons
-     * @return
+     * @param map      google map
+     * @param polygons multi polygon options
+     * @return multi polygon
      */
     public static mil.nga.geopackage.map.geom.MultiPolygon addPolygonsToMap(
             GoogleMap map, MultiPolygonOptions polygons) {
@@ -1663,9 +1662,9 @@ public class GoogleMapShapeConverter {
      * Convert a {@link GeometryCollection} to a list of Map shapes and add to
      * the map
      *
-     * @param map
-     * @param geometryCollection
-     * @return
+     * @param map                google map
+     * @param geometryCollection geometry collection
+     * @return google map shapes
      */
     public List<GoogleMapShape> addToMap(GoogleMap map,
                                          GeometryCollection<Geometry> geometryCollection) {
@@ -1683,15 +1682,15 @@ public class GoogleMapShapeConverter {
     /**
      * Add a shape to the map as markers
      *
-     * @param map
-     * @param shape
-     * @param markerOptions
-     * @param polylineMarkerOptions
-     * @param polygonMarkerOptions
-     * @param polygonMarkerHoleOptions
-     * @param globalPolylineOptions
-     * @param globalPolygonOptions
-     * @return
+     * @param map                      google map
+     * @param shape                    google map shape
+     * @param markerOptions            marker options
+     * @param polylineMarkerOptions    polyline marker options
+     * @param polygonMarkerOptions     polygon marker options
+     * @param polygonMarkerHoleOptions polygon marker hole options
+     * @param globalPolylineOptions    global polyline options
+     * @param globalPolygonOptions     globale polygon options
+     * @return google map shape markers
      */
     public GoogleMapShapeMarkers addShapeToMapAsMarkers(GoogleMap map,
                                                         GoogleMapShape shape, MarkerOptions markerOptions,
@@ -1807,11 +1806,11 @@ public class GoogleMapShapeConverter {
     /**
      * Add the list of points as markers
      *
-     * @param map
-     * @param points
-     * @param customMarkerOptions
-     * @param ignoreIdenticalEnds
-     * @return
+     * @param map                 google map
+     * @param points              points
+     * @param customMarkerOptions custom marker options
+     * @param ignoreIdenticalEnds ignore identical ends flag
+     * @return list of markers
      */
     public List<Marker> addPointsToMapAsMarkers(GoogleMap map,
                                                 List<LatLng> points, MarkerOptions customMarkerOptions,
@@ -1847,11 +1846,11 @@ public class GoogleMapShapeConverter {
     /**
      * Add a Polyline to the map as markers
      *
-     * @param map
-     * @param polylineOptions
-     * @param polylineMarkerOptions
-     * @param globalPolylineOptions
-     * @return
+     * @param map                   google map
+     * @param polylineOptions       polyline options
+     * @param polylineMarkerOptions polyline marker options
+     * @param globalPolylineOptions global polyline options
+     * @return polyline markers
      */
     public PolylineMarkers addPolylineToMapAsMarkers(GoogleMap map,
                                                      PolylineOptions polylineOptions,
@@ -1880,13 +1879,13 @@ public class GoogleMapShapeConverter {
     /**
      * Add a Polygon to the map as markers
      *
-     * @param shapeMarkers
-     * @param map
-     * @param polygonOptions
-     * @param polygonMarkerOptions
-     * @param polygonMarkerHoleOptions
-     * @param globalPolygonOptions
-     * @return
+     * @param shapeMarkers             google map shape markers
+     * @param map                      google map
+     * @param polygonOptions           polygon options
+     * @param polygonMarkerOptions     polygon marker options
+     * @param polygonMarkerHoleOptions polygon marker hole options
+     * @param globalPolygonOptions     global polygon options
+     * @return polygon markers
      */
     public PolygonMarkers addPolygonToMapAsMarkers(
             GoogleMapShapeMarkers shapeMarkers, GoogleMap map,
@@ -1928,12 +1927,12 @@ public class GoogleMapShapeConverter {
     /**
      * Add a MultiPolylineOptions to the map as markers
      *
-     * @param shapeMarkers
-     * @param map
-     * @param multiPolyline
-     * @param polylineMarkerOptions
-     * @param globalPolylineOptions
-     * @return
+     * @param shapeMarkers          google map shape markers
+     * @param map                   google map
+     * @param multiPolyline         multi polyline options
+     * @param polylineMarkerOptions polyline marker options
+     * @param globalPolylineOptions global polyline options
+     * @return multi polyline markers
      */
     public MultiPolylineMarkers addMultiPolylineToMapAsMarkers(
             GoogleMapShapeMarkers shapeMarkers, GoogleMap map,
@@ -1955,13 +1954,13 @@ public class GoogleMapShapeConverter {
     /**
      * Add a MultiPolygonOptions to the map as markers
      *
-     * @param shapeMarkers
-     * @param map
-     * @param multiPolygon
-     * @param polygonMarkerOptions
-     * @param polygonMarkerHoleOptions
-     * @param globalPolygonOptions
-     * @return
+     * @param shapeMarkers             google map shape markers
+     * @param map                      google map
+     * @param multiPolygon             multi polygon options
+     * @param polygonMarkerOptions     polygon marker options
+     * @param polygonMarkerHoleOptions polygon marker hole options
+     * @param globalPolygonOptions     global polygon options
+     * @return multi polygon markers
      */
     public MultiPolygonMarkers addMultiPolygonToMapAsMarkers(
             GoogleMapShapeMarkers shapeMarkers, GoogleMap map,
@@ -1983,8 +1982,8 @@ public class GoogleMapShapeConverter {
     /**
      * Get a list of points as LatLng from a list of Markers
      *
-     * @param markers
-     * @return
+     * @param markers list of markers
+     * @return lat lngs
      */
     public List<LatLng> getPointsFromMarkers(List<Marker> markers) {
         List<LatLng> points = new ArrayList<LatLng>();
@@ -1997,8 +1996,8 @@ public class GoogleMapShapeConverter {
     /**
      * Convert a GoogleMapShape to a Geometry
      *
-     * @param shape
-     * @return
+     * @param shape google map shape
+     * @return geometry
      */
     public Geometry toGeometry(GoogleMapShape shape) {
 

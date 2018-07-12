@@ -28,7 +28,7 @@ public class FeatureOverlay extends BoundedOverlay {
     /**
      * Constructor
      *
-     * @param featureTiles
+     * @param featureTiles feature tiles
      */
     public FeatureOverlay(FeatureTiles featureTiles) {
         this.featureTiles = featureTiles;

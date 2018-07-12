@@ -19,8 +19,8 @@ public class TileBoundingBoxMapUtils {
     /**
      * Get the longitude distance in the middle latitude
      *
-     * @param boundingBox
-     * @return
+     * @param boundingBox bounding box
+     * @return distance
      */
     public static double getLongitudeDistance(BoundingBox boundingBox) {
         return getLongitudeDistance(boundingBox.getMinLongitude(),
@@ -68,8 +68,8 @@ public class TileBoundingBoxMapUtils {
     /**
      * Get the latitude distance
      *
-     * @param boundingBox
-     * @return
+     * @param boundingBox bounding box
+     * @return distance
      */
     public static double getLatitudeDistance(BoundingBox boundingBox) {
         return getLatitudeDistance(boundingBox.getMinLatitude(),
@@ -79,9 +79,9 @@ public class TileBoundingBoxMapUtils {
     /**
      * Get the latitude distance
      *
-     * @param minLatitude
-     * @param maxLatitude
-     * @return
+     * @param minLatitude min latitude
+     * @param maxLatitude max latitude
+     * @return distance
      */
     public static double getLatitudeDistance(double minLatitude,
                                              double maxLatitude) {

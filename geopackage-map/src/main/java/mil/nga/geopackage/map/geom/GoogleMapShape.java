@@ -39,9 +39,9 @@ public class GoogleMapShape {
     /**
      * Constructor
      *
-     * @param geometryType
-     * @param shapeType
-     * @param shape
+     * @param geometryType geometry type
+     * @param shapeType    shape type
+     * @param shape        shape
      */
     public GoogleMapShape(GeometryType geometryType,
                           GoogleMapShapeType shapeType, Object shape) {
@@ -53,7 +53,7 @@ public class GoogleMapShape {
     /**
      * Get the geometry type
      *
-     * @return
+     * @return geometry type
      */
     public GeometryType getGeometryType() {
         return geometryType;
@@ -62,7 +62,7 @@ public class GoogleMapShape {
     /**
      * Set the geometry type
      *
-     * @param geometryType
+     * @param geometryType geometry type
      */
     public void setGeometryType(GeometryType geometryType) {
         this.geometryType = geometryType;
@@ -71,7 +71,7 @@ public class GoogleMapShape {
     /**
      * Get the shape type
      *
-     * @return
+     * @return shape type
      */
     public GoogleMapShapeType getShapeType() {
         return shapeType;
@@ -80,7 +80,7 @@ public class GoogleMapShape {
     /**
      * Set the shape type
      *
-     * @param shapeType
+     * @param shapeType shape type
      */
     public void setShapeType(GoogleMapShapeType shapeType) {
         this.shapeType = shapeType;
@@ -89,7 +89,7 @@ public class GoogleMapShape {
     /**
      * Get the shape
      *
-     * @return
+     * @return shape
      */
     public Object getShape() {
         return shape;
@@ -98,7 +98,7 @@ public class GoogleMapShape {
     /**
      * Set the shape
      *
-     * @param shape
+     * @param shape shape
      */
     public void setShape(Object shape) {
         this.shape = shape;
@@ -358,7 +358,7 @@ public class GoogleMapShape {
     /**
      * Get a bounding box that includes the shape
      *
-     * @return
+     * @return bounding box
      */
     public BoundingBox boundingBox() {
         BoundingBox boundingBox = new BoundingBox(Double.MAX_VALUE, Double.MAX_VALUE, -Double.MAX_VALUE, -Double.MAX_VALUE);
@@ -369,7 +369,7 @@ public class GoogleMapShape {
     /**
      * Expand the bounding box to include the shape
      *
-     * @param boundingBox
+     * @param boundingBox bounding box
      */
     public void expandBoundingBox(BoundingBox boundingBox) {
 
@@ -469,8 +469,8 @@ public class GoogleMapShape {
     /**
      * Expand the bounding box by the LatLng
      *
-     * @param boundingBox
-     * @param latLng
+     * @param boundingBox bounding box
+     * @param latLng      lat lng
      */
     private void expandBoundingBox(BoundingBox boundingBox, LatLng latLng) {
 
@@ -509,8 +509,8 @@ public class GoogleMapShape {
     /**
      * Expand the bounding box by the LatLngs
      *
-     * @param boundingBox
-     * @param latLngs
+     * @param boundingBox bounding box
+     * @param latLngs     lat lngs
      */
     private void expandBoundingBox(BoundingBox boundingBox, List<LatLng> latLngs) {
         for (LatLng latLng : latLngs) {
@@ -521,8 +521,8 @@ public class GoogleMapShape {
     /**
      * Expand the bounding box by the markers
      *
-     * @param boundingBox
-     * @param markers
+     * @param boundingBox bounding box
+     * @param markers     list of markers
      */
     private void expandBoundingBoxMarkers(BoundingBox boundingBox,
                                           List<Marker> markers) {

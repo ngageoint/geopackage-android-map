@@ -150,7 +150,7 @@ public class GeoPackageOverlayFactory {
     /**
      * Get a map tile from the GeoPackage tile
      *
-     * @param geoPackageTile
+     * @param geoPackageTile GeoPackage tile
      * @return tile
      */
     public static Tile getTile(GeoPackageTile geoPackageTile) {
