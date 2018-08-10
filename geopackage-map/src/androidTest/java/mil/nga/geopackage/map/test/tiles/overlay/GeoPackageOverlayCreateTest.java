@@ -1,5 +1,7 @@
 package mil.nga.geopackage.map.test.tiles.overlay;
 
+import org.junit.Test;
+
 import java.sql.SQLException;
 
 import mil.nga.geopackage.map.test.CreateGeoPackageTestCase;
@@ -23,6 +25,7 @@ public class GeoPackageOverlayCreateTest extends CreateGeoPackageTestCase {
 	 * 
 	 * @throws SQLException
 	 */
+	@Test
 	public void testOverlay() throws SQLException {
 
 		GeoPackageOverlayUtils.testOverlay(geoPackage);

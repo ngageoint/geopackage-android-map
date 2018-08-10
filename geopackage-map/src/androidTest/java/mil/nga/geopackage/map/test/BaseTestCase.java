@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.StrictMode;
-import android.test.ActivityInstrumentationTestCase2;
+import android.support.test.rule.ActivityTestRule;
+
+import org.junit.Before;
+import org.junit.Rule;
 
 import mil.nga.geopackage.db.metadata.GeoPackageMetadataDb;
+import mil.nga.geopackage.map.BuildConfig;
 import mil.nga.geopackage.map.GeoPackageMapActivity;
 
 /**
@@ -14,8 +18,10 @@ import mil.nga.geopackage.map.GeoPackageMapActivity;
  *
  * @author osbornb
  */
-public abstract class BaseTestCase extends
-        ActivityInstrumentationTestCase2<GeoPackageMapActivity> {
+public abstract class BaseTestCase{
+
+    @Rule
+    public ActivityTestRule<GeoPackageMapActivity> rule  = new ActivityTestRule<GeoPackageMapActivity>(GeoPackageMapActivity.class);
 
     /**
      * Activity
@@ -31,18 +37,14 @@ public abstract class BaseTestCase extends
      * Constructor
      */
     public BaseTestCase() {
-        super(GeoPackageMapActivity.class);
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void baseSetUp() throws Exception {
 
         // Set the activity and test context
-        activity = getActivity();
+        activity = rule.getActivity();
         testContext = TestUtils.getTestContext(activity);
 
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {

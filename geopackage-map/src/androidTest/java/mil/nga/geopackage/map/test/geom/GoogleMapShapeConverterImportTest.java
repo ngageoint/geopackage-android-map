@@ -1,5 +1,7 @@
 package mil.nga.geopackage.map.test.geom;
 
+import org.junit.Test;
+
 import java.sql.SQLException;
 
 import mil.nga.geopackage.map.test.ImportGeoPackageTestCase;
@@ -23,6 +25,7 @@ public class GoogleMapShapeConverterImportTest extends ImportGeoPackageTestCase 
 	 * 
 	 * @throws SQLException
 	 */
+	@Test
 	public void testShapes() throws SQLException {
 
 		GoogleMapShapeConverterUtils.testShapes(geoPackage);
