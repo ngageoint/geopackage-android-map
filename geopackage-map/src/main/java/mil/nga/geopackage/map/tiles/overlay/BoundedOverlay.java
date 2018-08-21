@@ -211,8 +211,8 @@ public abstract class BoundedOverlay implements TileProvider {
                     .getWebMercatorBoundingBox(x, y, zoom);
 
             // Check if the request overlaps
-            withinBounds = TileBoundingBoxUtils.overlap(webMercatorBoundingBox,
-                    requestWebMercatorBoundingBox) != null;
+            withinBounds = webMercatorBoundingBox.intersects(
+                    requestWebMercatorBoundingBox);
         }
 
         return withinBounds;
