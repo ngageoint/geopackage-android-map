@@ -6,7 +6,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.0.3 (TBD)
 
-* TBD
+* geopackage-android version 3.0.3
+* min SDK version updated to 16
+* compile SDK version 28
+* Android Manifest Apache HTTP legacy library flag
 
 ## [3.0.2](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.0.2) (07-27-2018)
 
