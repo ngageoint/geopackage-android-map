@@ -122,7 +122,7 @@ indexer.setIndexLocation(FeatureIndexType.GEOPACKAGE);
 int indexedCount = indexer.index();
 
 // Feature Tile Provider (dynamically draw tiles from features)
-FeatureTiles featureTiles = new MapFeatureTiles(context, featureDao);
+FeatureTiles featureTiles = new DefaultFeatureTiles(context, featureDao);
 featureTiles.setMaxFeaturesPerTile(1000); // Set max features to draw per tile
 NumberFeaturesTile numberFeaturesTile = new NumberFeaturesTile(context); // Custom feature tile implementation
 featureTiles.setMaxFeaturesTileDraw(numberFeaturesTile); // Draw feature count tiles when max features passed
