@@ -4,7 +4,7 @@ apply plugin: 'signing'
 
 group = "mil.nga.geopackage.map"
 archivesBaseName = "geopackage-android-map"
-version = "3.0.3"
+version = "3.1.0"
 def remotePublish = false
 
 android {
@@ -157,9 +157,9 @@ android {
 dependencies {
     api 'com.google.android.gms:play-services-maps:15.0.1'
     api 'com.google.maps.android:android-maps-utils:0.5'
-    api 'mil.nga.geopackage:geopackage-android:3.0.3'
+    api 'mil.nga.geopackage:geopackage-android:3.1.0'
     //api project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:3.0.3'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:3.1.0'
     testImplementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
