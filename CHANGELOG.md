@@ -9,7 +9,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * geopackage-android version 3.0.3
 * min SDK version updated to 16
 * compile SDK version 28
+* play-services-maps version 16.0.0
 * Android Manifest Apache HTTP legacy library flag
+* gradle plugin updated to 3.2.0
+* gradle version 4.6
 
 ## [3.0.2](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.0.2) (07-27-2018)
 
