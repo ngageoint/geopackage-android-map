@@ -157,9 +157,9 @@ android {
 dependencies {
     api 'com.google.android.gms:play-services-maps:16.0.0'
     api 'com.google.maps.android:android-maps-utils:0.5'
-    api 'mil.nga.geopackage:geopackage-android:3.1.0'
+    api 'mil.nga.geopackage:geopackage-android:3.1.1'
     //api project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:3.1.0'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:3.1.1'
     testImplementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
