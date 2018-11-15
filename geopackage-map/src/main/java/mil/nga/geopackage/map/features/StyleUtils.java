@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import mil.nga.geopackage.GeoPackage;
 import mil.nga.geopackage.extension.style.FeatureStyle;
@@ -194,6 +196,223 @@ public class StyleUtils {
             if (color != null) {
                 float hue = color.getHue();
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(hue));
+                styleSet = true;
+            }
+        }
+
+        return styleSet;
+    }
+
+    /**
+     * Create new polyline options populated with the feature row style
+     *
+     * @param geoPackage GeoPackage
+     * @param featureRow feature row
+     * @return polyline options populated with the feature style
+     */
+    public static PolylineOptions createPolylineOptions(GeoPackage geoPackage, FeatureRow featureRow) {
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+        setFeatureStyle(polylineOptions, geoPackage, featureRow);
+
+        return polylineOptions;
+    }
+
+    /**
+     * Set the feature row style into the polyline options
+     *
+     * @param polylineOptions polyline options
+     * @param geoPackage      GeoPackage
+     * @param featureRow      feature row
+     * @return true if style was set into the polyline options
+     */
+    public static boolean setFeatureStyle(PolylineOptions polylineOptions, GeoPackage geoPackage, FeatureRow featureRow) {
+
+        FeatureStyleExtension styleExtension = new FeatureStyleExtension(geoPackage);
+        FeatureStyle featureStyle = styleExtension.getFeatureStyle(featureRow);
+
+        return setFeatureStyle(polylineOptions, featureStyle);
+    }
+
+    /**
+     * Create new polyline options populated with the feature style
+     *
+     * @param featureStyle feature style
+     * @return polyline options populated with the feature style
+     */
+    public static PolylineOptions createPolylineOptions(FeatureStyle featureStyle) {
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+        setFeatureStyle(polylineOptions, featureStyle);
+
+        return polylineOptions;
+    }
+
+    /**
+     * Set the feature style into the polyline options
+     *
+     * @param polylineOptions polyline options
+     * @param featureStyle    feature style
+     * @return true if style was set into the polyline options
+     */
+    public static boolean setFeatureStyle(PolylineOptions polylineOptions, FeatureStyle featureStyle) {
+
+        boolean featureStyleSet = false;
+
+        if (featureStyle != null) {
+
+            featureStyleSet = setStyle(polylineOptions, featureStyle.getStyle());
+
+        }
+
+        return featureStyleSet;
+    }
+
+    /**
+     * Create new polyline options populated with the style
+     *
+     * @param style style row
+     * @return polyline options populated with the style
+     */
+    public static PolylineOptions createPolylineOptions(StyleRow style) {
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+        setStyle(polylineOptions, style);
+
+        return polylineOptions;
+    }
+
+    /**
+     * Set the style into the polyline options
+     *
+     * @param polylineOptions polyline options
+     * @param style           style row
+     * @return true if style was set into the polyline options
+     */
+    public static boolean setStyle(PolylineOptions polylineOptions, StyleRow style) {
+
+        boolean styleSet = false;
+
+        if (style != null) {
+            Color color = style.getColor();
+            if (color != null) {
+                polylineOptions.color(color.getColorWithAlpha());
+                styleSet = true;
+            }
+            Double width = style.getWidth();
+            if (width != null) {
+                polylineOptions.width(width.floatValue());
+                styleSet = true;
+            }
+        }
+
+        return styleSet;
+    }
+
+    /**
+     * Create new polygon options populated with the feature row style
+     *
+     * @param geoPackage GeoPackage
+     * @param featureRow feature row
+     * @return polygon options populated with the feature style
+     */
+    public static PolygonOptions createPolygonOptions(GeoPackage geoPackage, FeatureRow featureRow) {
+
+        PolygonOptions polygonOptions = new PolygonOptions();
+        setFeatureStyle(polygonOptions, geoPackage, featureRow);
+
+        return polygonOptions;
+    }
+
+    /**
+     * Set the feature row style into the polygon options
+     *
+     * @param polygonOptions polygon options
+     * @param geoPackage     GeoPackage
+     * @param featureRow     feature row
+     * @return true if style was set into the polygon options
+     */
+    public static boolean setFeatureStyle(PolygonOptions polygonOptions, GeoPackage geoPackage, FeatureRow featureRow) {
+
+        FeatureStyleExtension styleExtension = new FeatureStyleExtension(geoPackage);
+        FeatureStyle featureStyle = styleExtension.getFeatureStyle(featureRow);
+
+        return setFeatureStyle(polygonOptions, featureStyle);
+    }
+
+    /**
+     * Create new polygon options populated with the feature style
+     *
+     * @param featureStyle feature style
+     * @return polygon options populated with the feature style
+     */
+    public static PolygonOptions createPolygonOptions(FeatureStyle featureStyle) {
+
+        PolygonOptions polygonOptions = new PolygonOptions();
+        setFeatureStyle(polygonOptions, featureStyle);
+
+        return polygonOptions;
+    }
+
+    /**
+     * Set the feature style into the polygon options
+     *
+     * @param polygonOptions polygon options
+     * @param featureStyle   feature style
+     * @return true if style was set into the polygon options
+     */
+    public static boolean setFeatureStyle(PolygonOptions polygonOptions, FeatureStyle featureStyle) {
+
+        boolean featureStyleSet = false;
+
+        if (featureStyle != null) {
+
+            featureStyleSet = setStyle(polygonOptions, featureStyle.getStyle());
+
+        }
+
+        return featureStyleSet;
+    }
+
+    /**
+     * Create new polygon options populated with the style
+     *
+     * @param style style row
+     * @return polygon options populated with the style
+     */
+    public static PolygonOptions createPolygonOptions(StyleRow style) {
+
+        PolygonOptions polygonOptions = new PolygonOptions();
+        setStyle(polygonOptions, style);
+
+        return polygonOptions;
+    }
+
+    /**
+     * Set the style into the polygon options
+     *
+     * @param polygonOptions polygon options
+     * @param style          style row
+     * @return true if style was set into the polygon options
+     */
+    public static boolean setStyle(PolygonOptions polygonOptions, StyleRow style) {
+
+        boolean styleSet = false;
+
+        if (style != null) {
+            Color color = style.getColor();
+            if (color != null) {
+                polygonOptions.strokeColor(color.getColorWithAlpha());
+                styleSet = true;
+            }
+            Double width = style.getWidth();
+            if (width != null) {
+                polygonOptions.strokeWidth(width.floatValue());
+                styleSet = true;
+            }
+            Color fillColor = style.getFillColor();
+            if (fillColor != null) {
+                polygonOptions.fillColor(fillColor.getColorWithAlpha());
                 styleSet = true;
             }
         }
