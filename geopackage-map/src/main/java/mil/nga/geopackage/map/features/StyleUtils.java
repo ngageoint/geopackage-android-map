@@ -1,9 +1,6 @@
 package mil.nga.geopackage.map.features;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.DisplayMetrics;
-import android.util.LruCache;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -13,10 +10,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import mil.nga.geopackage.GeoPackage;
 import mil.nga.geopackage.extension.style.FeatureStyle;
 import mil.nga.geopackage.extension.style.FeatureStyleExtension;
+import mil.nga.geopackage.extension.style.IconCache;
 import mil.nga.geopackage.extension.style.IconRow;
 import mil.nga.geopackage.extension.style.StyleRow;
 import mil.nga.geopackage.features.user.FeatureRow;
-import mil.nga.geopackage.io.BitmapConverter;
 import mil.nga.geopackage.style.Color;
 
 /**
@@ -48,7 +45,7 @@ public class StyleUtils {
      * @param iconCache  icon cache
      * @return marker options populated with the feature style
      */
-    public static MarkerOptions createMarkerOptions(GeoPackage geoPackage, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
+    public static MarkerOptions createMarkerOptions(GeoPackage geoPackage, FeatureRow featureRow, float density, IconCache iconCache) {
 
         MarkerOptions markerOptions = new MarkerOptions();
         setFeatureStyle(markerOptions, geoPackage, featureRow, density, iconCache);
@@ -79,7 +76,7 @@ public class StyleUtils {
      * @param iconCache     icon cache
      * @return true if icon or style was set into the marker options
      */
-    public static boolean setFeatureStyle(MarkerOptions markerOptions, GeoPackage geoPackage, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
+    public static boolean setFeatureStyle(MarkerOptions markerOptions, GeoPackage geoPackage, FeatureRow featureRow, float density, IconCache iconCache) {
 
         FeatureStyleExtension featureStyleExtension = new FeatureStyleExtension(geoPackage);
 
@@ -124,7 +121,7 @@ public class StyleUtils {
      * @param iconCache             icon cache
      * @return marker options populated with the feature style
      */
-    public static MarkerOptions createMarkerOptions(FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
+    public static MarkerOptions createMarkerOptions(FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density, IconCache iconCache) {
 
         MarkerOptions markerOptions = new MarkerOptions();
         setFeatureStyle(markerOptions, featureStyleExtension, featureRow, density, iconCache);
@@ -142,7 +139,7 @@ public class StyleUtils {
      * @param iconCache             icon cache
      * @return true if icon or style was set into the marker options
      */
-    public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
+    public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density, IconCache iconCache) {
 
         FeatureStyle featureStyle = featureStyleExtension.getFeatureStyle(featureRow);
 
@@ -168,7 +165,7 @@ public class StyleUtils {
      * @param iconCache    icon cache
      * @return marker options populated with the feature style
      */
-    public static MarkerOptions createMarkerOptions(FeatureStyle featureStyle, float density, LruCache<Long, Bitmap> iconCache) {
+    public static MarkerOptions createMarkerOptions(FeatureStyle featureStyle, float density, IconCache iconCache) {
 
         MarkerOptions markerOptions = new MarkerOptions();
         setFeatureStyle(markerOptions, featureStyle, density, iconCache);
@@ -197,7 +194,7 @@ public class StyleUtils {
      * @param iconCache     icon cache
      * @return true if icon or style was set into the marker options
      */
-    public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyle featureStyle, float density, LruCache<Long, Bitmap> iconCache) {
+    public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyle featureStyle, float density, IconCache iconCache) {
 
         boolean featureStyleSet = false;
 
@@ -235,7 +232,7 @@ public class StyleUtils {
      * @param iconCache icon cache
      * @return marker options populated with the icon
      */
-    public static MarkerOptions createMarkerOptions(IconRow icon, float density, LruCache<Long, Bitmap> iconCache) {
+    public static MarkerOptions createMarkerOptions(IconRow icon, float density, IconCache iconCache) {
 
         MarkerOptions markerOptions = new MarkerOptions();
         setIcon(markerOptions, icon, density, iconCache);
@@ -264,7 +261,7 @@ public class StyleUtils {
      * @param iconCache     icon cache
      * @return true if icon was set into the marker options
      */
-    public static boolean setIcon(MarkerOptions markerOptions, IconRow icon, float density, LruCache<Long, Bitmap> iconCache) {
+    public static boolean setIcon(MarkerOptions markerOptions, IconRow icon, float density, IconCache iconCache) {
 
         boolean iconSet = false;
 
@@ -300,7 +297,7 @@ public class StyleUtils {
      * @return icon bitmap
      */
     public static Bitmap createIcon(IconRow icon, float density) {
-        return createIcon(icon, density, null);
+        return IconCache.createIconNoCache(icon, density);
     }
 
     /**
@@ -311,76 +308,8 @@ public class StyleUtils {
      * @param iconCache icon cache
      * @return icon bitmap
      */
-    public static Bitmap createIcon(IconRow icon, float density, LruCache<Long, Bitmap> iconCache) {
-
-        Bitmap iconImage = null;
-
-        if (icon != null) {
-
-            if (iconCache != null) {
-                iconImage = iconCache.get(icon.getId());
-            }
-
-            if (iconImage == null) {
-
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeByteArray(icon.getData(), 0, icon.getData().length, options);
-                int dataWidth = options.outWidth;
-                int dataHeight = options.outHeight;
-
-                double styleWidth = dataWidth;
-                double styleHeight = dataHeight;
-
-                double widthDensity = DisplayMetrics.DENSITY_DEFAULT;
-                double heightDensity = DisplayMetrics.DENSITY_DEFAULT;
-
-                if (icon.getWidth() != null) {
-                    styleWidth = icon.getWidth();
-                    double widthRatio = dataWidth / styleWidth;
-                    widthDensity *= widthRatio;
-                    if (icon.getHeight() == null) {
-                        heightDensity = widthDensity;
-                    }
-                }
-
-                if (icon.getHeight() != null) {
-                    styleHeight = icon.getHeight();
-                    double heightRatio = dataHeight / styleHeight;
-                    heightDensity *= heightRatio;
-                    if (icon.getWidth() == null) {
-                        widthDensity = heightDensity;
-                    }
-                }
-
-                options = new BitmapFactory.Options();
-                options.inDensity = (int) (Math.min(widthDensity, heightDensity) + 0.5f);
-                options.inTargetDensity = (int) (DisplayMetrics.DENSITY_DEFAULT * density + 0.5f);
-
-                iconImage = BitmapConverter.toBitmap(icon
-                        .getData(), options);
-
-                if (widthDensity != heightDensity) {
-
-                    int width = (int) (styleWidth * density + 0.5f);
-                    int height = (int) (styleHeight * density + 0.5f);
-
-                    if (width != iconImage.getWidth() || height != iconImage.getHeight()) {
-                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(iconImage, width, height, false);
-                        iconImage.recycle();
-                        iconImage = scaledBitmap;
-                    }
-
-                }
-
-                if (iconCache != null) {
-                    iconCache.put(icon.getId(), iconImage);
-                }
-            }
-
-        }
-
-        return iconImage;
+    public static Bitmap createIcon(IconRow icon, float density, IconCache iconCache) {
+        return iconCache.createIcon(icon, density);
     }
 
     /**

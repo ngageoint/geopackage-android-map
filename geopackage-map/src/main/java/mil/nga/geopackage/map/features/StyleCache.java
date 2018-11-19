@@ -1,7 +1,6 @@
 package mil.nga.geopackage.map.features;
 
 import android.graphics.Bitmap;
-import android.util.LruCache;
 
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -10,6 +9,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import mil.nga.geopackage.GeoPackage;
 import mil.nga.geopackage.extension.style.FeatureStyle;
 import mil.nga.geopackage.extension.style.FeatureStyleExtension;
+import mil.nga.geopackage.extension.style.IconCache;
 import mil.nga.geopackage.extension.style.IconRow;
 import mil.nga.geopackage.extension.style.StyleRow;
 import mil.nga.geopackage.features.user.FeatureRow;
@@ -23,11 +23,6 @@ import mil.nga.geopackage.features.user.FeatureRow;
 public class StyleCache {
 
     /**
-     * Default icon cache size for max number of icon bitmaps to keep loaded
-     */
-    public static final int DEFAULT_ICON_CACHE_SIZE = 100;
-
-    /**
      * Feature style extension
      */
     private final FeatureStyleExtension featureStyleExtension;
@@ -35,7 +30,7 @@ public class StyleCache {
     /**
      * Icon bitmap cache
      */
-    private final LruCache<Long, Bitmap> iconCache;
+    private final IconCache iconCache;
 
     /**
      * Display density: {@link android.util.DisplayMetrics#density}
@@ -49,7 +44,7 @@ public class StyleCache {
      * @param density    display density: {@link android.util.DisplayMetrics#density}
      */
     public StyleCache(GeoPackage geoPackage, float density) {
-        this(geoPackage, density, DEFAULT_ICON_CACHE_SIZE);
+        this(geoPackage, density, IconCache.DEFAULT_CACHE_SIZE);
     }
 
     /**
@@ -70,7 +65,7 @@ public class StyleCache {
      * @param density               display density: {@link android.util.DisplayMetrics#density}
      */
     public StyleCache(FeatureStyleExtension featureStyleExtension, float density) {
-        this(featureStyleExtension, density, DEFAULT_ICON_CACHE_SIZE);
+        this(featureStyleExtension, density, IconCache.DEFAULT_CACHE_SIZE);
     }
 
     /**
@@ -82,7 +77,7 @@ public class StyleCache {
      */
     public StyleCache(FeatureStyleExtension featureStyleExtension, float density, int iconCacheSize) {
         this.featureStyleExtension = featureStyleExtension;
-        iconCache = new LruCache<>(iconCacheSize);
+        iconCache = new IconCache(iconCacheSize);
         this.density = density;
     }
 
@@ -90,7 +85,7 @@ public class StyleCache {
      * Clear the cache
      */
     public void clear() {
-        iconCache.evictAll();
+        iconCache.clear();
     }
 
     /**
