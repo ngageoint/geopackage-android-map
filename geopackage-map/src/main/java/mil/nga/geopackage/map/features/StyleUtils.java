@@ -3,6 +3,7 @@ package mil.nga.geopackage.map.features;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
+import android.util.LruCache;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -35,9 +36,22 @@ public class StyleUtils {
      * @return marker options populated with the feature style
      */
     public static MarkerOptions createMarkerOptions(GeoPackage geoPackage, FeatureRow featureRow, float density) {
+        return createMarkerOptions(geoPackage, featureRow, density, null);
+    }
+
+    /**
+     * Create new marker options populated with the feature row style (icon or style)
+     *
+     * @param geoPackage GeoPackage
+     * @param featureRow feature row
+     * @param density    display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache  icon cache
+     * @return marker options populated with the feature style
+     */
+    public static MarkerOptions createMarkerOptions(GeoPackage geoPackage, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
 
         MarkerOptions markerOptions = new MarkerOptions();
-        setFeatureStyle(markerOptions, geoPackage, featureRow, density);
+        setFeatureStyle(markerOptions, geoPackage, featureRow, density, iconCache);
 
         return markerOptions;
     }
@@ -52,11 +66,87 @@ public class StyleUtils {
      * @return true if icon or style was set into the marker options
      */
     public static boolean setFeatureStyle(MarkerOptions markerOptions, GeoPackage geoPackage, FeatureRow featureRow, float density) {
+        return setFeatureStyle(markerOptions, geoPackage, featureRow, density, null);
+    }
 
-        FeatureStyleExtension styleExtension = new FeatureStyleExtension(geoPackage);
-        FeatureStyle featureStyle = styleExtension.getFeatureStyle(featureRow);
+    /**
+     * Set the feature row style (icon or style) into the marker options
+     *
+     * @param markerOptions marker options
+     * @param geoPackage    GeoPackage
+     * @param featureRow    feature row
+     * @param density       display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache     icon cache
+     * @return true if icon or style was set into the marker options
+     */
+    public static boolean setFeatureStyle(MarkerOptions markerOptions, GeoPackage geoPackage, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
 
-        return setFeatureStyle(markerOptions, featureStyle, density);
+        FeatureStyleExtension featureStyleExtension = new FeatureStyleExtension(geoPackage);
+
+        return setFeatureStyle(markerOptions, featureStyleExtension, featureRow, density, iconCache);
+    }
+
+    /**
+     * Create new marker options populated with the feature row style (icon or style)
+     *
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @return marker options populated with the feature style
+     */
+    public static MarkerOptions createMarkerOptions(FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density) {
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        setFeatureStyle(markerOptions, featureStyleExtension, featureRow, density);
+
+        return markerOptions;
+    }
+
+    /**
+     * Set the feature row style (icon or style) into the marker options
+     *
+     * @param markerOptions         marker options
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @return true if icon or style was set into the marker options
+     */
+    public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density) {
+        return setFeatureStyle(markerOptions, featureStyleExtension, featureRow, density, null);
+    }
+
+    /**
+     * Create new marker options populated with the feature row style (icon or style)
+     *
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache             icon cache
+     * @return marker options populated with the feature style
+     */
+    public static MarkerOptions createMarkerOptions(FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        setFeatureStyle(markerOptions, featureStyleExtension, featureRow, density, iconCache);
+
+        return markerOptions;
+    }
+
+    /**
+     * Set the feature row style (icon or style) into the marker options
+     *
+     * @param markerOptions         marker options
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache             icon cache
+     * @return true if icon or style was set into the marker options
+     */
+    public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density, LruCache<Long, Bitmap> iconCache) {
+
+        FeatureStyle featureStyle = featureStyleExtension.getFeatureStyle(featureRow);
+
+        return setFeatureStyle(markerOptions, featureStyle, density, iconCache);
     }
 
     /**
@@ -67,9 +157,21 @@ public class StyleUtils {
      * @return marker options populated with the feature style
      */
     public static MarkerOptions createMarkerOptions(FeatureStyle featureStyle, float density) {
+        return createMarkerOptions(featureStyle, density, null);
+    }
+
+    /**
+     * Create new marker options populated with the feature style (icon or style)
+     *
+     * @param featureStyle feature style
+     * @param density      display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache    icon cache
+     * @return marker options populated with the feature style
+     */
+    public static MarkerOptions createMarkerOptions(FeatureStyle featureStyle, float density, LruCache<Long, Bitmap> iconCache) {
 
         MarkerOptions markerOptions = new MarkerOptions();
-        setFeatureStyle(markerOptions, featureStyle, density);
+        setFeatureStyle(markerOptions, featureStyle, density, iconCache);
 
         return markerOptions;
     }
@@ -83,12 +185,25 @@ public class StyleUtils {
      * @return true if icon or style was set into the marker options
      */
     public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyle featureStyle, float density) {
+        return setFeatureStyle(markerOptions, featureStyle, density, null);
+    }
+
+    /**
+     * Set the feature style (icon or style) into the marker options
+     *
+     * @param markerOptions marker options
+     * @param featureStyle  feature style
+     * @param density       display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache     icon cache
+     * @return true if icon or style was set into the marker options
+     */
+    public static boolean setFeatureStyle(MarkerOptions markerOptions, FeatureStyle featureStyle, float density, LruCache<Long, Bitmap> iconCache) {
 
         boolean featureStyleSet = false;
 
         if (featureStyle != null) {
 
-            featureStyleSet = setIcon(markerOptions, featureStyle.getIcon(), density);
+            featureStyleSet = setIcon(markerOptions, featureStyle.getIcon(), density, iconCache);
 
             if (!featureStyleSet) {
 
@@ -109,9 +224,21 @@ public class StyleUtils {
      * @return marker options populated with the icon
      */
     public static MarkerOptions createMarkerOptions(IconRow icon, float density) {
+        return createMarkerOptions(icon, density, null);
+    }
+
+    /**
+     * Create new marker options populated with the icon
+     *
+     * @param icon      icon row
+     * @param density   display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache icon cache
+     * @return marker options populated with the icon
+     */
+    public static MarkerOptions createMarkerOptions(IconRow icon, float density, LruCache<Long, Bitmap> iconCache) {
 
         MarkerOptions markerOptions = new MarkerOptions();
-        setIcon(markerOptions, icon, density);
+        setIcon(markerOptions, icon, density, iconCache);
 
         return markerOptions;
     }
@@ -125,12 +252,25 @@ public class StyleUtils {
      * @return true if icon was set into the marker options
      */
     public static boolean setIcon(MarkerOptions markerOptions, IconRow icon, float density) {
+        return setIcon(markerOptions, icon, density, null);
+    }
+
+    /**
+     * Set the icon into the marker options
+     *
+     * @param markerOptions marker options
+     * @param icon          icon row
+     * @param density       display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache     icon cache
+     * @return true if icon was set into the marker options
+     */
+    public static boolean setIcon(MarkerOptions markerOptions, IconRow icon, float density, LruCache<Long, Bitmap> iconCache) {
 
         boolean iconSet = false;
 
         if (icon != null) {
 
-            Bitmap iconImage = createIcon(icon, density);
+            Bitmap iconImage = createIcon(icon, density, iconCache);
             markerOptions.icon(BitmapDescriptorFactory
                     .fromBitmap(iconImage));
             iconSet = true;
@@ -160,59 +300,82 @@ public class StyleUtils {
      * @return icon bitmap
      */
     public static Bitmap createIcon(IconRow icon, float density) {
+        return createIcon(icon, density, null);
+    }
+
+    /**
+     * Create the icon bitmap
+     *
+     * @param icon      icon row
+     * @param density   display density: {@link android.util.DisplayMetrics#density}
+     * @param iconCache icon cache
+     * @return icon bitmap
+     */
+    public static Bitmap createIcon(IconRow icon, float density, LruCache<Long, Bitmap> iconCache) {
 
         Bitmap iconImage = null;
 
         if (icon != null) {
 
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeByteArray(icon.getData(), 0, icon.getData().length, options);
-            int dataWidth = options.outWidth;
-            int dataHeight = options.outHeight;
-
-            double styleWidth = dataWidth;
-            double styleHeight = dataHeight;
-
-            double widthDensity = DisplayMetrics.DENSITY_DEFAULT;
-            double heightDensity = DisplayMetrics.DENSITY_DEFAULT;
-
-            if (icon.getWidth() != null) {
-                styleWidth = icon.getWidth();
-                double widthRatio = dataWidth / styleWidth;
-                widthDensity *= widthRatio;
-                if (icon.getHeight() == null) {
-                    heightDensity = widthDensity;
-                }
+            if (iconCache != null) {
+                iconImage = iconCache.get(icon.getId());
             }
 
-            if (icon.getHeight() != null) {
-                styleHeight = icon.getHeight();
-                double heightRatio = dataHeight / styleHeight;
-                heightDensity *= heightRatio;
-                if (icon.getWidth() == null) {
-                    widthDensity = heightDensity;
-                }
-            }
+            if (iconImage == null) {
 
-            options = new BitmapFactory.Options();
-            options.inDensity = (int) (Math.min(widthDensity, heightDensity) + 0.5f);
-            options.inTargetDensity = (int) (DisplayMetrics.DENSITY_DEFAULT * density + 0.5f);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(icon.getData(), 0, icon.getData().length, options);
+                int dataWidth = options.outWidth;
+                int dataHeight = options.outHeight;
 
-            iconImage = BitmapConverter.toBitmap(icon
-                    .getData(), options);
+                double styleWidth = dataWidth;
+                double styleHeight = dataHeight;
 
-            if (widthDensity != heightDensity) {
+                double widthDensity = DisplayMetrics.DENSITY_DEFAULT;
+                double heightDensity = DisplayMetrics.DENSITY_DEFAULT;
 
-                int width = (int) (styleWidth * density + 0.5f);
-                int height = (int) (styleHeight * density + 0.5f);
-
-                if (width != iconImage.getWidth() || height != iconImage.getHeight()) {
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(iconImage, width, height, false);
-                    iconImage.recycle();
-                    iconImage = scaledBitmap;
+                if (icon.getWidth() != null) {
+                    styleWidth = icon.getWidth();
+                    double widthRatio = dataWidth / styleWidth;
+                    widthDensity *= widthRatio;
+                    if (icon.getHeight() == null) {
+                        heightDensity = widthDensity;
+                    }
                 }
 
+                if (icon.getHeight() != null) {
+                    styleHeight = icon.getHeight();
+                    double heightRatio = dataHeight / styleHeight;
+                    heightDensity *= heightRatio;
+                    if (icon.getWidth() == null) {
+                        widthDensity = heightDensity;
+                    }
+                }
+
+                options = new BitmapFactory.Options();
+                options.inDensity = (int) (Math.min(widthDensity, heightDensity) + 0.5f);
+                options.inTargetDensity = (int) (DisplayMetrics.DENSITY_DEFAULT * density + 0.5f);
+
+                iconImage = BitmapConverter.toBitmap(icon
+                        .getData(), options);
+
+                if (widthDensity != heightDensity) {
+
+                    int width = (int) (styleWidth * density + 0.5f);
+                    int height = (int) (styleHeight * density + 0.5f);
+
+                    if (width != iconImage.getWidth() || height != iconImage.getHeight()) {
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(iconImage, width, height, false);
+                        iconImage.recycle();
+                        iconImage = scaledBitmap;
+                    }
+
+                }
+
+                if (iconCache != null) {
+                    iconCache.put(icon.getId(), iconImage);
+                }
             }
 
         }
@@ -284,8 +447,39 @@ public class StyleUtils {
      */
     public static boolean setFeatureStyle(PolylineOptions polylineOptions, GeoPackage geoPackage, FeatureRow featureRow, float density) {
 
-        FeatureStyleExtension styleExtension = new FeatureStyleExtension(geoPackage);
-        FeatureStyle featureStyle = styleExtension.getFeatureStyle(featureRow);
+        FeatureStyleExtension featureStyleExtension = new FeatureStyleExtension(geoPackage);
+
+        return setFeatureStyle(polylineOptions, featureStyleExtension, featureRow, density);
+    }
+
+    /**
+     * Create new polyline options populated with the feature row style
+     *
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @return polyline options populated with the feature style
+     */
+    public static PolylineOptions createPolylineOptions(FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density) {
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+        setFeatureStyle(polylineOptions, featureStyleExtension, featureRow, density);
+
+        return polylineOptions;
+    }
+
+    /**
+     * Set the feature row style into the polyline options
+     *
+     * @param polylineOptions       polyline options
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @return true if style was set into the polyline options
+     */
+    public static boolean setFeatureStyle(PolylineOptions polylineOptions, FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density) {
+
+        FeatureStyle featureStyle = featureStyleExtension.getFeatureStyle(featureRow);
 
         return setFeatureStyle(polylineOptions, featureStyle, density);
     }
@@ -396,8 +590,39 @@ public class StyleUtils {
      */
     public static boolean setFeatureStyle(PolygonOptions polygonOptions, GeoPackage geoPackage, FeatureRow featureRow, float density) {
 
-        FeatureStyleExtension styleExtension = new FeatureStyleExtension(geoPackage);
-        FeatureStyle featureStyle = styleExtension.getFeatureStyle(featureRow);
+        FeatureStyleExtension featureStyleExtension = new FeatureStyleExtension(geoPackage);
+
+        return setFeatureStyle(polygonOptions, featureStyleExtension, featureRow, density);
+    }
+
+    /**
+     * Create new polygon options populated with the feature row style
+     *
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @return polygon options populated with the feature style
+     */
+    public static PolygonOptions createPolygonOptions(FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density) {
+
+        PolygonOptions polygonOptions = new PolygonOptions();
+        setFeatureStyle(polygonOptions, featureStyleExtension, featureRow, density);
+
+        return polygonOptions;
+    }
+
+    /**
+     * Set the feature row style into the polygon options
+     *
+     * @param polygonOptions        polygon options
+     * @param featureStyleExtension feature style extension
+     * @param featureRow            feature row
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @return true if style was set into the polygon options
+     */
+    public static boolean setFeatureStyle(PolygonOptions polygonOptions, FeatureStyleExtension featureStyleExtension, FeatureRow featureRow, float density) {
+
+        FeatureStyle featureStyle = featureStyleExtension.getFeatureStyle(featureRow);
 
         return setFeatureStyle(polygonOptions, featureStyle, density);
     }
