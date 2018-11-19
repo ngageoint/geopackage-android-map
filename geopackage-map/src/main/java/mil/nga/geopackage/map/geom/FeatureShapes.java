@@ -4,8 +4,10 @@ import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.map.MapUtils;
@@ -202,13 +204,28 @@ public class FeatureShapes {
      * @return count of removed features
      */
     public int removeShapes() {
+        return removeShapesWithExclusions(null);
+    }
+
+    /**
+     * Remove all map shapes from the map, excluding shapes with the excluded types
+     *
+     * @param excludedTypes Google Map Shape Types to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesWithExclusions(Set<GoogleMapShapeType> excludedTypes) {
 
         int count = 0;
-        for (String database : databases.keySet()) {
-            count += removeShapes(database);
-        }
+        Iterator<String> iterator = databases.keySet().iterator();
+        while (iterator.hasNext()) {
+            String database = iterator.next();
+            count += removeShapesWithExclusions(database, excludedTypes);
 
-        clear();
+            if (getTablesCount(database) <= 0) {
+                iterator.remove();
+            }
+        }
 
         return count;
     }
@@ -220,6 +237,18 @@ public class FeatureShapes {
      * @return count of removed features
      */
     public int removeShapes(String database) {
+        return removeShapes(database, null);
+    }
+
+    /**
+     * Remove all map shapes in the database from the map, excluding shapes with the excluded types
+     *
+     * @param database      GeoPackage database
+     * @param excludedTypes Google Map Shape Types to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesWithExclusions(String database, Set<GoogleMapShapeType> excludedTypes) {
 
         int count = 0;
 
@@ -227,12 +256,17 @@ public class FeatureShapes {
 
         if (tables != null) {
 
-            for (String table : tables.keySet()) {
+            Iterator<String> iterator = tables.keySet().iterator();
+            while (iterator.hasNext()) {
+                String table = iterator.next();
 
-                count += removeShapes(database, table);
+                count += removeShapesWithExclusions(database, table, excludedTypes);
+
+                if (getFeatureIdsCount(database, table) <= 0) {
+                    iterator.remove();
+                }
             }
 
-            tables.clear();
         }
 
         return count;
@@ -246,6 +280,19 @@ public class FeatureShapes {
      * @return count of removed features
      */
     public int removeShapes(String database, String table) {
+        return removeShapesWithExclusions(database, table, null);
+    }
+
+    /**
+     * Remove all map shapes in the database and table from the map, excluding shapes with the excluded types
+     *
+     * @param database      GeoPackage database
+     * @param table         table name
+     * @param excludedTypes Google Map Shape Types to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesWithExclusions(String database, String table, Set<GoogleMapShapeType> excludedTypes) {
 
         int count = 0;
 
@@ -253,20 +300,32 @@ public class FeatureShapes {
 
         if (featureIds != null) {
 
-            for (long featureId : featureIds.keySet()) {
+            Iterator<Long> iterator = featureIds.keySet().iterator();
+            while (iterator.hasNext()) {
+                long featureId = iterator.next();
 
                 List<GoogleMapShape> mapShapes = getShapes(featureIds, featureId);
 
                 if (mapShapes != null) {
 
-                    for (GoogleMapShape mapShape : mapShapes) {
-                        mapShape.remove();
+                    Iterator<GoogleMapShape> shapeIterator = mapShapes.iterator();
+                    while (shapeIterator.hasNext()) {
+                        GoogleMapShape mapShape = shapeIterator.next();
+                        if (excludedTypes == null || !excludedTypes.contains(mapShape.getShapeType())) {
+                            mapShape.remove();
+                            shapeIterator.remove();
+                        }
                     }
+
                 }
-                count++;
+
+                if (mapShapes == null || mapShapes.isEmpty()) {
+                    iterator.remove();
+                    count++;
+                }
+
             }
 
-            featureIds.clear();
         }
 
         return count;
