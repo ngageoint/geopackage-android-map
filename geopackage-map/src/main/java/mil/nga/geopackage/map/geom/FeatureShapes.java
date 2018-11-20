@@ -4,6 +4,7 @@ import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class FeatureShapes {
     /**
      * Mapping between databases, feature tables, feature ids, and shapes
      */
-    private Map<String, Map<String, Map<Long, List<GoogleMapShape>>>> databases = new HashMap<>();
+    private Map<String, Map<String, Map<Long, FeatureShape>>> databases = new HashMap<>();
 
     /**
      * Constructor
@@ -39,8 +40,9 @@ public class FeatureShapes {
      * Get the mapping between databases and tables
      *
      * @return databases to tables mapping
+     * @since 3.1.1
      */
-    public Map<String, Map<String, Map<Long, List<GoogleMapShape>>>> getDatabases() {
+    public Map<String, Map<String, Map<Long, FeatureShape>>> getDatabases() {
         return databases;
     }
 
@@ -58,10 +60,11 @@ public class FeatureShapes {
      *
      * @param database GeoPackage database
      * @return tables to features ids mapping
+     * @since 3.1.1
      */
-    public Map<String, Map<Long, List<GoogleMapShape>>> getTables(String database) {
+    public Map<String, Map<Long, FeatureShape>> getTables(String database) {
 
-        Map<String, Map<Long, List<GoogleMapShape>>> tables = databases.get(database);
+        Map<String, Map<Long, FeatureShape>> tables = databases.get(database);
         if (tables == null) {
             tables = new HashMap<>();
             databases.put(database, tables);
@@ -85,10 +88,11 @@ public class FeatureShapes {
      * @param database GeoPackage database
      * @param table    table name
      * @return feature ids to map shapes mapping
+     * @since 3.1.1
      */
-    public Map<Long, List<GoogleMapShape>> getFeatureIds(String database, String table) {
-        Map<String, Map<Long, List<GoogleMapShape>>> tables = getTables(database);
-        Map<Long, List<GoogleMapShape>> featureIds = getFeatureIds(tables, table);
+    public Map<Long, FeatureShape> getFeatureIds(String database, String table) {
+        Map<String, Map<Long, FeatureShape>> tables = getTables(database);
+        Map<Long, FeatureShape> featureIds = getFeatureIds(tables, table);
         return featureIds;
     }
 
@@ -109,10 +113,11 @@ public class FeatureShapes {
      * @param tables tables
      * @param table  table name
      * @return feature ids to map shapes mapping
+     * @since 3.1.1
      */
-    private Map<Long, List<GoogleMapShape>> getFeatureIds(Map<String, Map<Long, List<GoogleMapShape>>> tables, String table) {
+    private Map<Long, FeatureShape> getFeatureIds(Map<String, Map<Long, FeatureShape>> tables, String table) {
 
-        Map<Long, List<GoogleMapShape>> featureIds = tables.get(table);
+        Map<Long, FeatureShape> featureIds = tables.get(table);
         if (featureIds == null) {
             featureIds = new HashMap<>();
             tables.put(table, featureIds);
@@ -121,17 +126,18 @@ public class FeatureShapes {
     }
 
     /**
-     * Get the map shapes for the database, table, and feature id
+     * Get the feature shape for the database, table, and feature id
      *
      * @param database  GeoPackage database
      * @param table     table name
      * @param featureId feature id
-     * @return map shapes
+     * @return feature shape
+     * @since 3.1.1
      */
-    public List<GoogleMapShape> getShapes(String database, String table, long featureId) {
-        Map<Long, List<GoogleMapShape>> featureIds = getFeatureIds(database, table);
-        List<GoogleMapShape> shapes = getShapes(featureIds, featureId);
-        return shapes;
+    public FeatureShape getFeatureShape(String database, String table, long featureId) {
+        Map<Long, FeatureShape> featureIds = getFeatureIds(database, table);
+        FeatureShape featureShape = getFeatureShape(featureIds, featureId);
+        return featureShape;
     }
 
     /**
@@ -141,9 +147,10 @@ public class FeatureShapes {
      * @param table     table name
      * @param featureId feature id
      * @return map shapes count
+     * @since 3.1.1
      */
-    public int getShapesCount(String database, String table, long featureId) {
-        return getShapes(database, table, featureId).size();
+    public int getFeatureShapeCount(String database, String table, long featureId) {
+        return getFeatureShape(database, table, featureId).count();
     }
 
     /**
@@ -151,16 +158,16 @@ public class FeatureShapes {
      *
      * @param featureIds feature ids
      * @param featureId  feature id
-     * @return map shapes
+     * @return feature shape
      */
-    private List<GoogleMapShape> getShapes(Map<Long, List<GoogleMapShape>> featureIds, long featureId) {
+    private FeatureShape getFeatureShape(Map<Long, FeatureShape> featureIds, long featureId) {
 
-        List<GoogleMapShape> shapes = featureIds.get(featureId);
-        if (shapes == null) {
-            shapes = new ArrayList<>();
-            featureIds.put(featureId, shapes);
+        FeatureShape featureShape = featureIds.get(featureId);
+        if (featureShape == null) {
+            featureShape = new FeatureShape(featureId);
+            featureIds.put(featureId, featureShape);
         }
-        return shapes;
+        return featureShape;
     }
 
     /**
@@ -172,8 +179,22 @@ public class FeatureShapes {
      * @param table     table name
      */
     public void addMapShape(GoogleMapShape mapShape, long featureId, String database, String table) {
-        List<GoogleMapShape> shapes = getShapes(database, table, featureId);
-        shapes.add(mapShape);
+        FeatureShape featureShape = getFeatureShape(database, table, featureId);
+        featureShape.addShape(mapShape);
+    }
+
+    /**
+     * Add a map metadata shape with the feature id, database, and table
+     *
+     * @param mapShape  map metadata shape
+     * @param featureId feature id
+     * @param database  GeoPackage database
+     * @param table     table name
+     * @since 3.1.1
+     */
+    public void addMapMetadataShape(GoogleMapShape mapShape, long featureId, String database, String table) {
+        FeatureShape featureShape = getFeatureShape(database, table, featureId);
+        featureShape.addMetadataShape(mapShape);
     }
 
     /**
@@ -186,13 +207,13 @@ public class FeatureShapes {
      */
     public boolean exists(long featureId, String database, String table) {
         boolean exists = false;
-        Map<String, Map<Long, List<GoogleMapShape>>> tables = databases.get(database);
+        Map<String, Map<Long, FeatureShape>> tables = databases.get(database);
         if (tables != null) {
 
-            Map<Long, List<GoogleMapShape>> featureIds = tables.get(table);
+            Map<Long, FeatureShape> featureIds = tables.get(table);
             if (featureIds != null) {
-                List<GoogleMapShape> shapes = featureIds.get(featureId);
-                exists = shapes != null && !shapes.isEmpty();
+                FeatureShape shapes = featureIds.get(featureId);
+                exists = shapes != null && shapes.hasShapes();
             }
         }
         return exists;
@@ -205,6 +226,34 @@ public class FeatureShapes {
      */
     public int removeShapes() {
         return removeShapesWithExclusions(null);
+    }
+
+    /**
+     * Remove all map shapes from the map, excluding shapes with the excluded type
+     *
+     * @param excludedType Google Map Shape Type to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesWithExclusion(GoogleMapShapeType excludedType) {
+        Set<GoogleMapShapeType> excludedTypes = new HashSet<>();
+        excludedTypes.add(excludedType);
+        return removeShapesWithExclusions(excludedTypes);
+    }
+
+    /**
+     * Remove all map shapes from the map, excluding shapes with the excluded types
+     *
+     * @param excludedTypes Google Map Shape Types to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesExcluding(GoogleMapShapeType... excludedTypes) {
+        Set<GoogleMapShapeType> excluded = new HashSet<>();
+        for (GoogleMapShapeType excludedType : excludedTypes) {
+            excluded.add(excludedType);
+        }
+        return removeShapesWithExclusions(excluded);
     }
 
     /**
@@ -237,7 +286,37 @@ public class FeatureShapes {
      * @return count of removed features
      */
     public int removeShapes(String database) {
-        return removeShapes(database, null);
+        return removeShapesWithExclusions(database, null);
+    }
+
+    /**
+     * Remove all map shapes in the database from the map, excluding shapes with the excluded type
+     *
+     * @param database     GeoPackage database
+     * @param excludedType Google Map Shape Type to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesWithExclusion(String database, GoogleMapShapeType excludedType) {
+        Set<GoogleMapShapeType> excludedTypes = new HashSet<>();
+        excludedTypes.add(excludedType);
+        return removeShapesWithExclusions(database, excludedTypes);
+    }
+
+    /**
+     * Remove all map shapes in the database from the map, excluding shapes with the excluded types
+     *
+     * @param database      GeoPackage database
+     * @param excludedTypes Google Map Shape Types to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesExcluding(String database, GoogleMapShapeType... excludedTypes) {
+        Set<GoogleMapShapeType> excluded = new HashSet<>();
+        for (GoogleMapShapeType excludedType : excludedTypes) {
+            excluded.add(excludedType);
+        }
+        return removeShapesWithExclusions(database, excluded);
     }
 
     /**
@@ -252,7 +331,7 @@ public class FeatureShapes {
 
         int count = 0;
 
-        Map<String, Map<Long, List<GoogleMapShape>>> tables = getTables(database);
+        Map<String, Map<Long, FeatureShape>> tables = getTables(database);
 
         if (tables != null) {
 
@@ -284,6 +363,38 @@ public class FeatureShapes {
     }
 
     /**
+     * Remove all map shapes in the database and table from the map, excluding shapes with the excluded type
+     *
+     * @param database     GeoPackage database
+     * @param table        table name
+     * @param excludedType Google Map Shape Type to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesWithExclusion(String database, String table, GoogleMapShapeType excludedType) {
+        Set<GoogleMapShapeType> excludedTypes = new HashSet<>();
+        excludedTypes.add(excludedType);
+        return removeShapesWithExclusions(database, table, excludedTypes);
+    }
+
+    /**
+     * Remove all map shapes in the database and table from the map, excluding shapes with the excluded types
+     *
+     * @param database      GeoPackage database
+     * @param table         table name
+     * @param excludedTypes Google Map Shape Types to exclude from map removal
+     * @return count of removed features
+     * @since 3.1.1
+     */
+    public int removeShapesExcluding(String database, String table, GoogleMapShapeType... excludedTypes) {
+        Set<GoogleMapShapeType> excluded = new HashSet<>();
+        for (GoogleMapShapeType excludedType : excludedTypes) {
+            excluded.add(excludedType);
+        }
+        return removeShapesWithExclusions(database, table, excluded);
+    }
+
+    /**
      * Remove all map shapes in the database and table from the map, excluding shapes with the excluded types
      *
      * @param database      GeoPackage database
@@ -296,7 +407,7 @@ public class FeatureShapes {
 
         int count = 0;
 
-        Map<Long, List<GoogleMapShape>> featureIds = getFeatureIds(database, table);
+        Map<Long, FeatureShape> featureIds = getFeatureIds(database, table);
 
         if (featureIds != null) {
 
@@ -304,11 +415,11 @@ public class FeatureShapes {
             while (iterator.hasNext()) {
                 long featureId = iterator.next();
 
-                List<GoogleMapShape> mapShapes = getShapes(featureIds, featureId);
+                FeatureShape featureShape = getFeatureShape(featureIds, featureId);
 
-                if (mapShapes != null) {
+                if (featureShape != null) {
 
-                    Iterator<GoogleMapShape> shapeIterator = mapShapes.iterator();
+                    Iterator<GoogleMapShape> shapeIterator = featureShape.getShapes().iterator();
                     while (shapeIterator.hasNext()) {
                         GoogleMapShape mapShape = shapeIterator.next();
                         if (excludedTypes == null || !excludedTypes.contains(mapShape.getShapeType())) {
@@ -319,7 +430,8 @@ public class FeatureShapes {
 
                 }
 
-                if (mapShapes == null || mapShapes.isEmpty()) {
+                if (featureShape == null || !featureShape.hasShapes()) {
+                    featureShape.removeMetadataShapes();
                     iterator.remove();
                     count++;
                 }
@@ -377,7 +489,7 @@ public class FeatureShapes {
 
         int count = 0;
 
-        Map<String, Map<Long, List<GoogleMapShape>>> tables = getTables(database);
+        Map<String, Map<Long, FeatureShape>> tables = getTables(database);
 
         if (tables != null) {
 
@@ -417,7 +529,7 @@ public class FeatureShapes {
 
         int count = 0;
 
-        Map<Long, List<GoogleMapShape>> featureIds = getFeatureIds(database, table);
+        Map<Long, FeatureShape> featureIds = getFeatureIds(database, table);
 
         if (featureIds != null) {
 
@@ -425,12 +537,12 @@ public class FeatureShapes {
 
             for (long featureId : featureIds.keySet()) {
 
-                List<GoogleMapShape> mapShapes = getShapes(featureIds, featureId);
+                FeatureShape featureShape = getFeatureShape(featureIds, featureId);
 
-                if (mapShapes != null) {
+                if (featureShape != null) {
 
                     boolean delete = true;
-                    for (GoogleMapShape mapShape : mapShapes) {
+                    for (GoogleMapShape mapShape : featureShape.getShapes()) {
                         BoundingBox mapShapeBoundingBox = mapShape.boundingBox();
                         boolean allowEmpty = mapShape.getGeometryType() == GeometryType.POINT;
                         if (TileBoundingBoxUtils.overlap(mapShapeBoundingBox, boundingBox, ProjectionConstants.WGS84_HALF_WORLD_LON_WIDTH, allowEmpty) != null) {
@@ -446,14 +558,10 @@ public class FeatureShapes {
 
             for (long deleteFeatureId : deleteFeatureIds) {
 
-                List<GoogleMapShape> mapShapes = getShapes(featureIds, deleteFeatureId);
+                FeatureShape featureShape = getFeatureShape(featureIds, deleteFeatureId);
 
-                if (mapShapes != null) {
-
-                    for (GoogleMapShape mapShape : mapShapes) {
-                        mapShape.remove();
-                    }
-
+                if (featureShape != null) {
+                    featureShape.remove();
                     featureIds.remove(deleteFeatureId);
                 }
                 count++;
@@ -461,6 +569,31 @@ public class FeatureShapes {
         }
 
         return count;
+    }
+
+    /**
+     * Remove the feature shape from the database and table
+     *
+     * @param database  GeoPackage database
+     * @param table     table name
+     * @param featureId feature id
+     * @return true if removed
+     * @since 3.1.1
+     */
+    public boolean removeFeatureShape(String database, String table, long featureId) {
+
+        boolean removed = false;
+
+        Map<Long, FeatureShape> featureIds = getFeatureIds(database, table);
+        if (featureIds != null) {
+            FeatureShape featureShape = featureIds.remove(featureId);
+            if (featureShape != null) {
+                featureShape.remove();
+                removed = true;
+            }
+        }
+
+        return removed;
     }
 
     /**
