@@ -272,18 +272,10 @@ public class StyleUtils {
                     .fromBitmap(iconImage));
             iconSet = true;
 
-            Double anchorU = icon.getAnchorU();
-            if (anchorU == null) {
-                anchorU = 0.5;
-            }
+            double anchorU = icon.getAnchorUOrDefault();
+            double anchorV = icon.getAnchorVOrDefault();
 
-            Double anchorV = icon.getAnchorV();
-            if (anchorV == null) {
-                anchorV = 1.0;
-            }
-
-            markerOptions.anchor(anchorU.floatValue(),
-                    anchorV.floatValue());
+            markerOptions.anchor((float) anchorU, (float) anchorV);
         }
 
         return iconSet;
