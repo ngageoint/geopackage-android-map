@@ -5,8 +5,10 @@ import com.google.android.gms.maps.model.Tile;
 import java.util.ArrayList;
 import java.util.List;
 
+import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.tiles.features.FeatureTiles;
 import mil.nga.geopackage.tiles.user.TileDao;
+import mil.nga.sf.proj.Projection;
 
 /**
  * Feature overlay which draws tiles from a feature table
@@ -42,6 +44,15 @@ public class FeatureOverlay extends BoundedOverlay {
      */
     public FeatureTiles getFeatureTiles() {
         return featureTiles;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBoundingBox(BoundingBox boundingBox, Projection projection) {
+        super.setBoundingBox(boundingBox, projection);
+        webMercatorBoundingBox = featureTiles.expandBoundingBox(webMercatorBoundingBox);
     }
 
     /**

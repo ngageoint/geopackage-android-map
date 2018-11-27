@@ -31,7 +31,7 @@ public abstract class BoundedOverlay implements TileProvider {
     /**
      * Web mercator bounding box
      */
-    private BoundingBox webMercatorBoundingBox;
+    protected BoundingBox webMercatorBoundingBox;
 
     /**
      * Constructor
