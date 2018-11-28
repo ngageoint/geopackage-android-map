@@ -330,12 +330,10 @@ public class StyleUtils {
         boolean styleSet = false;
 
         if (style != null) {
-            Color color = style.getColor();
-            if (color != null) {
-                float hue = color.getHue();
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(hue));
-                styleSet = true;
-            }
+            Color color = style.getColorOrDefault();
+            float hue = color.getHue();
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(hue));
+            styleSet = true;
         }
 
         return styleSet;
@@ -466,22 +464,17 @@ public class StyleUtils {
      */
     public static boolean setStyle(PolylineOptions polylineOptions, StyleRow style, float density) {
 
-        boolean styleSet = false;
-
         if (style != null) {
-            Color color = style.getColor();
-            if (color != null) {
-                polylineOptions.color(color.getColorWithAlpha());
-                styleSet = true;
-            }
-            Double width = style.getWidth();
-            if (width != null) {
-                polylineOptions.width(width.floatValue() * density);
-                styleSet = true;
-            }
+
+            Color color = style.getColorOrDefault();
+            polylineOptions.color(color.getColorWithAlpha());
+
+            double width = style.getWidthOrDefault();
+            polylineOptions.width((float) width * density);
+
         }
 
-        return styleSet;
+        return style != null;
     }
 
     /**
@@ -609,27 +602,21 @@ public class StyleUtils {
      */
     public static boolean setStyle(PolygonOptions polygonOptions, StyleRow style, float density) {
 
-        boolean styleSet = false;
-
         if (style != null) {
-            Color color = style.getColor();
-            if (color != null) {
-                polygonOptions.strokeColor(color.getColorWithAlpha());
-                styleSet = true;
-            }
-            Double width = style.getWidth();
-            if (width != null) {
-                polygonOptions.strokeWidth(width.floatValue() * density);
-                styleSet = true;
-            }
+
+            Color color = style.getColorOrDefault();
+            polygonOptions.strokeColor(color.getColorWithAlpha());
+
+            double width = style.getWidthOrDefault();
+            polygonOptions.strokeWidth((float) width * density);
+
             Color fillColor = style.getFillColor();
             if (fillColor != null) {
                 polygonOptions.fillColor(fillColor.getColorWithAlpha());
-                styleSet = true;
             }
         }
 
-        return styleSet;
+        return style != null;
     }
 
 }
