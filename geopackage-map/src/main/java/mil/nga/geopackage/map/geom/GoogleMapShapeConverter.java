@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 
-import org.osgeo.proj4j.units.Units;
+import org.locationtech.proj4j.units.Units;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -568,7 +568,7 @@ public class GoogleMapShapeConverter {
         if (simplifyTolerance != null) {
 
             // Reproject to web mercator if not in meters
-            if (projection != null && projection.getUnit() != Units.METRES) {
+            if (projection != null && !projection.isUnit(Units.METRES)) {
                 points = toWebMercator.transform(points);
             }
 
@@ -577,7 +577,7 @@ public class GoogleMapShapeConverter {
                     simplifyTolerance);
 
             // Reproject back to the original projection
-            if (projection != null && projection.getUnit() != Units.METRES) {
+            if (projection != null && !projection.isUnit(Units.METRES)) {
                 simplifiedPoints = fromWebMercator.transform(simplifiedPoints);
             }
         } else {
