@@ -113,7 +113,6 @@ public class FeatureShapes {
      * @param tables tables
      * @param table  table name
      * @return feature ids to map shapes mapping
-     * @since 3.1.1
      */
     private Map<Long, FeatureShape> getFeatureIds(Map<String, Map<Long, FeatureShape>> tables, String table) {
 
@@ -141,7 +140,7 @@ public class FeatureShapes {
     }
 
     /**
-     * Get the map shapes count for the database, table, and feature id
+     * Get the feature shape count for the database, table, and feature id
      *
      * @param database  GeoPackage database
      * @param table     table name
@@ -431,7 +430,9 @@ public class FeatureShapes {
                 }
 
                 if (featureShape == null || !featureShape.hasShapes()) {
-                    featureShape.removeMetadataShapes();
+                    if(featureShape != null) {
+                        featureShape.removeMetadataShapes();
+                    }
                     iterator.remove();
                     count++;
                 }
@@ -484,8 +485,9 @@ public class FeatureShapes {
      * @param boundingBox bounding box
      * @param database    GeoPackage database
      * @return count of removed features
+     * @since 3.1.1
      */
-    private int removeShapesNotWithinMap(BoundingBox boundingBox, String database) {
+    public int removeShapesNotWithinMap(BoundingBox boundingBox, String database) {
 
         int count = 0;
 
