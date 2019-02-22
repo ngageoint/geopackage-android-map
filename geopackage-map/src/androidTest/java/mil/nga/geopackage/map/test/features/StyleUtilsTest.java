@@ -30,27 +30,27 @@ public class StyleUtilsTest extends BaseTestCase {
 
         float density = (float) DisplayMetrics.DENSITY_560 / DisplayMetrics.DENSITY_DEFAULT;
 
-        testSetIcon(3.5f, 40, 40, 30.0, 20.0);
-        testSetIcon(3.5f, 40, 40, 200.0, 160.0);
-        testSetIcon(3.5f, 40, 40, 10.0, 5.0);
-        testSetIcon(3.5f, 40, 40, 200.0, 10.0);
+        testSetIcon(density, 40, 40, 30.0, 20.0);
+        testSetIcon(density, 40, 40, 200.0, 160.0);
+        testSetIcon(density, 40, 40, 10.0, 5.0);
+        testSetIcon(density, 40, 40, 200.0, 10.0);
 
-        testSetIcon(3.5f, 40, 40, 30.0, null);
-        testSetIcon(3.5f, 40, 40, null, 160.0);
-        testSetIcon(3.5f, 40, 40, null, null);
+        testSetIcon(density, 40, 40, 30.0, null);
+        testSetIcon(density, 40, 40, null, 160.0);
+        testSetIcon(density, 40, 40, null, null);
 
-        testSetIcon(3.5f, 40, 80, 20.0, 40.0);
-        testSetIcon(3.5f, 40, 80, 80.0, 160.0);
-        testSetIcon(3.5f, 40, 80, 10.0, 20.0);
+        testSetIcon(density, 40, 80, 20.0, 40.0);
+        testSetIcon(density, 40, 80, 80.0, 160.0);
+        testSetIcon(density, 40, 80, 10.0, 20.0);
 
-        testSetIcon(3.5f, 32, 37, 23.0, 31.0);
-        testSetIcon(3.5f, 32, 37, 119.0, 130.0);
-        testSetIcon(3.5f, 32, 37, 7.0, 4.0);
-        testSetIcon(3.5f, 32, 37, 165.0, 9.0);
+        testSetIcon(density, 32, 37, 23.0, 31.0);
+        testSetIcon(density, 32, 37, 119.0, 130.0);
+        testSetIcon(density, 32, 37, 7.0, 4.0);
+        testSetIcon(density, 32, 37, 165.0, 9.0);
 
-        testSetIcon(3.5f, 32, 37, 23.0, null);
-        testSetIcon(3.5f, 32, 37, null, 160.0);
-        testSetIcon(3.5f, 32, 37, null, null);
+        testSetIcon(density, 32, 37, 23.0, null);
+        testSetIcon(density, 32, 37, null, 160.0);
+        testSetIcon(density, 32, 37, null, null);
 
         for (int i = 0; i < 100; i++) {
             density = (float) (1.0f + Math.random() * 4.0f);
