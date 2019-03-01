@@ -155,7 +155,7 @@ android {
 }
 
 dependencies {
-    api 'com.google.android.gms:play-services-maps:16.0.0'
+    api 'com.google.android.gms:play-services-maps:16.1.0'
     api 'com.google.maps.android:android-maps-utils:0.5'
     api 'mil.nga.geopackage:geopackage-android:3.1.1'
     //api project(':geopackage-sdk') // uncomment me to build locally
