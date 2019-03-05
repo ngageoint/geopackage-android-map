@@ -212,7 +212,7 @@ public abstract class BoundedOverlay implements TileProvider {
 
             // Check if the request overlaps
             withinBounds = webMercatorBoundingBox.intersects(
-                    requestWebMercatorBoundingBox);
+                    requestWebMercatorBoundingBox, true);
         }
 
         return withinBounds;
