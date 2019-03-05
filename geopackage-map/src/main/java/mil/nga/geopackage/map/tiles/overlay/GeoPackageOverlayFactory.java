@@ -63,6 +63,27 @@ public class GeoPackageOverlayFactory {
     }
 
     /**
+     * Get a Bounded Overlay Tile Provider for the Tile DAO with the display density
+     *
+     * @param tileDao tile dao
+     * @param density display density: {@link android.util.DisplayMetrics#density}
+     * @return bounded overlay
+     * @since 3.1.1
+     */
+    public static BoundedOverlay getBoundedOverlay(TileDao tileDao, float density) {
+
+        BoundedOverlay overlay = null;
+
+        if (tileDao.isGoogleTiles()) {
+            overlay = new GoogleAPIGeoPackageOverlay(tileDao);
+        } else {
+            overlay = new GeoPackageOverlay(tileDao, density);
+        }
+
+        return overlay;
+    }
+
+    /**
      * Get a Bounded Overlay Tile Provider for the Tile DAO with the tile creator options
      *
      * @param tileDao tile dao
@@ -72,6 +93,19 @@ public class GeoPackageOverlayFactory {
      */
     public static BoundedOverlay getBoundedOverlay(TileDao tileDao, TileScaling scaling) {
         return new GeoPackageOverlay(tileDao, scaling);
+    }
+
+    /**
+     * Get a Bounded Overlay Tile Provider for the Tile DAO with the display density and tile creator options
+     *
+     * @param tileDao tile dao
+     * @param density display density: {@link android.util.DisplayMetrics#density}
+     * @param scaling tile scaling options
+     * @return bounded overlay
+     * @since 3.1.1
+     */
+    public static BoundedOverlay getBoundedOverlay(TileDao tileDao, float density, TileScaling scaling) {
+        return new GeoPackageOverlay(tileDao, density, scaling);
     }
 
     /**

@@ -3,6 +3,7 @@ package mil.nga.geopackage.map.tiles.overlay;
 import com.google.android.gms.maps.model.Tile;
 
 import mil.nga.geopackage.extension.scale.TileScaling;
+import mil.nga.geopackage.tiles.TileUtils;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTile;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTileRetriever;
 import mil.nga.geopackage.tiles.retriever.TileRetriever;
@@ -30,6 +31,17 @@ public class GeoPackageOverlay extends BoundedOverlay {
     }
 
     /**
+     * Constructor using the density to determine tile size
+     *
+     * @param tileDao tile dao
+     * @param density display density: {@link android.util.DisplayMetrics#density}
+     * @since 3.1.1
+     */
+    public GeoPackageOverlay(TileDao tileDao, float density) {
+        this(tileDao, density, null);
+    }
+
+    /**
      * Constructor with specified tile size
      *
      * @param tileDao tile dao
@@ -49,8 +61,22 @@ public class GeoPackageOverlay extends BoundedOverlay {
      */
     public GeoPackageOverlay(TileDao tileDao, TileScaling scaling) {
         GeoPackageTileRetriever tileRetriever = new GeoPackageTileRetriever(tileDao);
-        tileRetriever.setScaling(scaling);
+        if (scaling != null) {
+            tileRetriever.setScaling(scaling);
+        }
         this.retriever = tileRetriever;
+    }
+
+    /**
+     * Constructor using the density to determine tile size and with tile scaling options
+     *
+     * @param tileDao tile dao
+     * @param density display density: {@link android.util.DisplayMetrics#density}
+     * @param scaling tile scaling options
+     * @since 3.1.1
+     */
+    public GeoPackageOverlay(TileDao tileDao, float density, TileScaling scaling) {
+        this(tileDao, TileUtils.tileLength(density), TileUtils.tileLength(density), scaling);
     }
 
     /**
@@ -64,7 +90,9 @@ public class GeoPackageOverlay extends BoundedOverlay {
      */
     public GeoPackageOverlay(TileDao tileDao, int width, int height, TileScaling scaling) {
         GeoPackageTileRetriever tileRetriever = new GeoPackageTileRetriever(tileDao, width, height);
-        tileRetriever.setScaling(scaling);
+        if (scaling != null) {
+            tileRetriever.setScaling(scaling);
+        }
         this.retriever = tileRetriever;
     }
 
