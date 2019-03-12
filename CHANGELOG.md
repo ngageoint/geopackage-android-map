@@ -6,7 +6,16 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.2.0 (TBD)
 
-* TBD
+* geopackage-android version 3.2.0
+* play-services-maps version 16.1.0
+* Feature Style cache and utilities
+* Feature Shape for maintaining shapes and metadata shapes for a single feature
+* Feature Shapes improvements for maintaining map shapes
+* Overlay improvements for bounds checking
+* Overlay map and tile density support
+* Map Shape Converter stroke width setting for multiple shapes and marker shapes
+* gradle plugin updated to 3.3.2
+* gradle version 4.10.1
 
 ## [3.1.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.1.0) (10-04-2018)
 
