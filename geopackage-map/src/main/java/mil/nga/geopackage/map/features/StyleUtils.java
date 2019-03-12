@@ -20,7 +20,7 @@ import mil.nga.geopackage.style.Color;
  * Style utilities for populating markers and shapes
  *
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public class StyleUtils {
 

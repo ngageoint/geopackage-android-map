@@ -40,7 +40,7 @@ public class FeatureShapes {
      * Get the mapping between databases and tables
      *
      * @return databases to tables mapping
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public Map<String, Map<String, Map<Long, FeatureShape>>> getDatabases() {
         return databases;
@@ -60,7 +60,7 @@ public class FeatureShapes {
      *
      * @param database GeoPackage database
      * @return tables to features ids mapping
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public Map<String, Map<Long, FeatureShape>> getTables(String database) {
 
@@ -88,7 +88,7 @@ public class FeatureShapes {
      * @param database GeoPackage database
      * @param table    table name
      * @return feature ids to map shapes mapping
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public Map<Long, FeatureShape> getFeatureIds(String database, String table) {
         Map<String, Map<Long, FeatureShape>> tables = getTables(database);
@@ -131,7 +131,7 @@ public class FeatureShapes {
      * @param table     table name
      * @param featureId feature id
      * @return feature shape
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public FeatureShape getFeatureShape(String database, String table, long featureId) {
         Map<Long, FeatureShape> featureIds = getFeatureIds(database, table);
@@ -146,7 +146,7 @@ public class FeatureShapes {
      * @param table     table name
      * @param featureId feature id
      * @return map shapes count
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int getFeatureShapeCount(String database, String table, long featureId) {
         return getFeatureShape(database, table, featureId).count();
@@ -189,7 +189,7 @@ public class FeatureShapes {
      * @param featureId feature id
      * @param database  GeoPackage database
      * @param table     table name
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public void addMapMetadataShape(GoogleMapShape mapShape, long featureId, String database, String table) {
         FeatureShape featureShape = getFeatureShape(database, table, featureId);
@@ -232,7 +232,7 @@ public class FeatureShapes {
      *
      * @param excludedType Google Map Shape Type to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesWithExclusion(GoogleMapShapeType excludedType) {
         Set<GoogleMapShapeType> excludedTypes = new HashSet<>();
@@ -245,7 +245,7 @@ public class FeatureShapes {
      *
      * @param excludedTypes Google Map Shape Types to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesExcluding(GoogleMapShapeType... excludedTypes) {
         Set<GoogleMapShapeType> excluded = new HashSet<>();
@@ -260,7 +260,7 @@ public class FeatureShapes {
      *
      * @param excludedTypes Google Map Shape Types to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesWithExclusions(Set<GoogleMapShapeType> excludedTypes) {
 
@@ -294,7 +294,7 @@ public class FeatureShapes {
      * @param database     GeoPackage database
      * @param excludedType Google Map Shape Type to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesWithExclusion(String database, GoogleMapShapeType excludedType) {
         Set<GoogleMapShapeType> excludedTypes = new HashSet<>();
@@ -308,7 +308,7 @@ public class FeatureShapes {
      * @param database      GeoPackage database
      * @param excludedTypes Google Map Shape Types to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesExcluding(String database, GoogleMapShapeType... excludedTypes) {
         Set<GoogleMapShapeType> excluded = new HashSet<>();
@@ -324,7 +324,7 @@ public class FeatureShapes {
      * @param database      GeoPackage database
      * @param excludedTypes Google Map Shape Types to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesWithExclusions(String database, Set<GoogleMapShapeType> excludedTypes) {
 
@@ -368,7 +368,7 @@ public class FeatureShapes {
      * @param table        table name
      * @param excludedType Google Map Shape Type to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesWithExclusion(String database, String table, GoogleMapShapeType excludedType) {
         Set<GoogleMapShapeType> excludedTypes = new HashSet<>();
@@ -383,7 +383,7 @@ public class FeatureShapes {
      * @param table         table name
      * @param excludedTypes Google Map Shape Types to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesExcluding(String database, String table, GoogleMapShapeType... excludedTypes) {
         Set<GoogleMapShapeType> excluded = new HashSet<>();
@@ -400,7 +400,7 @@ public class FeatureShapes {
      * @param table         table name
      * @param excludedTypes Google Map Shape Types to exclude from map removal
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesWithExclusions(String database, String table, Set<GoogleMapShapeType> excludedTypes) {
 
@@ -485,7 +485,7 @@ public class FeatureShapes {
      * @param boundingBox bounding box
      * @param database    GeoPackage database
      * @return count of removed features
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public int removeShapesNotWithinMap(BoundingBox boundingBox, String database) {
 
@@ -580,7 +580,7 @@ public class FeatureShapes {
      * @param table     table name
      * @param featureId feature id
      * @return true if removed
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public boolean removeFeatureShape(String database, String table, long featureId) {
 

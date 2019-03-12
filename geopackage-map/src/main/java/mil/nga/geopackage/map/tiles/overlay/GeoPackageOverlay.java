@@ -35,7 +35,7 @@ public class GeoPackageOverlay extends BoundedOverlay {
      *
      * @param tileDao tile dao
      * @param density display density: {@link android.util.DisplayMetrics#density}
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public GeoPackageOverlay(TileDao tileDao, float density) {
         this(tileDao, density, null);
@@ -73,7 +73,7 @@ public class GeoPackageOverlay extends BoundedOverlay {
      * @param tileDao tile dao
      * @param density display density: {@link android.util.DisplayMetrics#density}
      * @param scaling tile scaling options
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public GeoPackageOverlay(TileDao tileDao, float density, TileScaling scaling) {
         this(tileDao, TileUtils.tileLength(density), TileUtils.tileLength(density), scaling);

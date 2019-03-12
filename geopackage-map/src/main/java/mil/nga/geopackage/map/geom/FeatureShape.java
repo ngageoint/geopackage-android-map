@@ -7,7 +7,7 @@ import java.util.List;
  * Map shapes and metadata shapes for a single feature shape
  *
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public class FeatureShape {
 

@@ -68,7 +68,7 @@ public class GeoPackageOverlayFactory {
      * @param tileDao tile dao
      * @param density display density: {@link android.util.DisplayMetrics#density}
      * @return bounded overlay
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public static BoundedOverlay getBoundedOverlay(TileDao tileDao, float density) {
 
@@ -102,7 +102,7 @@ public class GeoPackageOverlayFactory {
      * @param density display density: {@link android.util.DisplayMetrics#density}
      * @param scaling tile scaling options
      * @return bounded overlay
-     * @since 3.1.1
+     * @since 3.2.0
      */
     public static BoundedOverlay getBoundedOverlay(TileDao tileDao, float density, TileScaling scaling) {
         return new GeoPackageOverlay(tileDao, density, scaling);

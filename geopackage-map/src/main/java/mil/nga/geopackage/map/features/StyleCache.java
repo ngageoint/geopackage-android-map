@@ -18,7 +18,7 @@ import mil.nga.geopackage.features.user.FeatureRow;
  * Style utilities for populating markers and shapes. Caches icons for a single GeoPackage
  *
  * @author osbornb
- * @since 3.1.1
+ * @since 3.2.0
  */
 public class StyleCache {
 
