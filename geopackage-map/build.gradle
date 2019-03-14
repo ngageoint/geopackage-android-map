@@ -20,7 +20,7 @@ android {
         multiDexEnabled true
 
         testApplicationId 'mil.nga.geopackage.map.test'
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     configurations {
@@ -160,7 +160,7 @@ dependencies {
     api 'mil.nga.geopackage:geopackage-android:3.2.0'
     //api project(':geopackage-sdk') // uncomment me to build locally
     javadocDeps 'mil.nga.geopackage:geopackage-android:3.2.0'
-    testImplementation 'com.android.support:multidex:1.0.3'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    testImplementation 'androidx.multidex:multidex:2.0.1'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
 }

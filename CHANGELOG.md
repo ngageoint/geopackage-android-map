@@ -14,6 +14,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * Overlay improvements for bounds checking
 * Overlay map and tile density support
 * Map Shape Converter stroke width setting for multiple shapes and marker shapes
+* Upgrade to AndroidX support libraries
 * gradle plugin updated to 3.3.2
 * gradle version 4.10.1
 
