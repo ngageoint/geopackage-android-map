@@ -112,6 +112,16 @@ public abstract class BoundedOverlay implements TileProvider {
     }
 
     /**
+     * Get the bounded overlay web mercator bounding box expanded as needed by the requested bounding box dimensions
+     *
+     * @param requestWebMercatorBoundingBox requested web mercator bounding box
+     * @return web mercator bounding box
+     */
+    protected BoundingBox getWebMercatorBoundingBox(BoundingBox requestWebMercatorBoundingBox) {
+        return webMercatorBoundingBox;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -207,12 +217,15 @@ public abstract class BoundedOverlay implements TileProvider {
         if (webMercatorBoundingBox != null) {
 
             // Get the bounding box of the requested tile
-            BoundingBox requestWebMercatorBoundingBox = TileBoundingBoxUtils
+            BoundingBox tileWebMercatorBoundingBox = TileBoundingBoxUtils
                     .getWebMercatorBoundingBox(x, y, zoom);
 
+            // Adjust the bounding box if needed
+            BoundingBox adjustedWebMercatorBoundingBox = getWebMercatorBoundingBox(tileWebMercatorBoundingBox);
+
             // Check if the request overlaps
-            withinBounds = webMercatorBoundingBox.intersects(
-                    requestWebMercatorBoundingBox, true);
+            withinBounds = adjustedWebMercatorBoundingBox.intersects(
+                    tileWebMercatorBoundingBox, true);
         }
 
         return withinBounds;
