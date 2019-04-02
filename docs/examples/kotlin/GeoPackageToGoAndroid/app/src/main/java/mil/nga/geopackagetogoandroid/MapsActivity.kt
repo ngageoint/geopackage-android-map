@@ -1,7 +1,7 @@
 package mil.nga.geopackagetogoandroid
 
 import android.graphics.BitmapFactory
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
