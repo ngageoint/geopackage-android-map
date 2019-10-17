@@ -8,7 +8,7 @@ version = "3.3.1"
 def remotePublish = false
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
         multiDexEnabled true
 
         testApplicationId 'mil.nga.geopackage.map.test'
@@ -25,6 +25,11 @@ android {
 
     configurations {
         javadocDeps
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -55,10 +60,11 @@ android {
         options.links("http://ngageoint.github.io/simple-features-geojson-java/docs/api/")
         options.links("http://ngageoint.github.io/simple-features-proj-java/docs/api/")
         options.links("http://ngageoint.github.io/simple-features-java/docs/api/")
+        options.links("http://ngageoint.github.io/ogc-api-features-json-java/docs/api/")
         options.links("http://ngageoint.github.io/tiff-java/docs/api/")
         options.links("http://ormlite.com/javadoc/ormlite-core/")
         options.links("http://ormlite.com/javadoc/ormlite-android/")
-        options.links("http://docs.oracle.com/javase/7/docs/api/")
+        options.links("http://docs.oracle.com/javase/8/docs/api/")
         options.links("http://hjg.com.ar/pngj/apidocs/")
         options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/docs/reference")
         options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/extras/google/google_play_services/reference")
@@ -156,10 +162,10 @@ android {
 
 dependencies {
     api 'com.google.android.gms:play-services-maps:17.0.0'
-    api 'com.google.maps.android:android-maps-utils:0.5'
-    api 'mil.nga.geopackage:geopackage-android:3.3.0'
+    api 'com.google.maps.android:android-maps-utils:0.6.1'
+    api 'mil.nga.geopackage:geopackage-android:3.3.1'
     //api project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:3.3.0'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:3.3.1'
     testImplementation 'androidx.multidex:multidex:2.0.1'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
