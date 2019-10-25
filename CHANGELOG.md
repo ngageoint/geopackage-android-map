@@ -8,7 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * compile SDK version 29
 * geopackage-android version 3.3.1
-* android-maps-utils version 0.6.1
+* android-maps-utils version 0.6.2
 * Java 8
 * gradle plugin updated to 3.5.1
 * gradle version 5.4.1
