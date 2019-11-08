@@ -10,7 +10,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * geopackage-android version 3.3.1
 * android-maps-utils version 0.6.2
 * Java 8
-* gradle plugin updated to 3.5.1
+* gradle plugin updated to 3.5.2
 * gradle version 5.4.1
 
 ## [3.3.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.3.0) (07-10-2019)
