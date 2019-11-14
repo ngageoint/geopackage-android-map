@@ -4,10 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.3.1 (TBD)
+## 3.4.0 (TBD)
 
 * compile SDK version 29
-* geopackage-android version 3.3.1
+* geopackage-android version 3.4.0
 * android-maps-utils version 0.6.2
 * Java 8
 * gradle plugin updated to 3.5.2
