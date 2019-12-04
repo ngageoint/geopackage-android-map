@@ -1,6 +1,9 @@
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - master
 
 jobs:
   
@@ -16,15 +19,4 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Gradle
-      run: ./gradlew build -x lint 
-    - name: Copy Release Artifacts
-      run: |
-        mkdir geopackage-map/build/release
-        cp geopackage-map/build/libs/*.jar geopackage-map/build/outputs/aar/*release.aar geopackage-map/build/release/
-        grep "version =" geopackage-map/build.gradle | sed 's/[a-z ="]//g' > VERSION
-        mv geopackage-map/build/release/*.aar geopackage-map/build/release/geopackage-android-map-$(cat VERSION).aar 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: geopackage-android-map
-        path: geopackage-map/build/release
+      run: ./gradlew build -x lint
