@@ -3,17 +3,16 @@ package mil.nga.geopackage.map.tiles.overlay;
 import com.google.android.gms.maps.model.Tile;
 
 import mil.nga.geopackage.tiles.retriever.GeoPackageTile;
-import mil.nga.geopackage.tiles.retriever.GoogleAPIGeoPackageTileRetriever;
 import mil.nga.geopackage.tiles.retriever.TileRetriever;
+import mil.nga.geopackage.tiles.retriever.XYZGeoPackageTileRetriever;
 import mil.nga.geopackage.tiles.user.TileDao;
 
 /**
- * GeoPackage Map Overlay Tile Provider, assumes the Google Maps API zoom level
- * and grid
+ * XYZ GeoPackage Map Overlay Tile Provider, assumes XYZ tiles
  *
  * @author osbornb
  */
-public class GoogleAPIGeoPackageOverlay extends BoundedOverlay {
+public class XYZGeoPackageOverlay extends BoundedOverlay {
 
     /**
      * Tile retriever
@@ -25,8 +24,8 @@ public class GoogleAPIGeoPackageOverlay extends BoundedOverlay {
      *
      * @param tileDao
      */
-    public GoogleAPIGeoPackageOverlay(TileDao tileDao) {
-        this.retriever = new GoogleAPIGeoPackageTileRetriever(tileDao);
+    public XYZGeoPackageOverlay(TileDao tileDao) {
+        this.retriever = new XYZGeoPackageTileRetriever(tileDao);
     }
 
     /**

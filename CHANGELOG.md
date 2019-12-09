@@ -4,9 +4,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.4.1 (TBD)
+## 3.5.0 (TBD)
 
-* TBD
+* geopackage-android version 3.5.0
+* XYZ tile rebranding, previously referred to as Google
+* gradle plugin updated to 3.5.3
 
 ## [3.4.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.4.0) (11-14-2019)
 

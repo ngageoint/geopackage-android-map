@@ -53,8 +53,8 @@ public class GeoPackageOverlayFactory {
 
         BoundedOverlay overlay = null;
 
-        if (tileDao.isGoogleTiles()) {
-            overlay = new GoogleAPIGeoPackageOverlay(tileDao);
+        if (tileDao.isXYZTiles()) {
+            overlay = new XYZGeoPackageOverlay(tileDao);
         } else {
             overlay = new GeoPackageOverlay(tileDao);
         }
@@ -74,8 +74,8 @@ public class GeoPackageOverlayFactory {
 
         BoundedOverlay overlay = null;
 
-        if (tileDao.isGoogleTiles()) {
-            overlay = new GoogleAPIGeoPackageOverlay(tileDao);
+        if (tileDao.isXYZTiles()) {
+            overlay = new XYZGeoPackageOverlay(tileDao);
         } else {
             overlay = new GeoPackageOverlay(tileDao, density);
         }
