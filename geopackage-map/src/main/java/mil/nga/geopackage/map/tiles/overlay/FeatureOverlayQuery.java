@@ -285,8 +285,19 @@ public class FeatureOverlayQuery {
      * @return feature index results, must be closed
      */
     public FeatureIndexResults queryFeatures(BoundingBox boundingBox) {
-        FeatureIndexResults results = queryFeatures(boundingBox, null);
-        return results;
+        return queryFeatures(boundingBox, null);
+    }
+
+    /**
+     * Query for features in the WGS84 projected bounding box
+     *
+     * @param columns     columns
+     * @param boundingBox query bounding box in WGS84 projection
+     * @return feature index results, must be closed
+     * @since 3.5.0
+     */
+    public FeatureIndexResults queryFeatures(String[] columns, BoundingBox boundingBox) {
+        return queryFeatures(columns, boundingBox, null);
     }
 
     /**
@@ -297,6 +308,19 @@ public class FeatureOverlayQuery {
      * @return feature index results, must be closed
      */
     public FeatureIndexResults queryFeatures(BoundingBox boundingBox, Projection projection) {
+        return queryFeatures(null, boundingBox, projection);
+    }
+
+    /**
+     * Query for features in the bounding box
+     *
+     * @param columns     columns
+     * @param boundingBox query bounding box
+     * @param projection  bounding box projection
+     * @return feature index results, must be closed
+     * @since 3.5.0
+     */
+    public FeatureIndexResults queryFeatures(String[] columns, BoundingBox boundingBox, Projection projection) {
 
         if (projection == null) {
             projection = ProjectionFactory.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
@@ -307,7 +331,7 @@ public class FeatureOverlayQuery {
         if (indexManager == null) {
             throw new GeoPackageException("Index Manager is not set on the Feature Tiles and is required to query indexed features");
         }
-        FeatureIndexResults results = indexManager.query(boundingBox, projection);
+        FeatureIndexResults results = indexManager.query(columns, boundingBox, projection);
         return results;
     }
 
