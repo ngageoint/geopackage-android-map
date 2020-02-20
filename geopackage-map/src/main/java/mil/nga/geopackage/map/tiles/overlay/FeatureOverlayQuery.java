@@ -308,7 +308,7 @@ public class FeatureOverlayQuery {
      * @return feature index results, must be closed
      */
     public FeatureIndexResults queryFeatures(BoundingBox boundingBox, Projection projection) {
-        return queryFeatures(null, boundingBox, projection);
+        return queryFeatures(featureTiles.getFeatureDao().getColumnNames(), boundingBox, projection);
     }
 
     /**
