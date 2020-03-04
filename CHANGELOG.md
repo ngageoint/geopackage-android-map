@@ -9,7 +9,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 * geopackage-android version 3.5.0
 * XYZ tile rebranding, previously referred to as Google
 * Queries by specified columns
-* gradle plugin updated to 3.5.3
+* gradle plugin updated to 3.6.1
 
 ## [3.4.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.4.0) (11-14-2019)
 
