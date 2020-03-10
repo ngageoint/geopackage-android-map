@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 3.5.0 (TBD)
+## [3.5.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/3.5.0) (03-11-2020)
 
 * geopackage-android version 3.5.0
 * XYZ tile rebranding, previously referred to as Google
