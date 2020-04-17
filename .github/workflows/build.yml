@@ -42,6 +42,16 @@ jobs:
       with:
         repository: ${{ steps.android-repository.outputs.replaced }}
         ref: ${{ github.ref }}
+    - name: temp
+      run: |
+        pwd
+        ls -la
+        cd ..
+        pwd
+        ls -la
+        cd geopackage-android
+        pwd
+        ls -la
     - name: Build Android with Gradle
       run: ./gradlew -p ../geopackage-android uploadArchives -x lint
     - name: Checkout Repository
