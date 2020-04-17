@@ -44,6 +44,7 @@ jobs:
         ref: ${{ github.ref }}
     - name: temp
       run: |
+        echo ${{ github.workspace }}
         pwd
         ls -la
         cd ..
@@ -53,7 +54,8 @@ jobs:
         pwd
         ls -la
     - name: Build Android with Gradle
-      run: ./gradlew -p ../geopackage-android uploadArchives -x lint
+      working-directory: ${{ github.workspace }}/geopackage-android
+      run: ./gradlew uploadArchives -x lint
     - name: Checkout Repository
       uses: actions/checkout@v1
     - name: Build with Gradle
