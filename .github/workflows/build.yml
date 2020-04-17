@@ -54,7 +54,7 @@ jobs:
         pwd
         ls -la
     - name: Build Android with Gradle
-      working-directory: ${{ github.workspace }}/geopackage-android
+      working-directory: ../geopackage-android
       run: ./gradlew uploadArchives -x lint
     - name: Checkout Repository
       uses: actions/checkout@v1
