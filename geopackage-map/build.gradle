@@ -72,12 +72,12 @@ android {
     }
 
     task javadocJar(type: Jar) {
-        classifier = 'javadoc'
+        archiveClassifier.set("javadoc")
         from javadoc
     }
 
     task sourcesJar(type: Jar) {
-        classifier = 'sources'
+        archiveClassifier.set("sources")
         from sourceSets.main.java.srcDirs
     }
 
@@ -162,9 +162,9 @@ android {
 dependencies {
     api 'com.google.android.gms:play-services-maps:17.0.0'
     api 'com.google.maps.android:android-maps-utils:0.6.2'
-    api 'mil.nga.geopackage:geopackage-android:3.5.0'
+    api 'mil.nga.geopackage:geopackage-android:3.5.1'
     //api project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:3.5.0'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:3.5.1'
     testImplementation 'androidx.multidex:multidex:2.0.1'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
