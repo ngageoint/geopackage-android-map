@@ -2,7 +2,7 @@ package mil.nga.geopackage.map.tiles.overlay;
 
 import com.google.android.gms.maps.model.Tile;
 
-import mil.nga.geopackage.extension.scale.TileScaling;
+import mil.nga.geopackage.extension.nga.scale.TileScaling;
 import mil.nga.geopackage.tiles.TileUtils;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTile;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTileRetriever;

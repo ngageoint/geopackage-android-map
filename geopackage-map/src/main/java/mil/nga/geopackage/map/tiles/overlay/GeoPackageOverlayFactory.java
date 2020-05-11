@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackage;
-import mil.nga.geopackage.extension.link.FeatureTileTableLinker;
-import mil.nga.geopackage.extension.scale.TileScaling;
+import mil.nga.geopackage.extension.nga.link.FeatureTileTableLinker;
+import mil.nga.geopackage.extension.nga.scale.TileScaling;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTile;
 import mil.nga.geopackage.tiles.user.TileDao;
 

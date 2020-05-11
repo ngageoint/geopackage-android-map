@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 
-import mil.nga.geopackage.extension.style.IconRow;
+import mil.nga.geopackage.extension.nga.style.IconRow;
 import mil.nga.geopackage.io.BitmapConverter;
 import mil.nga.geopackage.map.features.StyleUtils;
 import mil.nga.geopackage.map.test.BaseTestCase;

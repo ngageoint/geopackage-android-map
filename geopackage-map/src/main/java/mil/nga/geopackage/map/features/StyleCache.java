@@ -7,11 +7,11 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import mil.nga.geopackage.GeoPackage;
-import mil.nga.geopackage.extension.style.FeatureStyle;
-import mil.nga.geopackage.extension.style.FeatureStyleExtension;
-import mil.nga.geopackage.extension.style.IconCache;
-import mil.nga.geopackage.extension.style.IconRow;
-import mil.nga.geopackage.extension.style.StyleRow;
+import mil.nga.geopackage.extension.nga.style.FeatureStyle;
+import mil.nga.geopackage.extension.nga.style.FeatureStyleExtension;
+import mil.nga.geopackage.extension.nga.style.IconCache;
+import mil.nga.geopackage.extension.nga.style.IconRow;
+import mil.nga.geopackage.extension.nga.style.StyleRow;
 import mil.nga.geopackage.features.user.FeatureRow;
 
 /**
