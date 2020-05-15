@@ -18,8 +18,14 @@ import java.util.UUID;
 
 import mil.nga.geopackage.GeoPackage;
 import mil.nga.geopackage.GeoPackageException;
-import mil.nga.geopackage.core.contents.Contents;
+import mil.nga.geopackage.contents.Contents;
 import mil.nga.geopackage.db.GeoPackageDataType;
+import mil.nga.geopackage.extension.schema.SchemaExtension;
+import mil.nga.geopackage.extension.schema.columns.DataColumns;
+import mil.nga.geopackage.extension.schema.columns.DataColumnsDao;
+import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraintType;
+import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraints;
+import mil.nga.geopackage.extension.schema.constraints.DataColumnConstraintsDao;
 import mil.nga.geopackage.features.columns.GeometryColumns;
 import mil.nga.geopackage.features.user.FeatureColumn;
 import mil.nga.geopackage.features.user.FeatureDao;
@@ -27,11 +33,6 @@ import mil.nga.geopackage.features.user.FeatureRow;
 import mil.nga.geopackage.features.user.FeatureTable;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
 import mil.nga.geopackage.io.ContextIOUtils;
-import mil.nga.geopackage.schema.columns.DataColumns;
-import mil.nga.geopackage.schema.columns.DataColumnsDao;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraintType;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraints;
-import mil.nga.geopackage.schema.constraints.DataColumnConstraintsDao;
 import mil.nga.geopackage.tiles.matrix.TileMatrix;
 import mil.nga.geopackage.tiles.user.TileColumn;
 import mil.nga.geopackage.tiles.user.TileDao;
@@ -204,7 +205,8 @@ public class TestUtils {
 
         double random = Math.random();
 
-        DataColumnsDao dataColumnsDao = geoPackage.getDataColumnsDao();
+        DataColumnsDao dataColumnsDao = SchemaExtension
+                .getDataColumnsDao(geoPackage);
         DataColumns dataColumns = new DataColumns();
         dataColumns.setContents(contents);
         dataColumns.setColumnName(TEST_INTEGER_COLUMN);
@@ -502,9 +504,11 @@ public class TestUtils {
     public static void createConstraints(GeoPackage geoPackage)
             throws SQLException {
 
-        geoPackage.createDataColumnConstraintsTable();
+        SchemaExtension schemaExtension = new SchemaExtension(geoPackage);
+        schemaExtension.createDataColumnConstraintsTable();
 
-        DataColumnConstraintsDao dao = geoPackage.getDataColumnConstraintsDao();
+        DataColumnConstraintsDao dao = schemaExtension
+                .getDataColumnConstraintsDao();
 
         DataColumnConstraints sampleRange = new DataColumnConstraints();
         sampleRange.setConstraintName(SAMPLE_RANGE_CONSTRAINT);
