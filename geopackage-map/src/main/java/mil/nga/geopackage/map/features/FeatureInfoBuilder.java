@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.j256.ormlite.dao.DaoManager;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -529,8 +528,8 @@ public class FeatureInfoBuilder {
 
         if (geometryData.getGeometry() != null) {
 
+            SpatialReferenceSystemDao srsDao = SpatialReferenceSystemDao.create(featureDao.getDb());
             try {
-                SpatialReferenceSystemDao srsDao = DaoManager.createDao(featureDao.getDb().getConnectionSource(), SpatialReferenceSystem.class);
                 int srsId = geometryData.getSrsId();
                 SpatialReferenceSystem srs = srsDao.queryForId((long) srsId);
 
@@ -558,9 +557,8 @@ public class FeatureInfoBuilder {
      * @return data columns dao
      */
     private DataColumnsDao getDataColumnsDao() {
-        DataColumnsDao dataColumnsDao = null;
+        DataColumnsDao dataColumnsDao = DataColumnsDao.create(featureDao.getDb());
         try {
-            dataColumnsDao = DaoManager.createDao(featureDao.getDb().getConnectionSource(), DataColumns.class);
             if (!dataColumnsDao.isTableExists()) {
                 dataColumnsDao = null;
             }
