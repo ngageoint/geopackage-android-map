@@ -56,6 +56,7 @@ android {
         options.links "https://ngageoint.github.io/tiff-java/docs/api/"
         options.links "https://ngageoint.github.io/simple-features-java/docs/api/"
         options.links "https://ngageoint.github.io/simple-features-wkb-java/docs/api/"
+        options.links "https://ngageoint.github.io/simple-features-wkt-java/docs/api/"
         options.links "https://ngageoint.github.io/simple-features-proj-java/docs/api/"
         options.links "https://ngageoint.github.io/simple-features-geojson-java/docs/api/"
         options.links "https://ngageoint.github.io/ogc-api-features-json-java/docs/api/"
@@ -161,7 +162,7 @@ android {
 
 dependencies {
     api 'com.google.android.gms:play-services-maps:17.0.0'
-    api 'com.google.maps.android:android-maps-utils:0.6.2'
+    api 'com.google.maps.android:android-maps-utils:2.0.3'
     api 'mil.nga.geopackage:geopackage-android:4.0.0'
     //api project(':geopackage-sdk') // uncomment me to build locally
     javadocDeps 'mil.nga.geopackage:geopackage-android:4.0.0'
