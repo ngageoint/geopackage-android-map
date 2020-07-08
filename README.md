@@ -48,11 +48,11 @@ The [Disconnected Interactive Content Explorer (DICE)](https://github.com/ngageo
 // Get a manager
 GeoPackageManager manager = GeoPackageFactory.getManager(context);
 
-// Available databases
-List<String> databases = manager.databases();
-
 // Import database
 boolean imported = manager.importGeoPackage(geoPackageFile);
+
+// Available databases
+List<String> databases = manager.databases();
 
 // Open database
 GeoPackage geoPackage = manager.open(databases.get(0));
@@ -63,10 +63,14 @@ ContentsDao contentsDao = geoPackage.getContentsDao();
 GeometryColumnsDao geomColumnsDao = geoPackage.getGeometryColumnsDao();
 TileMatrixSetDao tileMatrixSetDao = geoPackage.getTileMatrixSetDao();
 TileMatrixDao tileMatrixDao = geoPackage.getTileMatrixDao();
-DataColumnsDao dataColumnsDao = geoPackage.getDataColumnsDao();
-DataColumnConstraintsDao dataColumnConstraintsDao = geoPackage.getDataColumnConstraintsDao();
-MetadataDao metadataDao = geoPackage.getMetadataDao();
-MetadataReferenceDao metadataReferenceDao = geoPackage.getMetadataReferenceDao();
+SchemaExtension schemaExtension = new SchemaExtension(geoPackage);
+DataColumnsDao dao = schemaExtension.getDataColumnsDao();
+DataColumnConstraintsDao dataColumnConstraintsDao = schemaExtension
+        .getDataColumnConstraintsDao();
+MetadataExtension metadataExtension = new MetadataExtension(geoPackage);
+MetadataDao metadataDao = metadataExtension.getMetadataDao();
+MetadataReferenceDao metadataReferenceDao = metadataExtension
+        .getMetadataReferenceDao();
 ExtensionsDao extensionsDao = geoPackage.getExtensionsDao();
 
 // Feature and tile tables
@@ -79,8 +83,8 @@ FeatureDao featureDao = geoPackage.getFeatureDao(featureTable);
 GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
         featureDao.getProjection());
 FeatureCursor featureCursor = featureDao.queryForAll();
-try{
-    while(featureCursor.moveToNext()){
+try {
+    while (featureCursor.moveToNext()) {
         FeatureRow featureRow = featureCursor.getRow();
         GeoPackageGeometryData geometryData = featureRow.getGeometry();
         Geometry geometry = geometryData.getGeometry();
@@ -89,7 +93,7 @@ try{
                 .addShapeToMap(map, shape);
         // ...
     }
-}finally{
+} finally {
     featureCursor.close();
 }
 
@@ -97,14 +101,14 @@ try{
 String tileTable = tiles.get(0);
 TileDao tileDao = geoPackage.getTileDao(tileTable);
 TileCursor tileCursor = tileDao.queryForAll();
-try{
-    while(tileCursor.moveToNext()){
+try {
+    while (tileCursor.moveToNext()) {
         TileRow tileRow = tileCursor.getRow();
         byte[] tileBytes = tileRow.getTileData();
         Bitmap tileBitmap = tileRow.getTileDataBitmap();
         // ...
     }
-}finally{
+} finally {
     tileCursor.close();
 }
 
@@ -139,12 +143,12 @@ Projection projection = ProjectionFactory.getProjection(ProjectionConstants.EPSG
 
 // URL Tile Generator (generate tiles from a URL)
 TileGenerator urlTileGenerator = new UrlTileGenerator(context, geoPackage,
-                "url_tile_table", "http://url/{z}/{x}/{y}.png", 2, 7, boundingBox, projection);
+        "url_tile_table", "http://url/{z}/{x}/{y}.png", 1, 2, boundingBox, projection);
 int urlTileCount = urlTileGenerator.generateTiles();
 
 // Feature Tile Generator (generate tiles from features)
 TileGenerator featureTileGenerator = new FeatureTileGenerator(context, geoPackage,
-                featureTable + "_tiles", featureTiles, 10, 15, boundingBox, projection);
+        featureTable + "_tiles", featureTiles, 1, 2, boundingBox, projection);
 int featureTileCount = featureTileGenerator.generateTiles();
 
 // Close database when done
