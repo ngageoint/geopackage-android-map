@@ -87,11 +87,13 @@ try {
     while (featureCursor.moveToNext()) {
         FeatureRow featureRow = featureCursor.getRow();
         GeoPackageGeometryData geometryData = featureRow.getGeometry();
-        Geometry geometry = geometryData.getGeometry();
-        GoogleMapShape shape = converter.toShape(geometry);
-        GoogleMapShape mapShape = GoogleMapShapeConverter
-                .addShapeToMap(map, shape);
-        // ...
+        if (geometryData != null && !geometryData.isEmpty()) {
+            Geometry geometry = geometryData.getGeometry();
+            GoogleMapShape shape = converter.toShape(geometry);
+            GoogleMapShape mapShape = GoogleMapShapeConverter
+                    .addShapeToMap(map, shape);
+            // ...
+        }
     }
 } finally {
     featureCursor.close();

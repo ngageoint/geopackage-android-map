@@ -7,8 +7,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 
-import org.junit.Test;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -146,11 +144,13 @@ public class ReadmeTest extends ImportGeoPackageTestCase {
             while (featureCursor.moveToNext()) {
                 FeatureRow featureRow = featureCursor.getRow();
                 GeoPackageGeometryData geometryData = featureRow.getGeometry();
-                Geometry geometry = geometryData.getGeometry();
-                GoogleMapShape shape = converter.toShape(geometry);
-                GoogleMapShape mapShape = GoogleMapShapeConverter
-                        .addShapeToMap(map, shape);
-                // ...
+                if (geometryData != null && !geometryData.isEmpty()) {
+                    Geometry geometry = geometryData.getGeometry();
+                    GoogleMapShape shape = converter.toShape(geometry);
+                    GoogleMapShape mapShape = GoogleMapShapeConverter
+                            .addShapeToMap(map, shape);
+                    // ...
+                }
             }
         } finally {
             featureCursor.close();
