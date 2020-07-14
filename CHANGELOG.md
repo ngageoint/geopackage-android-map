@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 4.0.0 (TBD)
+## [4.0.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/4.0.0) (07-14-2020)
 
 * geopackage-android version 4.0.0
 * android-maps-utils version 2.0.3
