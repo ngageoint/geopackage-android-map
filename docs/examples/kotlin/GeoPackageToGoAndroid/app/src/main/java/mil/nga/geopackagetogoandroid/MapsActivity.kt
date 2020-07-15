@@ -1,22 +1,25 @@
 package mil.nga.geopackagetogoandroid
 
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import mil.nga.geopackage.GeoPackage
+import mil.nga.geopackage.GeoPackageFactory
 import mil.nga.geopackage.GeoPackageManager
-import mil.nga.geopackage.factory.GeoPackageFactory
-import mil.nga.geopackage.features.user.*
-import mil.nga.geopackage.map.geom.*
+import mil.nga.geopackage.features.user.FeatureCursor
+import mil.nga.geopackage.features.user.FeatureDao
+import mil.nga.geopackage.map.geom.GoogleMapShape
+import mil.nga.geopackage.map.geom.GoogleMapShapeConverter
+import mil.nga.geopackage.map.geom.GoogleMapShapeType
 import mil.nga.geopackage.map.tiles.overlay.GeoPackageOverlayFactory
+import mil.nga.geopackage.tiles.user.TileDao
 import mil.nga.sf.proj.ProjectionConstants
 import mil.nga.sf.proj.ProjectionFactory
-import mil.nga.geopackage.tiles.user.TileDao
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -61,10 +64,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val featureRow = featureCursor.row
                     val geometryData = featureRow.geometry
                     val geometry = geometryData.geometry
-                    val googleMapShape:GoogleMapShape = converter.toShape(geometry)
+                    val googleMapShape: GoogleMapShape = converter.toShape(geometry)
 
                     if (googleMapShape.shapeType == GoogleMapShapeType.LAT_LNG) {
-                        val markerOptions:MarkerOptions = MarkerOptions()
+                        val markerOptions: MarkerOptions = MarkerOptions()
                             .title(featureRow.getValue("name") as String)
                             .position(googleMapShape.shape as LatLng)
                             .icon(icon)
