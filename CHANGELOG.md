@@ -8,7 +8,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * compile SDK version 30
 * geopackage-android version 4.0.1
-* gradle plugin updated to 4.1.1
+* gradle plugin updated to 4.1.2
 
 ## [4.0.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/4.0.0) (07-14-2020)
 
