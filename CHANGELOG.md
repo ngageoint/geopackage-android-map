@@ -4,10 +4,10 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 4.0.1 (TBD)
+## 5.0.0 (TBD)
 
 * compile SDK version 30
-* geopackage-android version 4.0.1
+* geopackage-android version 5.0.0
 * gradle plugin updated to 4.1.2
 
 ## [4.0.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/4.0.0) (07-14-2020)
