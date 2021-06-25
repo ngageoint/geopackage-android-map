@@ -4,9 +4,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 5.1.1 (TBD)
+## 6.0.0 (TBD)
 
-* TBD
+* geopackage-android version 6.0.0
+* play-services-maps version 17.0.1
+* gradle plugin updated to 4.2.1
 
 ## [5.1.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/5.1.0) (03-23-2021)
 
