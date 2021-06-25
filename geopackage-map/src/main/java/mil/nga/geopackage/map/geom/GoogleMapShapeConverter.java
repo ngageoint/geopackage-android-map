@@ -18,6 +18,8 @@ import java.util.List;
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.features.user.FeatureDao;
+import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
 import mil.nga.sf.CircularString;
 import mil.nga.sf.CompoundCurve;
 import mil.nga.sf.Curve;
@@ -34,9 +36,7 @@ import mil.nga.sf.Polygon;
 import mil.nga.sf.PolyhedralSurface;
 import mil.nga.sf.TIN;
 import mil.nga.sf.Triangle;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionConstants;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.sf.proj.GeometryTransform;
 import mil.nga.sf.util.GeometryUtils;
 
 /**
@@ -55,22 +55,22 @@ public class GoogleMapShapeConverter {
     /**
      * Transformation to WGS 84
      */
-    private final ProjectionTransform toWgs84;
+    private final GeometryTransform toWgs84;
 
     /**
      * Transformation from WGS 84
      */
-    private final ProjectionTransform fromWgs84;
+    private final GeometryTransform fromWgs84;
 
     /**
      * Transformation to Web Mercator
      */
-    private final ProjectionTransform toWebMercator;
+    private final GeometryTransform toWebMercator;
 
     /**
      * Transformation from Web Mercator
      */
-    private final ProjectionTransform fromWebMercator;
+    private final GeometryTransform fromWebMercator;
 
     /**
      * Convert polygon exteriors to specified orientation
@@ -106,13 +106,14 @@ public class GoogleMapShapeConverter {
     public GoogleMapShapeConverter(Projection projection) {
         this.projection = projection;
         if (projection != null) {
-            toWgs84 = projection
-                    .getTransformation(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+            toWgs84 = GeometryTransform.create(projection,
+                    ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
             Projection wgs84 = toWgs84.getToProjection();
-            fromWgs84 = wgs84.getTransformation(projection);
-            toWebMercator = projection.getTransformation(ProjectionConstants.EPSG_WEB_MERCATOR);
+            fromWgs84 = GeometryTransform.create(wgs84, projection);
+            toWebMercator = GeometryTransform.create(projection,
+                    ProjectionConstants.EPSG_WEB_MERCATOR);
             Projection webMercator = toWebMercator.getToProjection();
-            fromWebMercator = webMercator.getTransformation(projection);
+            fromWebMercator = GeometryTransform.create(webMercator, projection);
         } else {
             toWgs84 = null;
             fromWgs84 = null;

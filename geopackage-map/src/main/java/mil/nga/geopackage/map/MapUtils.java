@@ -21,7 +21,7 @@ import mil.nga.geopackage.map.geom.MultiLatLng;
 import mil.nga.geopackage.map.geom.MultiPolygonOptions;
 import mil.nga.geopackage.map.geom.MultiPolylineOptions;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
-import mil.nga.sf.proj.ProjectionConstants;
+import mil.nga.proj.ProjectionConstants;
 
 /**
  * Map utilities

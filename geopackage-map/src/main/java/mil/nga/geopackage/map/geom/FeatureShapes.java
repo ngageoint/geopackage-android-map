@@ -13,8 +13,8 @@ import java.util.Set;
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
+import mil.nga.proj.ProjectionConstants;
 import mil.nga.sf.GeometryType;
-import mil.nga.sf.proj.ProjectionConstants;
 
 /**
  * Maintains a collection of feature map shapes by database, table name, and feature id
@@ -430,7 +430,7 @@ public class FeatureShapes {
                 }
 
                 if (featureShape == null || !featureShape.hasShapes()) {
-                    if(featureShape != null) {
+                    if (featureShape != null) {
                         featureShape.removeMetadataShapes();
                     }
                     iterator.remove();

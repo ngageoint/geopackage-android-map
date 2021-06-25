@@ -31,11 +31,11 @@ import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
 import mil.nga.geopackage.tiles.overlay.FeatureRowData;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
+import mil.nga.proj.Projection;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryType;
 import mil.nga.sf.Point;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.sf.proj.GeometryTransform;
 import mil.nga.sf.util.GeometryPrinter;
 
 /**
@@ -536,7 +536,7 @@ public class FeatureInfoBuilder {
                 if (!projection.equals(srs.getOrganization(), srs.getOrganizationCoordsysId())) {
 
                     Projection geomProjection = srs.getProjection();
-                    ProjectionTransform transform = geomProjection.getTransformation(projection);
+                    GeometryTransform transform = GeometryTransform.create(geomProjection, projection);
 
                     Geometry projectedGeometry = transform.transform(geometryData.getGeometry());
                     geometryData.setGeometry(projectedGeometry);

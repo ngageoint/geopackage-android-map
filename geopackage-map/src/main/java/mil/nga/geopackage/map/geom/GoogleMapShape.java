@@ -11,8 +11,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.List;
 
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.proj.ProjectionConstants;
 import mil.nga.sf.GeometryType;
-import mil.nga.sf.proj.ProjectionConstants;
 
 /**
  * Google Map Shape

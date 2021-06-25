@@ -5,10 +5,10 @@ import com.google.android.gms.maps.model.TileProvider;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
-import mil.nga.sf.proj.Projection;
-import mil.nga.sf.proj.ProjectionConstants;
-import mil.nga.sf.proj.ProjectionFactory;
-import mil.nga.sf.proj.ProjectionTransform;
+import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
+import mil.nga.proj.ProjectionFactory;
+import mil.nga.proj.ProjectionTransform;
 
 /**
  * Abstract overlay which provides bounding returned tiles by zoom levels and/or a bounding box
