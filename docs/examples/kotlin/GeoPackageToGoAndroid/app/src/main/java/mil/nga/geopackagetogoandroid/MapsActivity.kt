@@ -18,8 +18,8 @@ import mil.nga.geopackage.map.geom.GoogleMapShapeConverter
 import mil.nga.geopackage.map.geom.GoogleMapShapeType
 import mil.nga.geopackage.map.tiles.overlay.GeoPackageOverlayFactory
 import mil.nga.geopackage.tiles.user.TileDao
-import mil.nga.sf.proj.ProjectionConstants
-import mil.nga.sf.proj.ProjectionFactory
+import mil.nga.proj.ProjectionConstants
+import mil.nga.proj.ProjectionFactory
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
