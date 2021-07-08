@@ -64,6 +64,8 @@ android {
         options.links "https://ngageoint.github.io/simple-features-geojson-java/docs/api/"
         options.links "https://ngageoint.github.io/ogc-api-features-json-java/docs/api/"
         options.links "https://ngageoint.github.io/geopackage-core-java/docs/api/"
+        // In this ordering, BoundingBox currently generated with url to geopackage-android instead of geopackage-core-java. Replace with:
+        // find docs/docs/api/ -type f -name "*.html" | xargs sed -i '' 's|geopackage-android/docs/api/mil/nga/geopackage/BoundingBox.html|geopackage-core-java/docs/api/mil/nga/geopackage/BoundingBox.html|g'
         options.links "https://ngageoint.github.io/geopackage-android/docs/api/"
         options.links "https://ormlite.com/javadoc/ormlite-core/"
         options.links "https://ormlite.com/javadoc/ormlite-android/"
