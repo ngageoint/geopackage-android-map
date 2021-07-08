@@ -110,6 +110,26 @@ try {
     tileCursor.close();
 }
 
+// Retrieve Tiles by XYZ
+GeoPackageTileRetriever retriever = new GeoPackageTileRetriever(tileDao);
+GeoPackageTile geoPackageTile = retriever.getTile(2, 2, 2);
+if (geoPackageTile != null) {
+    byte[] tileBytes = geoPackageTile.getData();
+    Bitmap tileBitmap = geoPackageTile.getBitmap();
+    // ...
+}
+
+// Retrieve Tiles by Bounding Box
+TileCreator tileCreator = new TileCreator(
+        tileDao, ProjectionFactory.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM));
+GeoPackageTile geoPackageTile2 = tileCreator.getTile(
+        new BoundingBox(-90.0, 0.0, 0.0, 66.513260));
+if (geoPackageTile2 != null) {
+    byte[] tileBytes = geoPackageTile2.getData();
+    Bitmap tileBitmap = geoPackageTile2.getBitmap();
+    // ...
+}
+
 // Tile Provider (GeoPackage or Google API)
 TileProvider overlay = GeoPackageOverlayFactory
         .getTileProvider(tileDao);
@@ -141,7 +161,7 @@ Projection projection = ProjectionFactory.getProjection(ProjectionConstants.EPSG
 
 // URL Tile Generator (generate tiles from a URL)
 TileGenerator urlTileGenerator = new UrlTileGenerator(context, geoPackage,
-        "url_tile_table", "http://url/{z}/{x}/{y}.png", 1, 2, boundingBox, projection);
+        "url_tile_table", "http://url/{z}/{x}/{y}.png", 0, 0, boundingBox, projection);
 int urlTileCount = urlTileGenerator.generateTiles();
 
 // Feature Tile Generator (generate tiles from features)
