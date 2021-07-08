@@ -320,6 +320,8 @@ public class GoogleMapShape {
 
     /**
      * Determines if the shape is in a valid state
+     *
+     * @return true if valid
      */
     public boolean isValid() {
 

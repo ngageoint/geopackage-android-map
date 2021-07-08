@@ -41,7 +41,7 @@ public class PolylineMarkers implements ShapeMarkers {
     /**
      * Get the polyline
      *
-     * @return
+     * @return polyline
      */
     public Polyline getPolyline() {
         return polyline;
@@ -50,7 +50,7 @@ public class PolylineMarkers implements ShapeMarkers {
     /**
      * Set the polyline
      *
-     * @param polyline
+     * @param polyline polyline
      */
     public void setPolyline(Polyline polyline) {
         this.polyline = polyline;

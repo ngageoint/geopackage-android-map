@@ -22,7 +22,7 @@ public class XYZGeoPackageOverlay extends BoundedOverlay {
     /**
      * Constructor
      *
-     * @param tileDao
+     * @param tileDao tile dao
      */
     public XYZGeoPackageOverlay(TileDao tileDao) {
         this.retriever = new XYZGeoPackageTileRetriever(tileDao);

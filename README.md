@@ -33,10 +33,6 @@ The [GeoPackage MapCache](https://github.com/ngageoint/geopackage-mapcache-andro
 
 The [Mobile Awareness GEOINT Environment (MAGE)](https://github.com/ngageoint/mage-android) app provides mobile situational awareness capabilities. It [uses the SDK](https://github.com/ngageoint/mage-android/search?q=GeoPackage&type=Code) to provide GeoPackage functionality.
 
-##### DICE #####
-
-The [Disconnected Interactive Content Explorer (DICE)](https://github.com/ngageoint/disconnected-content-explorer-android) app allows users to load and display interactive content without a network connection. It [uses the SDK](https://github.com/ngageoint/disconnected-content-explorer-android/search?q=GeoPackage&type=Code) to provide GeoPackage functionality on the map and within reports.
-
 #### Example ####
 
 ```java
@@ -163,9 +159,9 @@ geoPackage.close();
 
 ### Installation ###
 
-Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage.map|geopackage-android-map|5.1.0|aar) (AAR, POM, Source, Javadoc)
+Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage.map|geopackage-android-map|6.0.0|aar) (AAR, POM, Source, Javadoc)
 
-    compile "mil.nga.geopackage.map:geopackage-android-map:5.1.0"
+    api 'mil.nga.geopackage.map:geopackage-android-map:6.0.0'
 
 ### Build ###
 
@@ -179,7 +175,8 @@ Build this repository using Android Studio and/or Gradle.
 Include as repositories in your project build.gradle:
 
     repositories {
-        jcenter()
+        google()
+        mavenCentral()
         mavenLocal()
     }
 
@@ -187,7 +184,7 @@ Include as repositories in your project build.gradle:
 
 Include the dependency in your module build.gradle with desired version number:
 
-    compile "mil.nga.geopackage.map:geopackage-android-map:5.1.0"
+    api 'mil.nga.geopackage.map:geopackage-android-map:6.0.0'
 
 As part of the build process, run the "uploadArchives" task on the geopackage-android Gradle script to update the Maven local repository.
 
@@ -195,7 +192,7 @@ As part of the build process, run the "uploadArchives" task on the geopackage-an
 
 Replace the normal build dependency in your module build.gradle with:
 
-    compile project(':geopackage-map')
+    api project(':geopackage-map')
 
 Include in your settings.gradle:
 

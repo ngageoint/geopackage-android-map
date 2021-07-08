@@ -102,6 +102,7 @@ public abstract class BoundedOverlay implements TileProvider {
      * Get the bounding box as the provided projection
      *
      * @param projection projection
+     * @return bounding box
      */
     public BoundingBox getBoundingBox(Projection projection) {
         ProjectionTransform webMercatorToProjection = ProjectionFactory

@@ -14,21 +14,21 @@ public interface ShapeMarkers {
     /**
      * Get all markers
      *
-     * @return
+     * @return markers
      */
     public List<Marker> getMarkers();
 
     /**
      * Delete the marker
      *
-     * @param marker
+     * @param marker marker
      */
     public void delete(Marker marker);
 
     /**
      * Add the marker
      *
-     * @param marker
+     * @param marker marker
      */
     public void addNew(Marker marker);
 

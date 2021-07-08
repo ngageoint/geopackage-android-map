@@ -25,7 +25,7 @@ public class PolygonHoleMarkers implements ShapeMarkers {
     /**
      * Constructor
      *
-     * @param polygonMarkers
+     * @param polygonMarkers polygon markers
      */
     public PolygonHoleMarkers(PolygonMarkers polygonMarkers) {
         parentPolygon = polygonMarkers;

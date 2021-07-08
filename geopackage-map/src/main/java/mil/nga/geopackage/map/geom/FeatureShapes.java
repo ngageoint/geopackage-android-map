@@ -525,6 +525,7 @@ public class FeatureShapes {
      *
      * @param boundingBox bounding box
      * @param database    GeoPackage database
+     * @param table       table name
      * @return count of removed features
      */
     public int removeShapesNotWithinMap(BoundingBox boundingBox, String database, String table) {
