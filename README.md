@@ -179,9 +179,9 @@ geoPackage.close();
 
 ### Installation ###
 
-Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage.map|geopackage-android-map|6.0.0|aar) (AAR, POM, Source, Javadoc)
+Pull from the [Maven Central Repository](http://search.maven.org/#artifactdetails|mil.nga.geopackage.map|geopackage-android-map|6.0.1|aar) (AAR, POM, Source, Javadoc)
 
-    api 'mil.nga.geopackage.map:geopackage-android-map:6.0.0'
+    api 'mil.nga.geopackage.map:geopackage-android-map:6.0.1'
 
 ### Build ###
 
@@ -204,7 +204,7 @@ Include as repositories in your project build.gradle:
 
 Include the dependency in your module build.gradle with desired version number:
 
-    api 'mil.nga.geopackage.map:geopackage-android-map:6.0.0'
+    api 'mil.nga.geopackage.map:geopackage-android-map:6.0.1'
 
 As part of the build process, run the "uploadArchives" task on the geopackage-android Gradle script to update the Maven local repository.
 
