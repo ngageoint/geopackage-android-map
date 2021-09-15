@@ -172,7 +172,7 @@ android {
 dependencies {
     api 'com.google.android.gms:play-services-maps:17.0.1'
     api 'com.google.maps.android:android-maps-utils:2.0.3'
-    api 'mil.nga.geopackage:geopackage-android:6.0.1'
+    api 'mil.nga.geopackage:geopackage-android:6.0.2'
     //api project(':geopackage-sdk') // uncomment me to build locally
     javadocDeps 'mil.nga.geopackage:geopackage-android:6.0.1'
     testImplementation 'androidx.multidex:multidex:2.0.1'
