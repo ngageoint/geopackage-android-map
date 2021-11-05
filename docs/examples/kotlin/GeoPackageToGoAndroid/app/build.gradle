@@ -1,18 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'maven'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 def googleMapsApiReleaseKey = hasProperty('RELEASE_MAPS_MAPCACHE_API_KEY') ? RELEASE_MAPS_MAPCACHE_API_KEY: ''
 def googleMapsApiKeyDebug = hasProperty('DEBUG_MAPS_API_KEY') ? DEBUG_MAPS_API_KEY: ''
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "mil.nga.geopackagetogoandroid"
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion 19
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -33,8 +31,8 @@ android {
 
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api 'androidx.appcompat:appcompat:1.3.0'
-    api 'mil.nga.geopackage.map:geopackage-android-map:6.0.0'
+    api 'androidx.appcompat:appcompat:1.3.1'
+    api 'mil.nga.geopackage.map:geopackage-android-map:6.1.0'
     api 'androidx.multidex:multidex:2.0.1'
     testImplementation 'androidx.multidex:multidex:2.0.1'
 }
