@@ -223,8 +223,7 @@ public class GoogleMapShapeConverter {
      */
     public LatLng toLatLng(Point point) {
         point = toWgs84(point);
-        LatLng latLng = new LatLng(point.getY(), point.getX());
-        return latLng;
+        return new LatLng(point.getY(), point.getX());
     }
 
     /**
@@ -434,7 +433,7 @@ public class GoogleMapShapeConverter {
                 // Try to simplify the number of points in the polygon hole
                 List<Point> holePoints = simplifyPoints(hole.getPoints());
 
-                List<LatLng> holeLatLngs = new ArrayList<LatLng>();
+                List<LatLng> holeLatLngs = new ArrayList<>();
                 for (Point point : holePoints) {
                     LatLng latLng = toLatLng(point);
                     holeLatLngs.add(latLng);
@@ -461,7 +460,7 @@ public class GoogleMapShapeConverter {
      * @return polygon options
      * @since 1.4.1
      */
-    public PolygonOptions toCurvePolygon(CurvePolygon curvePolygon) {
+    public PolygonOptions toCurvePolygon(CurvePolygon<Curve> curvePolygon) {
 
         PolygonOptions polygonOptions = new PolygonOptions();
 
@@ -509,7 +508,7 @@ public class GoogleMapShapeConverter {
             // Add the holes
             for (int i = 1; i < rings.size(); i++) {
                 Curve hole = rings.get(i);
-                List<LatLng> holeLatLngs = new ArrayList<LatLng>();
+                List<LatLng> holeLatLngs = new ArrayList<>();
                 if (hole instanceof CompoundCurve) {
                     CompoundCurve holeCompoundCurve = (CompoundCurve) hole;
                     for (LineString holeLineString : holeCompoundCurve.getLineStrings()) {
@@ -852,7 +851,7 @@ public class GoogleMapShapeConverter {
     }
 
     /**
-     * Convert a list of List<LatLng> to a {@link MultiLineString}
+     * Convert a list of LatLng lists to a {@link MultiLineString}
      *
      * @param polylineList polyline list
      * @return multi line string
@@ -863,7 +862,7 @@ public class GoogleMapShapeConverter {
     }
 
     /**
-     * Convert a list of List<LatLng> to a {@link MultiLineString}
+     * Convert a list of LatLng lists to a {@link MultiLineString}
      *
      * @param polylineList polyline list
      * @param hasZ         has z flag
@@ -884,7 +883,7 @@ public class GoogleMapShapeConverter {
     }
 
     /**
-     * Convert a list of List<LatLng> to a {@link CompoundCurve}
+     * Convert a list of LatLng lists to a {@link CompoundCurve}
      *
      * @param polylineList polyline list
      * @return compound curve
@@ -894,7 +893,7 @@ public class GoogleMapShapeConverter {
     }
 
     /**
-     * Convert a list of List<LatLng> to a {@link CompoundCurve}
+     * Convert a list of LatLng lists to a {@link CompoundCurve}
      *
      * @param polylineList polyline list
      * @param hasZ         has z flag
@@ -1320,7 +1319,7 @@ public class GoogleMapShapeConverter {
             case CURVEPOLYGON:
                 shape = new GoogleMapShape(geometryType,
                         GoogleMapShapeType.POLYGON_OPTIONS,
-                        toCurvePolygon((CurvePolygon) geometry));
+                        toCurvePolygon((CurvePolygon<Curve>) geometry));
                 break;
             case POLYHEDRALSURFACE:
                 shape = new GoogleMapShape(geometryType,
@@ -1359,7 +1358,7 @@ public class GoogleMapShapeConverter {
     public List<GoogleMapShape> toShapes(
             GeometryCollection<Geometry> geometryCollection) {
 
-        List<GoogleMapShape> shapes = new ArrayList<GoogleMapShape>();
+        List<GoogleMapShape> shapes = new ArrayList<>();
 
         for (Geometry geometry : geometryCollection.getGeometries()) {
             GoogleMapShape shape = toShape(geometry);
@@ -1425,7 +1424,7 @@ public class GoogleMapShapeConverter {
             case CURVEPOLYGON:
                 shape = new GoogleMapShape(geometryType,
                         GoogleMapShapeType.POLYGON, addPolygonToMap(map,
-                        toCurvePolygon((CurvePolygon) geometry)));
+                        toCurvePolygon((CurvePolygon<Curve>) geometry)));
                 break;
             case POLYHEDRALSURFACE:
                 shape = new GoogleMapShape(geometryType,
@@ -1505,7 +1504,7 @@ public class GoogleMapShapeConverter {
                         (MultiPolygonOptions) shape.getShape()));
                 break;
             case COLLECTION:
-                List<GoogleMapShape> addedShapeList = new ArrayList<GoogleMapShape>();
+                List<GoogleMapShape> addedShapeList = new ArrayList<>();
                 @SuppressWarnings("unchecked")
                 List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shape
                         .getShape();
@@ -1672,7 +1671,7 @@ public class GoogleMapShapeConverter {
     public List<GoogleMapShape> addToMap(GoogleMap map,
                                          GeometryCollection<Geometry> geometryCollection) {
 
-        List<GoogleMapShape> shapes = new ArrayList<GoogleMapShape>();
+        List<GoogleMapShape> shapes = new ArrayList<>();
 
         for (Geometry geometry : geometryCollection.getGeometries()) {
             GoogleMapShape shape = addToMap(map, geometry);
@@ -1779,7 +1778,7 @@ public class GoogleMapShapeConverter {
                         multiPolygonMarkers);
                 break;
             case COLLECTION:
-                List<GoogleMapShape> addedShapeList = new ArrayList<GoogleMapShape>();
+                List<GoogleMapShape> addedShapeList = new ArrayList<>();
                 @SuppressWarnings("unchecked")
                 List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shape
                         .getShape();
@@ -1819,7 +1818,7 @@ public class GoogleMapShapeConverter {
                                                 List<LatLng> points, MarkerOptions customMarkerOptions,
                                                 boolean ignoreIdenticalEnds) {
 
-        List<Marker> markers = new ArrayList<Marker>();
+        List<Marker> markers = new ArrayList<>();
         for (int i = 0; i < points.size(); i++) {
             LatLng latLng = points.get(i);
 
@@ -1991,7 +1990,7 @@ public class GoogleMapShapeConverter {
      * @return lat lngs
      */
     public List<LatLng> getPointsFromMarkers(List<Marker> markers) {
-        List<LatLng> points = new ArrayList<LatLng>();
+        List<LatLng> points = new ArrayList<>();
         for (Marker marker : markers) {
             points.add(marker.getPosition());
         }
@@ -2105,7 +2104,7 @@ public class GoogleMapShapeConverter {
                         if (!polygonMarkers.isDeleted()) {
                             polygonPoints = getPointsFromMarkers(polygonMarkers
                                     .getMarkers());
-                            holePointList = new ArrayList<List<LatLng>>();
+                            holePointList = new ArrayList<>();
                             for (PolygonHoleMarkers hole : polygonMarkers.getHoles()) {
                                 if (!hole.isDeleted()) {
                                     List<LatLng> holePoints = getPointsFromMarkers(hole
@@ -2186,7 +2185,7 @@ public class GoogleMapShapeConverter {
                                             + shape.getGeometryType().getName());
                         }
                         if (!multiPolylineMarkers.isDeleted()) {
-                            List<List<LatLng>> multiPolylineMarkersList = new ArrayList<List<LatLng>>();
+                            List<List<LatLng>> multiPolylineMarkersList = new ArrayList<>();
                             for (PolylineMarkers polylineMarkers : multiPolylineMarkers
                                     .getPolylineMarkers()) {
                                 if (!polylineMarkers.isDeleted()) {
@@ -2234,7 +2233,7 @@ public class GoogleMapShapeConverter {
                                             + shape.getGeometryType().getName());
                         }
                         if (!multiPolygonMarkers.isDeleted()) {
-                            List<Polygon> multiPolygonMarkersList = new ArrayList<Polygon>();
+                            List<Polygon> multiPolygonMarkersList = new ArrayList<>();
                             for (PolygonMarkers polygonMarkers : multiPolygonMarkers
                                     .getPolygonMarkers()) {
 
@@ -2242,7 +2241,7 @@ public class GoogleMapShapeConverter {
 
                                     List<LatLng> multiPolygonPoints = getPointsFromMarkers(polygonMarkers
                                             .getMarkers());
-                                    List<List<LatLng>> multiPolygonHolePoints = new ArrayList<List<LatLng>>();
+                                    List<List<LatLng>> multiPolygonHolePoints = new ArrayList<>();
                                     for (PolygonHoleMarkers hole : polygonMarkers
                                             .getHoles()) {
                                         if (!hole.isDeleted()) {
@@ -2276,7 +2275,7 @@ public class GoogleMapShapeConverter {
             case GEOMETRYCOLLECTION:
                 @SuppressWarnings("unchecked")
                 List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shapeObject;
-                GeometryCollection<Geometry> geometryCollection = new GeometryCollection<Geometry>(
+                GeometryCollection<Geometry> geometryCollection = new GeometryCollection<>(
                         false, false);
                 for (GoogleMapShape shapeListItem : shapeList) {
                     Geometry subGeometry = toGeometry(shapeListItem);
