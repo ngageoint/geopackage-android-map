@@ -6,7 +6,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.1.1 (TBD)
 
-* TBD
+* Java 11
+* geopackage-android version 6.1.1
+* gradle plugin updated to 7.0.3
 
 ## [6.1.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.1.0) (11-05-2021)
 
