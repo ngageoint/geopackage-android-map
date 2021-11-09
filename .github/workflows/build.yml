@@ -44,7 +44,7 @@ jobs:
         ref: ${{ github.ref }}
     - name: Build Android with Gradle
       working-directory: ../geopackage-android
-      run: ./gradlew publishToMavenLocal -x lint
+      run: ./gradlew publishToMavenLocal -x signMavenPublication -x lint
     - name: Checkout Repository
       uses: actions/checkout@v1
     - name: Build with Gradle
