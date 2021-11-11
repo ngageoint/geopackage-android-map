@@ -206,7 +206,7 @@ Include the dependency in your module build.gradle with desired version number:
 
     api 'mil.nga.geopackage.map:geopackage-android-map:6.1.1'
 
-As part of the build process, run the "uploadArchives" task on the geopackage-android Gradle script to update the Maven local repository.
+As part of the build process, run the "publishToMavenLocal" task on the geopackage-map Gradle script to update the Maven local repository.
 
 ##### Local Build #####
 
