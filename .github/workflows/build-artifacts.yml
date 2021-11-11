@@ -1,13 +1,13 @@
 name: Build Artifacts
 
-on: 
+on:
   push:
     branches:
       - master
   pull_request:
 
 jobs:
-  
+
   build:
 
     runs-on: ubuntu-latest
@@ -15,18 +15,18 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v1
-    - name: set up JDK 1.8
+    - name: set up JDK 11
       uses: actions/setup-java@v1
       with:
-        java-version: 1.8
+        java-version: 11
     - name: Build with Gradle
-      run: ./gradlew build -x lint 
+      run: ./gradlew build -x lint
     - name: Copy Release Artifacts
       run: |
         mkdir geopackage-map/build/release
         cp geopackage-map/build/libs/*.jar geopackage-map/build/outputs/aar/*release.aar geopackage-map/build/release/
         grep "version =" geopackage-map/build.gradle | sed 's/[a-z ="]//g' > VERSION
-        mv geopackage-map/build/release/*.aar geopackage-map/build/release/geopackage-android-map-$(cat VERSION).aar 
+        mv geopackage-map/build/release/*.aar geopackage-map/build/release/geopackage-android-map-$(cat VERSION).aar
     - name: Upload Artifacts
       uses: actions/upload-artifact@v1
       with:

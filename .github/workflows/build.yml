@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  
+
   build:
 
     runs-on: ubuntu-latest
@@ -24,10 +24,10 @@ jobs:
       with:
         repository: ${{ steps.core-repository.outputs.replaced }}
         ref: ${{ github.ref }}
-    - name: set up JDK 1.8
+    - name: set up JDK 11
       uses: actions/setup-java@v1
       with:
-        java-version: 1.8
+        java-version: 11
     - name: Build & Install Core
       run: mvn -f ../geopackage-core-java clean install -DskipTests
     - name: Determine Android Repository
@@ -44,7 +44,7 @@ jobs:
         ref: ${{ github.ref }}
     - name: Build Android with Gradle
       working-directory: ../geopackage-android
-      run: ./gradlew uploadArchives -x lint
+      run: ./gradlew publishToMavenLocal -x signMavenPublication -x lint
     - name: Checkout Repository
       uses: actions/checkout@v1
     - name: Build with Gradle
