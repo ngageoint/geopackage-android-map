@@ -6,7 +6,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.1.3 (TBD)
 
-* TBD
+* geopackage-android version 6.1.3
+* play-services-maps version 18.0.1
+* gradle plugin updated to 7.0.4
 
 ## [6.1.2](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.1.2) (11-22-2021)
 
