@@ -1,4 +1,4 @@
-package mil.nga.geopackage.map.test.tiles.overlay;
+package mil.nga.geopackage.map.tiles.overlay;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 import mil.nga.geopackage.GeoPackage;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSet;
 import mil.nga.geopackage.tiles.matrixset.TileMatrixSetDao;
-import mil.nga.geopackage.map.tiles.overlay.GeoPackageOverlay;
 import mil.nga.geopackage.tiles.user.TileDao;
 
 import com.google.android.gms.maps.model.Tile;

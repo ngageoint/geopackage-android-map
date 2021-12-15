@@ -1,4 +1,4 @@
-package mil.nga.geopackage.map.test.features;
+package mil.nga.geopackage.map.features;
 
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
@@ -13,8 +13,7 @@ import java.sql.SQLException;
 
 import mil.nga.geopackage.extension.nga.style.IconRow;
 import mil.nga.geopackage.io.BitmapConverter;
-import mil.nga.geopackage.map.features.StyleUtils;
-import mil.nga.geopackage.map.test.BaseTestCase;
+import mil.nga.geopackage.map.BaseTestCase;
 
 public class StyleUtilsTest extends BaseTestCase {
 

@@ -1,22 +1,22 @@
-package mil.nga.geopackage.map.test.tiles.overlay;
+package mil.nga.geopackage.map.tiles.overlay;
 
 import org.junit.Test;
 
 import java.sql.SQLException;
 
-import mil.nga.geopackage.map.test.ImportGeoPackageTestCase;
+import mil.nga.geopackage.map.CreateGeoPackageTestCase;
 
 /**
- * Test GeoPackage Overlay from an imported database
+ * Test GeoPackage Overlay from a created database
  * 
  * @author osbornb
  */
-public class GeoPackageOverlayImportTest extends ImportGeoPackageTestCase {
+public class GeoPackageOverlayCreateTest extends CreateGeoPackageTestCase {
 
 	/**
 	 * Constructor
 	 */
-	public GeoPackageOverlayImportTest() {
+	public GeoPackageOverlayCreateTest() {
 
 	}
 

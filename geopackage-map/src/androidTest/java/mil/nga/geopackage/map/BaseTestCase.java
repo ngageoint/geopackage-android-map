@@ -1,4 +1,4 @@
-package mil.nga.geopackage.map.test;
+package mil.nga.geopackage.map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,8 +10,6 @@ import org.junit.Before;
 import org.junit.Rule;
 
 import mil.nga.geopackage.db.metadata.GeoPackageMetadataDb;
-import mil.nga.geopackage.map.BuildConfig;
-import mil.nga.geopackage.map.GeoPackageMapActivity;
 
 /**
  * Abstract Base Test Case
