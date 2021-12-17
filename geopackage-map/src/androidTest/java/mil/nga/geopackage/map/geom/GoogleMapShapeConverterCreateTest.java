@@ -1,10 +1,10 @@
-package mil.nga.geopackage.map.test.geom;
+package mil.nga.geopackage.map.geom;
 
 import org.junit.Test;
 
 import java.sql.SQLException;
 
-import mil.nga.geopackage.map.test.CreateGeoPackageTestCase;
+import mil.nga.geopackage.map.CreateGeoPackageTestCase;
 
 /**
  * Test Google Map Shape Converter from a created database

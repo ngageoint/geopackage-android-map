@@ -1,4 +1,4 @@
-package mil.nga.geopackage.map.test.geom;
+package mil.nga.geopackage.map.geom;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,10 +23,6 @@ import mil.nga.sf.Polygon;
 import mil.nga.sf.PolyhedralSurface;
 import mil.nga.sf.TIN;
 import mil.nga.sf.Triangle;
-import mil.nga.geopackage.map.geom.GoogleMapShapeConverter;
-import mil.nga.geopackage.map.geom.MultiLatLng;
-import mil.nga.geopackage.map.geom.MultiPolygonOptions;
-import mil.nga.geopackage.map.geom.MultiPolylineOptions;
 import mil.nga.geopackage.geom.GeoPackageGeometryData;
 
 import com.google.android.gms.maps.model.LatLng;

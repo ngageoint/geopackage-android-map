@@ -1,4 +1,4 @@
-package mil.nga.geopackage.map.test;
+package mil.nga.geopackage.map;
 
 import android.app.Activity;
 import android.content.Context;
