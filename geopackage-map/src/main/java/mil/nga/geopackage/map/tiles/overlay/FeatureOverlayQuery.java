@@ -172,8 +172,7 @@ public class FeatureOverlayQuery {
      */
     public boolean isOnAtCurrentZoom(GoogleMap map, LatLng latLng) {
         float zoom = MapUtils.getCurrentZoom(map);
-        boolean on = isOnAtCurrentZoom(zoom, latLng);
-        return on;
+        return isOnAtCurrentZoom(zoom, latLng);
     }
 
     /**
@@ -189,8 +188,7 @@ public class FeatureOverlayQuery {
         Point point = new Point(latLng.longitude, latLng.latitude);
         TileGrid tileGrid = TileBoundingBoxUtils.getTileGridFromWGS84(point, (int) zoom);
 
-        boolean on = boundedOverlay.hasTile((int) tileGrid.getMinX(), (int) tileGrid.getMinY(), (int) zoom);
-        return on;
+        return boundedOverlay.hasTile((int) tileGrid.getMinX(), (int) tileGrid.getMinY(), (int) zoom);
     }
 
     /**
@@ -201,9 +199,7 @@ public class FeatureOverlayQuery {
      * @return count
      */
     public long tileFeatureCount(LatLng latLng, double zoom) {
-        int zoomValue = (int) zoom;
-        long tileFeaturesCount = tileFeatureCount(latLng, zoomValue);
-        return tileFeaturesCount;
+        return tileFeatureCount(latLng, (int) zoom);
     }
 
     /**
@@ -215,8 +211,7 @@ public class FeatureOverlayQuery {
      */
     public long tileFeatureCount(LatLng latLng, int zoom) {
         Point point = new Point(latLng.longitude, latLng.latitude);
-        long tileFeaturesCount = tileFeatureCount(point, zoom);
-        return tileFeaturesCount;
+        return tileFeatureCount(point, zoom);
     }
 
     /**
@@ -227,9 +222,7 @@ public class FeatureOverlayQuery {
      * @return count
      */
     public long tileFeatureCount(Point point, double zoom) {
-        int zoomValue = (int) zoom;
-        long tileFeaturesCount = tileFeatureCount(point, zoomValue);
-        return tileFeaturesCount;
+        return tileFeatureCount(point, (int) zoom);
     }
 
     /**
@@ -242,6 +235,108 @@ public class FeatureOverlayQuery {
     public long tileFeatureCount(Point point, int zoom) {
         TileGrid tileGrid = TileBoundingBoxUtils.getTileGridFromWGS84(point, zoom);
         return featureTiles.queryIndexedFeaturesCount((int) tileGrid.getMinX(), (int) tileGrid.getMinY(), zoom);
+    }
+
+    /**
+     * Get the WGS84 bounds of the tile at the lat lng coordinate and zoom level
+     *
+     * @param latLng lat lng location
+     * @param zoom   zoom level
+     * @return WGS84 bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(LatLng latLng, double zoom) {
+        return tileBounds(latLng, (int) zoom);
+    }
+
+    /**
+     * Get the WGS84 bounds of the tile at the lat lng coordinate and zoom level
+     *
+     * @param latLng lat lng location
+     * @param zoom   zoom level
+     * @return WGS84 bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(LatLng latLng, int zoom) {
+        Point point = new Point(latLng.longitude, latLng.latitude);
+        return tileBounds(point, zoom);
+    }
+
+    /**
+     * Get the WGS84 bounds of the tile at the point coordinate and zoom level
+     *
+     * @param point point location
+     * @param zoom  zoom level
+     * @return WGS84 bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(Point point, double zoom) {
+        return tileBounds(point, (int) zoom);
+    }
+
+    /**
+     * Get the WGS84 bounds of the tile at the point coordinate and zoom level
+     *
+     * @param point point location
+     * @param zoom  zoom level
+     * @return WGS84 bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(Point point, int zoom) {
+        return TileBoundingBoxUtils.getTileBoundsForWGS84(point, zoom);
+    }
+
+    /**
+     * Get the bounds of the tile at the lat lng coordinate and zoom level
+     *
+     * @param projection desired bounding box projection
+     * @param latLng     lat lng location
+     * @param zoom       zoom level
+     * @return bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(Projection projection, LatLng latLng, double zoom) {
+        return tileBounds(projection, latLng, (int) zoom);
+    }
+
+    /**
+     * Get the bounds of the tile at the lat lng coordinate and zoom level
+     *
+     * @param projection desired bounding box projection
+     * @param latLng     lat lng location
+     * @param zoom       zoom level
+     * @return bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(Projection projection, LatLng latLng, int zoom) {
+        Point point = new Point(latLng.longitude, latLng.latitude);
+        return tileBounds(projection, point, zoom);
+    }
+
+    /**
+     * Get the bounds of the tile at the point coordinate and zoom level
+     *
+     * @param projection desired bounding box projection
+     * @param point      point location
+     * @param zoom       zoom level
+     * @return bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(Projection projection, Point point, double zoom) {
+        return tileBounds(projection, point, (int) zoom);
+    }
+
+    /**
+     * Get the bounds of the tile at the point coordinate and zoom level
+     *
+     * @param projection desired bounding box projection
+     * @param point      point location
+     * @param zoom       zoom level
+     * @return bounding box
+     * @since 6.1.4
+     */
+    public static BoundingBox tileBounds(Projection projection, Point point, int zoom) {
+        return TileBoundingBoxUtils.getTileBounds(projection, point, zoom);
     }
 
     /**

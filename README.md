@@ -156,8 +156,8 @@ featureOverlayOptions.tileProvider(featureOverlay);
 featureOverlayOptions.zIndex(-1); // Draw the feature tiles behind map markers
 map.addTileOverlay(featureOverlayOptions);
 
-BoundingBox boundingBox = new BoundingBox();
-Projection projection = ProjectionFactory.getProjection(ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+BoundingBox boundingBox = BoundingBox.worldWebMercator();
+Projection projection = ProjectionFactory.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
 
 // URL Tile Generator (generate tiles from a URL)
 TileGenerator urlTileGenerator = new UrlTileGenerator(context, geoPackage,
