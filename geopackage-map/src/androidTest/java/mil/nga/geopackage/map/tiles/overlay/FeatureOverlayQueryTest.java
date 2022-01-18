@@ -6,8 +6,6 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import java.sql.SQLException;
-
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
@@ -24,11 +22,9 @@ public class FeatureOverlayQueryTest {
 
     /**
      * Test Tile Bounds
-     *
-     * @throws SQLException
      */
     @Test
-    public void testTileBounds() throws SQLException {
+    public void testTileBounds() {
 
         double longitude = -77.196785;
         double latitude = 38.753195;
