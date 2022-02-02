@@ -7,6 +7,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 6.1.4 (TBD)
 
 * geopackage-android version 6.1.4
+* play-services-maps version 18.0.2
 * FeatureOverlayQuery tileBounds methods
 
 ## [6.1.3](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.1.3) (12-17-2021)
