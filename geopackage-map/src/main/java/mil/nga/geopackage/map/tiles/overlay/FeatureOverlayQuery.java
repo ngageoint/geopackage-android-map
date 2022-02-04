@@ -243,7 +243,7 @@ public class FeatureOverlayQuery {
      * @param latLng lat lng location
      * @param zoom   zoom level
      * @return WGS84 bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(LatLng latLng, double zoom) {
         return tileBounds(latLng, (int) zoom);
@@ -255,7 +255,7 @@ public class FeatureOverlayQuery {
      * @param latLng lat lng location
      * @param zoom   zoom level
      * @return WGS84 bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(LatLng latLng, int zoom) {
         Point point = new Point(latLng.longitude, latLng.latitude);
@@ -268,7 +268,7 @@ public class FeatureOverlayQuery {
      * @param point point location
      * @param zoom  zoom level
      * @return WGS84 bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(Point point, double zoom) {
         return tileBounds(point, (int) zoom);
@@ -280,7 +280,7 @@ public class FeatureOverlayQuery {
      * @param point point location
      * @param zoom  zoom level
      * @return WGS84 bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(Point point, int zoom) {
         return TileBoundingBoxUtils.getTileBoundsForWGS84(point, zoom);
@@ -293,7 +293,7 @@ public class FeatureOverlayQuery {
      * @param latLng     lat lng location
      * @param zoom       zoom level
      * @return bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(Projection projection, LatLng latLng, double zoom) {
         return tileBounds(projection, latLng, (int) zoom);
@@ -306,7 +306,7 @@ public class FeatureOverlayQuery {
      * @param latLng     lat lng location
      * @param zoom       zoom level
      * @return bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(Projection projection, LatLng latLng, int zoom) {
         Point point = new Point(latLng.longitude, latLng.latitude);
@@ -320,7 +320,7 @@ public class FeatureOverlayQuery {
      * @param point      point location
      * @param zoom       zoom level
      * @return bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(Projection projection, Point point, double zoom) {
         return tileBounds(projection, point, (int) zoom);
@@ -333,7 +333,7 @@ public class FeatureOverlayQuery {
      * @param point      point location
      * @param zoom       zoom level
      * @return bounding box
-     * @since 6.1.4
+     * @since 6.2.0
      */
     public static BoundingBox tileBounds(Projection projection, Point point, int zoom) {
         return TileBoundingBoxUtils.getTileBounds(projection, point, zoom);
