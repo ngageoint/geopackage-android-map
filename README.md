@@ -80,8 +80,7 @@ GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
         featureDao.getProjection());
 FeatureCursor featureCursor = featureDao.queryForAll();
 try {
-    while (featureCursor.moveToNext()) {
-        FeatureRow featureRow = featureCursor.getRow();
+    for (FeatureRow featureRow : featureCursor) {
         GeoPackageGeometryData geometryData = featureRow.getGeometry();
         if (geometryData != null && !geometryData.isEmpty()) {
             Geometry geometry = geometryData.getGeometry();
@@ -100,8 +99,7 @@ String tileTable = tiles.get(0);
 TileDao tileDao = geoPackage.getTileDao(tileTable);
 TileCursor tileCursor = tileDao.queryForAll();
 try {
-    while (tileCursor.moveToNext()) {
-        TileRow tileRow = tileCursor.getRow();
+    for (TileRow tileRow : tileCursor) {
         byte[] tileBytes = tileRow.getTileData();
         Bitmap tileBitmap = tileRow.getTileDataBitmap();
         // ...
@@ -138,10 +136,27 @@ overlayOptions.tileProvider(overlay);
 overlayOptions.zIndex(-1);
 map.addTileOverlay(overlayOptions);
 
+BoundingBox boundingBox = BoundingBox.worldWebMercator();
+Projection projection = ProjectionFactory
+        .getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
+
 // Index Features
 FeatureIndexManager indexer = new FeatureIndexManager(context, geoPackage, featureDao);
 indexer.setIndexLocation(FeatureIndexType.GEOPACKAGE);
 int indexedCount = indexer.index();
+
+// Query Indexed Features in paginated chunks
+FeatureIndexResults indexResults = indexer.queryForChunk(boundingBox,
+        projection, 50);
+FeaturePaginatedCursor paginatedCursor = indexer
+        .paginate(indexResults);
+for (FeatureRow featureRow : paginatedCursor) {
+    GeoPackageGeometryData geometryData = featureRow.getGeometry();
+    if (geometryData != null && !geometryData.isEmpty()) {
+        Geometry geometry = geometryData.getGeometry();
+        // ...
+    }
+}
 
 // Feature Tile Provider (dynamically draw tiles from features)
 FeatureTiles featureTiles = new DefaultFeatureTiles(context, featureDao, context.getResources().getDisplayMetrics().density);
@@ -156,9 +171,6 @@ featureOverlayOptions.tileProvider(featureOverlay);
 featureOverlayOptions.zIndex(-1); // Draw the feature tiles behind map markers
 map.addTileOverlay(featureOverlayOptions);
 
-BoundingBox boundingBox = BoundingBox.worldWebMercator();
-Projection projection = ProjectionFactory.getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
-
 // URL Tile Generator (generate tiles from a URL)
 TileGenerator urlTileGenerator = new UrlTileGenerator(context, geoPackage,
         "url_tile_table", "http://url/{z}/{x}/{y}.png", 0, 0, boundingBox, projection);
@@ -166,7 +178,7 @@ int urlTileCount = urlTileGenerator.generateTiles();
 
 // Feature Tile Generator (generate tiles from features)
 TileGenerator featureTileGenerator = new FeatureTileGenerator(context, geoPackage,
-        featureTable + "_tiles", featureTiles, 1, 2, boundingBox, projection);
+        "tiles_" + featureTable, featureTiles, 1, 2, boundingBox, projection);
 int featureTileCount = featureTileGenerator.generateTiles();
 
 // Close feature tiles (and indexer)
