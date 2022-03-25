@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.SphericalUtil;
 
 import mil.nga.geopackage.BoundingBox;
 import mil.nga.geopackage.GeoPackageException;
@@ -17,10 +16,10 @@ import mil.nga.geopackage.features.user.FeatureDao;
 import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.map.R;
 import mil.nga.geopackage.map.features.FeatureInfoBuilder;
-import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
 import mil.nga.geopackage.tiles.TileBoundingBoxUtils;
 import mil.nga.geopackage.tiles.TileGrid;
 import mil.nga.geopackage.tiles.features.FeatureTiles;
+import mil.nga.geopackage.tiles.features.PixelBounds;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
@@ -65,6 +64,11 @@ public class FeatureOverlayQuery {
      * Feature info builder
      */
     private FeatureInfoBuilder featureInfoBuilder;
+
+    /**
+     * Pixel bounds
+     */
+    private PixelBounds pixelBounds;
 
     /**
      * Constructor
@@ -160,6 +164,37 @@ public class FeatureOverlayQuery {
             throw new GeoPackageException("Screen click percentage must be a float between 0.0 and 1.0, not " + screenClickPercentage);
         }
         this.screenClickPercentage = screenClickPercentage;
+    }
+
+    /**
+     * Calculate and set the style pixel bounds to enable queries on visible feature styles
+     *
+     * @since 6.3.0
+     */
+    public void calculateStylePixelBounds() {
+        if (featureTiles != null) {
+            setStylePixelBounds(featureTiles.calculateStylePixelBounds());
+        }
+    }
+
+    /**
+     * Get the style pixel bounds
+     *
+     * @return style pixel bounds
+     * @since 6.3.0
+     */
+    public PixelBounds getStylePixelBounds() {
+        return pixelBounds;
+    }
+
+    /**
+     * Set the style pixel bounds to enable queries on visible feature styles
+     *
+     * @param pixelBounds style pixel bounds
+     * @since 6.3.0
+     */
+    public void setStylePixelBounds(PixelBounds pixelBounds) {
+        this.pixelBounds = pixelBounds;
     }
 
     /**
@@ -350,30 +385,6 @@ public class FeatureOverlayQuery {
     }
 
     /**
-     * Build a bounding box using the location coordinate click location and map view bounds
-     *
-     * @param latLng    click location
-     * @param mapBounds map bounds
-     * @return bounding box
-     * @since 1.2.7
-     */
-    public BoundingBox buildClickBoundingBox(LatLng latLng, BoundingBox mapBounds) {
-
-        // Get the screen width and height a click occurs from a feature
-        double width = TileBoundingBoxMapUtils.getLongitudeDistance(mapBounds) * screenClickPercentage;
-        double height = TileBoundingBoxMapUtils.getLatitudeDistance(mapBounds) * screenClickPercentage;
-
-        LatLng leftCoordinate = SphericalUtil.computeOffset(latLng, width, 270);
-        LatLng upCoordinate = SphericalUtil.computeOffset(latLng, height, 0);
-        LatLng rightCoordinate = SphericalUtil.computeOffset(latLng, width, 90);
-        LatLng downCoordinate = SphericalUtil.computeOffset(latLng, height, 180);
-
-        BoundingBox boundingBox = new BoundingBox(leftCoordinate.longitude, downCoordinate.latitude, rightCoordinate.longitude, upCoordinate.latitude);
-
-        return boundingBox;
-    }
-
-    /**
      * Query for features in the WGS84 projected bounding box
      *
      * @param boundingBox query bounding box in WGS84 projection
@@ -426,6 +437,7 @@ public class FeatureOverlayQuery {
         if (indexManager == null) {
             throw new GeoPackageException("Index Manager is not set on the Feature Tiles and is required to query indexed features");
         }
+
         FeatureIndexResults results = indexManager.query(columns, boundingBox, projection);
         return results;
     }
@@ -478,10 +490,10 @@ public class FeatureOverlayQuery {
         double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, view, map, screenClickPercentage);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, pixelBounds, view, map, screenClickPercentage);
 
         // Get the map click distance tolerance
-        double tolerance = MapUtils.getToleranceDistance(latLng, view, map, screenClickPercentage);
+        double tolerance = MapUtils.getToleranceDistance(latLng, pixelBounds, view, map, screenClickPercentage);
 
         String message = buildMapClickMessage(latLng, zoom, boundingBox, tolerance, projection);
 
@@ -516,7 +528,7 @@ public class FeatureOverlayQuery {
     public String buildMapClickMessageWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, double tolerance, Projection projection) {
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = buildClickBoundingBox(latLng, mapBounds);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, mapBounds, screenClickPercentage);
 
         String message = buildMapClickMessage(latLng, zoom, boundingBox, tolerance, projection);
 
@@ -597,10 +609,10 @@ public class FeatureOverlayQuery {
         double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, view, map, screenClickPercentage);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, pixelBounds, view, map, screenClickPercentage);
 
         // Get the map click distance tolerance
-        double tolerance = MapUtils.getToleranceDistance(latLng, view, map, screenClickPercentage);
+        double tolerance = MapUtils.getToleranceDistance(latLng, pixelBounds, view, map, screenClickPercentage);
 
         FeatureTableData tableData = buildMapClickTableData(latLng, zoom, boundingBox, tolerance, projection);
 
@@ -635,7 +647,7 @@ public class FeatureOverlayQuery {
     public FeatureTableData buildMapClickTableDataWithMapBounds(LatLng latLng, double zoom, BoundingBox mapBounds, double tolerance, Projection projection) {
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = buildClickBoundingBox(latLng, mapBounds);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, mapBounds, screenClickPercentage);
 
         FeatureTableData tableData = buildMapClickTableData(latLng, zoom, boundingBox, tolerance, projection);
 

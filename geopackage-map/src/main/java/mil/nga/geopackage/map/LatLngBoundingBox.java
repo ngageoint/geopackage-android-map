@@ -41,6 +41,16 @@ public class LatLngBoundingBox {
     /**
      * Constructor
      *
+     * @param coordinate coordinate
+     * @since 6.3.0
+     */
+    public LatLngBoundingBox(LatLng coordinate) {
+        this(coordinate, coordinate, coordinate, coordinate);
+    }
+
+    /**
+     * Constructor
+     *
      * @param leftCoordinate  left coordinate
      * @param upCoordinate    up coordinate
      * @param rightCoordinate right coordinate
