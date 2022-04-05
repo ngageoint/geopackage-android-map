@@ -21,7 +21,7 @@ import mil.nga.geopackage.map.geom.MultiLatLng;
 import mil.nga.geopackage.map.geom.MultiPolygonOptions;
 import mil.nga.geopackage.map.geom.MultiPolylineOptions;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
-import mil.nga.geopackage.tiles.features.PixelBounds;
+import mil.nga.geopackage.style.PixelBounds;
 import mil.nga.proj.ProjectionConstants;
 
 /**

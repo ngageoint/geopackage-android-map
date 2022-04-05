@@ -35,7 +35,7 @@ import mil.nga.geopackage.map.geom.GoogleMapShapeConverter;
 import mil.nga.geopackage.map.tiles.overlay.FeatureOverlayQuery;
 import mil.nga.geopackage.srs.SpatialReferenceSystem;
 import mil.nga.geopackage.srs.SpatialReferenceSystemDao;
-import mil.nga.geopackage.tiles.features.PixelBounds;
+import mil.nga.geopackage.style.PixelBounds;
 import mil.nga.geopackage.tiles.overlay.FeatureRowData;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
 import mil.nga.proj.Projection;
