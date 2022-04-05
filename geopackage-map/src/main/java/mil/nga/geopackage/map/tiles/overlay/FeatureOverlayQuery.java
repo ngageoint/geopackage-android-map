@@ -574,7 +574,11 @@ public class FeatureOverlayQuery {
 
                     // Query for results and build the message
                     FeatureIndexResults results = queryFeatures(boundingBox, projection);
-                    message = featureInfoBuilder.buildResultsInfoMessageAndClose(results, tolerance, latLng, featureTiles.getDensity(), zoom, view, map, screenClickPercentage, projection);
+                    if (pixelBounds != null) {
+                        message = featureInfoBuilder.buildResultsInfoMessageAndClose(results, tolerance, latLng, featureTiles.getDensity(), zoom, view, map, screenClickPercentage, projection);
+                    } else {
+                        message = featureInfoBuilder.buildResultsInfoMessageAndClose(results, tolerance, latLng, projection);
+                    }
 
                 }
 
@@ -696,7 +700,12 @@ public class FeatureOverlayQuery {
 
                     // Query for results and build the message
                     FeatureIndexResults results = queryFeatures(boundingBox, projection);
-                    tableData = featureInfoBuilder.buildTableDataAndClose(results, tolerance, latLng, featureTiles.getDensity(), zoom, view, map, screenClickPercentage, projection);
+                    if (pixelBounds != null) {
+                        tableData = featureInfoBuilder.buildTableDataAndClose(results, tolerance, latLng, featureTiles.getDensity(), zoom, view, map, screenClickPercentage, projection);
+                    } else {
+                        tableData = featureInfoBuilder.buildTableDataAndClose(results, tolerance, latLng, projection);
+                    }
+
                 }
 
             }
