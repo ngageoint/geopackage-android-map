@@ -135,4 +135,84 @@ public class LatLngBoundingBox {
         this.downCoordinate = downCoordinate;
     }
 
+    /**
+     * Get the west coordinate
+     *
+     * @return west coordinate
+     * @since 6.3.0
+     */
+    public LatLng getWestCoordinate() {
+        return leftCoordinate;
+    }
+
+    /**
+     * Get the northwest coordinate
+     *
+     * @return northwest coordinate
+     * @since 6.3.0
+     */
+    public LatLng getNorthwestCoordinate() {
+        return new LatLng(upCoordinate.latitude, leftCoordinate.longitude);
+    }
+
+    /**
+     * Get the north coordinate
+     *
+     * @return north coordinate
+     * @since 6.3.0
+     */
+    public LatLng getNorthCoordinate() {
+        return upCoordinate;
+    }
+
+    /**
+     * Get the northeast coordinate
+     *
+     * @return northeast coordinate
+     * @since 6.3.0
+     */
+    public LatLng getNortheastCoordinate() {
+        return new LatLng(upCoordinate.latitude, rightCoordinate.longitude);
+    }
+
+    /**
+     * Get the east coordinate
+     *
+     * @return east coordinate
+     * @since 6.3.0
+     */
+    public LatLng getEastCoordinate() {
+        return rightCoordinate;
+    }
+
+    /**
+     * Get the southeast coordinate
+     *
+     * @return southeast coordinate
+     * @since 6.3.0
+     */
+    public LatLng getSoutheastCoordinate() {
+        return new LatLng(downCoordinate.latitude, rightCoordinate.longitude);
+    }
+
+    /**
+     * Get the south coordinate
+     *
+     * @return south coordinate
+     * @since 6.3.0
+     */
+    public LatLng getSouthCoordinate() {
+        return downCoordinate;
+    }
+
+    /**
+     * Get the southwest coordinate
+     *
+     * @return southwest coordinate
+     * @since 6.3.0
+     */
+    public LatLng getSouthwestCoordinate() {
+        return new LatLng(downCoordinate.latitude, leftCoordinate.longitude);
+    }
+
 }

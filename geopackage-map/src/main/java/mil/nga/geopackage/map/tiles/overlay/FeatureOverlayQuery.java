@@ -13,6 +13,7 @@ import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.features.index.FeatureIndexManager;
 import mil.nga.geopackage.features.index.FeatureIndexResults;
 import mil.nga.geopackage.features.user.FeatureDao;
+import mil.nga.geopackage.map.LatLngBoundingBox;
 import mil.nga.geopackage.map.MapUtils;
 import mil.nga.geopackage.map.R;
 import mil.nga.geopackage.map.features.FeatureInfoBuilder;
@@ -103,7 +104,7 @@ public class FeatureOverlayQuery {
         featuresInfo = resources.getBoolean(R.bool.map_feature_overlay_features_info);
 
         FeatureDao featureDao = featureTiles.getFeatureDao();
-        featureInfoBuilder = new FeatureInfoBuilder(context, featureDao);
+        featureInfoBuilder = new FeatureInfoBuilder(context, featureDao, featureTiles.getFeatureTableStyles());
     }
 
     /**
@@ -490,12 +491,13 @@ public class FeatureOverlayQuery {
         double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, pixelBounds, view, map, screenClickPercentage);
+        LatLngBoundingBox latLngBoundingBox = MapUtils.buildClickLatLngBoundingBox(latLng, featureTiles.getDensity(), zoom, pixelBounds, view, map, screenClickPercentage);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLngBoundingBox);
 
         // Get the map click distance tolerance
-        double tolerance = MapUtils.getToleranceDistance(latLng, pixelBounds, view, map, screenClickPercentage);
+        double tolerance = MapUtils.getToleranceDistance(latLng, latLngBoundingBox);
 
-        String message = buildMapClickMessage(latLng, zoom, boundingBox, tolerance, projection);
+        String message = buildMapClickMessage(latLng, zoom, boundingBox, tolerance, view, map, projection);
 
         return message;
     }
@@ -530,7 +532,7 @@ public class FeatureOverlayQuery {
         // Build a bounding box to represent the click location
         BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, mapBounds, screenClickPercentage);
 
-        String message = buildMapClickMessage(latLng, zoom, boundingBox, tolerance, projection);
+        String message = buildMapClickMessage(latLng, zoom, boundingBox, tolerance, null, null, projection);
 
         return message;
     }
@@ -542,10 +544,12 @@ public class FeatureOverlayQuery {
      * @param zoom        current zoom level
      * @param boundingBox click bounding box
      * @param tolerance   tolerance distance
+     * @param view        view
+     * @param map         Google Map
      * @param projection  desired geometry projection
      * @return information message on what was clicked, or null
      */
-    private String buildMapClickMessage(LatLng latLng, double zoom, BoundingBox boundingBox, double tolerance, Projection projection) {
+    private String buildMapClickMessage(LatLng latLng, double zoom, BoundingBox boundingBox, double tolerance, View view, GoogleMap map, Projection projection) {
         String message = null;
 
         // Verify the features are indexed and we are getting information
@@ -570,7 +574,7 @@ public class FeatureOverlayQuery {
 
                     // Query for results and build the message
                     FeatureIndexResults results = queryFeatures(boundingBox, projection);
-                    message = featureInfoBuilder.buildResultsInfoMessageAndClose(results, tolerance, latLng, projection);
+                    message = featureInfoBuilder.buildResultsInfoMessageAndClose(results, tolerance, latLng, featureTiles.getDensity(), zoom, view, map, screenClickPercentage, projection);
 
                 }
 
@@ -609,12 +613,13 @@ public class FeatureOverlayQuery {
         double zoom = MapUtils.getCurrentZoom(map);
 
         // Build a bounding box to represent the click location
-        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, pixelBounds, view, map, screenClickPercentage);
+        LatLngBoundingBox latLngBoundingBox = MapUtils.buildClickLatLngBoundingBox(latLng, featureTiles.getDensity(), zoom, pixelBounds, view, map, screenClickPercentage);
+        BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLngBoundingBox);
 
         // Get the map click distance tolerance
-        double tolerance = MapUtils.getToleranceDistance(latLng, pixelBounds, view, map, screenClickPercentage);
+        double tolerance = MapUtils.getToleranceDistance(latLng, latLngBoundingBox);
 
-        FeatureTableData tableData = buildMapClickTableData(latLng, zoom, boundingBox, tolerance, projection);
+        FeatureTableData tableData = buildMapClickTableData(latLng, zoom, boundingBox, tolerance, view, map, projection);
 
         return tableData;
     }
@@ -649,7 +654,7 @@ public class FeatureOverlayQuery {
         // Build a bounding box to represent the click location
         BoundingBox boundingBox = MapUtils.buildClickBoundingBox(latLng, mapBounds, screenClickPercentage);
 
-        FeatureTableData tableData = buildMapClickTableData(latLng, zoom, boundingBox, tolerance, projection);
+        FeatureTableData tableData = buildMapClickTableData(latLng, zoom, boundingBox, tolerance, null, null, projection);
 
         return tableData;
     }
@@ -661,10 +666,12 @@ public class FeatureOverlayQuery {
      * @param zoom        current zoom level
      * @param boundingBox click bounding box
      * @param tolerance   distance tolerance
+     * @param view        view
+     * @param map         Google Map
      * @param projection  desired geometry projection
      * @return table data on what was clicked, or null
      */
-    private FeatureTableData buildMapClickTableData(LatLng latLng, double zoom, BoundingBox boundingBox, double tolerance, Projection projection) {
+    private FeatureTableData buildMapClickTableData(LatLng latLng, double zoom, BoundingBox boundingBox, double tolerance, View view, GoogleMap map, Projection projection) {
         FeatureTableData tableData = null;
 
         // Verify the features are indexed and we are getting information
@@ -689,7 +696,7 @@ public class FeatureOverlayQuery {
 
                     // Query for results and build the message
                     FeatureIndexResults results = queryFeatures(boundingBox, projection);
-                    tableData = featureInfoBuilder.buildTableDataAndClose(results, tolerance, latLng, projection);
+                    tableData = featureInfoBuilder.buildTableDataAndClose(results, tolerance, latLng, featureTiles.getDensity(), zoom, view, map, screenClickPercentage, projection);
                 }
 
             }
