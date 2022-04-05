@@ -841,6 +841,7 @@ public class FeatureInfoBuilder {
 
             if (pixelBounds != null) {
 
+                // Clear expanded pixel bounds in the click direction opposite of a point
                 if (geometry.getGeometryType() == GeometryType.POINT) {
                     Point point = (Point) geometry;
                     if (point.getX() < clickLocation.longitude) {
