@@ -445,11 +445,12 @@ public class MapUtils {
      */
     public static LatLngBoundingBox buildClickLatLngBoundingBox(LatLng latLng, float density, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
 
-        // Get the screen width and height a click occurs from a feature
-        double leftPixels = view.getWidth() * screenClickPercentage;
-        double upPixels = view.getHeight() * screenClickPercentage;
-        double rightPixels = leftPixels;
-        double downPixels = upPixels;
+        // Get the pixels a click occurs from a feature
+        double pixels = Math.max(view.getWidth(), view.getHeight()) * screenClickPercentage;
+        double leftPixels = pixels;
+        double upPixels = pixels;
+        double rightPixels = pixels;
+        double downPixels = pixels;
 
         if (pixelBounds != null) {
             double adjust = 1.0 + zoom - (int) zoom;
