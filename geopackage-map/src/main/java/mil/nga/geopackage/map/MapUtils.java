@@ -502,29 +502,15 @@ public class MapUtils {
      * @since 6.3.0
      */
     public static BoundingBox buildClickBoundingBox(LatLng latLng, BoundingBox mapBounds, float screenClickPercentage) {
-        return buildClickBoundingBox(new LatLngBoundingBox(latLng), mapBounds, screenClickPercentage);
-    }
-
-    /**
-     * Build a bounding box using the location coordinate click location and map view bounds
-     *
-     * @param boundingBox           click bounding box
-     * @param mapBounds             map bounds
-     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
-     *                              on the screen must be to be included in a click query
-     * @return bounding box
-     * @since 6.3.0
-     */
-    public static BoundingBox buildClickBoundingBox(LatLngBoundingBox boundingBox, BoundingBox mapBounds, float screenClickPercentage) {
 
         // Get the screen width and height a click occurs from a feature
         double width = TileBoundingBoxMapUtils.getLongitudeDistance(mapBounds) * screenClickPercentage;
         double height = TileBoundingBoxMapUtils.getLatitudeDistance(mapBounds) * screenClickPercentage;
 
-        LatLng leftCoordinate = SphericalUtil.computeOffset(boundingBox.getLeftCoordinate(), width, 270);
-        LatLng upCoordinate = SphericalUtil.computeOffset(boundingBox.getUpCoordinate(), height, 0);
-        LatLng rightCoordinate = SphericalUtil.computeOffset(boundingBox.getRightCoordinate(), width, 90);
-        LatLng downCoordinate = SphericalUtil.computeOffset(boundingBox.getDownCoordinate(), height, 180);
+        LatLng leftCoordinate = SphericalUtil.computeOffset(latLng, width, 270);
+        LatLng upCoordinate = SphericalUtil.computeOffset(latLng, height, 0);
+        LatLng rightCoordinate = SphericalUtil.computeOffset(latLng, width, 90);
+        LatLng downCoordinate = SphericalUtil.computeOffset(latLng, height, 180);
 
         BoundingBox bbox = new BoundingBox(leftCoordinate.longitude, downCoordinate.latitude, rightCoordinate.longitude, upCoordinate.latitude);
 
