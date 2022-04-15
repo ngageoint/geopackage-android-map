@@ -854,6 +854,9 @@ public class FeatureInfoBuilder {
                     } else if (point.getY() > clickLocation.latitude) {
                         pixelBounds.setDown(0);
                     }
+                    if (pixelBounds.getArea() == 0) {
+                        pixelBounds = null;
+                    }
                 }
 
                 // Get the map click distance tolerance
