@@ -21,6 +21,7 @@ import mil.nga.geopackage.map.geom.MultiLatLng;
 import mil.nga.geopackage.map.geom.MultiPolygonOptions;
 import mil.nga.geopackage.map.geom.MultiPolylineOptions;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
+import mil.nga.geopackage.style.PixelBounds;
 import mil.nga.proj.ProjectionConstants;
 
 /**
@@ -111,17 +112,82 @@ public class MapUtils {
      * @return bounding box
      */
     public static BoundingBox buildClickBoundingBox(LatLng latLng, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickBoundingBox(latLng, null, view, map, screenClickPercentage);
+    }
 
-        LatLngBoundingBox latLngBoundingBox = buildClickLatLngBoundingBox(latLng, view, map, screenClickPercentage);
+    /**
+     * Build a bounding box using the click location, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param pixelBounds           click pixel bounds
+     * @param view                  view
+     * @param map                   Google map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static BoundingBox buildClickBoundingBox(LatLng latLng, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickBoundingBox(latLng, 0.0, pixelBounds, view, map, screenClickPercentage);
+    }
+
+    /**
+     * Build a bounding box using the click location, zoom level, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  view
+     * @param map                   Google map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static BoundingBox buildClickBoundingBox(LatLng latLng, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickBoundingBox(latLng, 1.0f, zoom, pixelBounds, view, map, screenClickPercentage);
+    }
+
+    /**
+     * Build a bounding box using the click location, display density, zoom level, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  view
+     * @param map                   Google map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static BoundingBox buildClickBoundingBox(LatLng latLng, float density, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+
+        LatLngBoundingBox latLngBoundingBox = buildClickLatLngBoundingBox(latLng, density, zoom, pixelBounds, view, map, screenClickPercentage);
 
         // Create the bounding box to query for features
-        BoundingBox boundingBox = new BoundingBox(
-                latLngBoundingBox.getLeftCoordinate().longitude,
-                latLngBoundingBox.getDownCoordinate().latitude,
-                latLngBoundingBox.getRightCoordinate().longitude,
-                latLngBoundingBox.getUpCoordinate().latitude);
+        BoundingBox bbox = buildClickBoundingBox(latLngBoundingBox);
 
-        return boundingBox;
+        return bbox;
+    }
+
+    /**
+     * Build a bounding box using the click location
+     *
+     * @param boundingBox click bounding box
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static BoundingBox buildClickBoundingBox(LatLngBoundingBox boundingBox) {
+        return new BoundingBox(
+                boundingBox.getLeftCoordinate().longitude,
+                boundingBox.getDownCoordinate().latitude,
+                boundingBox.getRightCoordinate().longitude,
+                boundingBox.getUpCoordinate().latitude);
     }
 
     /**
@@ -136,8 +202,62 @@ public class MapUtils {
      * @return bounding box
      */
     public static LatLngBounds buildClickLatLngBounds(LatLng latLng, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickLatLngBounds(latLng, null, view, map, screenClickPercentage);
+    }
 
-        LatLngBoundingBox latLngBoundingBox = buildClickLatLngBoundingBox(latLng, view, map, screenClickPercentage);
+    /**
+     * Build a lat lng bounds using the click location, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param pixelBounds           click pixel bounds
+     * @param view                  view
+     * @param map                   Google map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static LatLngBounds buildClickLatLngBounds(LatLng latLng, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickLatLngBounds(latLng, 0.0, pixelBounds, view, map, screenClickPercentage);
+    }
+
+    /**
+     * Build a lat lng bounds using the click location, zoom level, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  view
+     * @param map                   Google map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static LatLngBounds buildClickLatLngBounds(LatLng latLng, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickLatLngBounds(latLng, 1.0f, zoom, pixelBounds, view, map, screenClickPercentage);
+    }
+
+    /**
+     * Build a lat lng bounds using the click location, display density, zoom level, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  view
+     * @param map                   Google map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static LatLngBounds buildClickLatLngBounds(LatLng latLng, float density, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+
+        LatLngBoundingBox latLngBoundingBox = buildClickLatLngBoundingBox(latLng, density, zoom, pixelBounds, view, map, screenClickPercentage);
 
         double southWestLongitude = Math.min(latLngBoundingBox.getLeftCoordinate().longitude, latLngBoundingBox.getDownCoordinate().longitude);
 
@@ -160,13 +280,100 @@ public class MapUtils {
      * @return tolerance distance in meters
      */
     public static double getToleranceDistance(LatLng latLng, View view, GoogleMap map, float screenClickPercentage) {
+        return getToleranceDistance(latLng, null, view, map, screenClickPercentage);
+    }
 
-        LatLngBoundingBox latLngBoundingBox = buildClickLatLngBoundingBox(latLng, view, map, screenClickPercentage);
+    /**
+     * Get the allowable tolerance distance in meters from the click location on the map view and map with the screen percentage tolerance.
+     *
+     * @param latLng                click location
+     * @param pixelBounds           click pixel bounds
+     * @param view                  map view
+     * @param map                   map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return tolerance distance in meters
+     * @since 6.3.0
+     */
+    public static double getToleranceDistance(LatLng latLng, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return getToleranceDistance(latLng, 0.0, pixelBounds, view, map, screenClickPercentage);
+    }
 
-        double longitudeDistance = SphericalUtil.computeDistanceBetween(latLngBoundingBox.getLeftCoordinate(), latLngBoundingBox.getRightCoordinate());
-        double latitudeDistance = SphericalUtil.computeDistanceBetween(latLngBoundingBox.getDownCoordinate(), latLngBoundingBox.getUpCoordinate());
+    /**
+     * Get the allowable tolerance distance in meters from the click location on the map view and map with the screen percentage tolerance.
+     *
+     * @param latLng                click location
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  map view
+     * @param map                   map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return tolerance distance in meters
+     * @since 6.3.0
+     */
+    public static double getToleranceDistance(LatLng latLng, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return getToleranceDistance(latLng, 1.0f, zoom, pixelBounds, view, map, screenClickPercentage);
+    }
 
-        double distance = Math.max(longitudeDistance, latitudeDistance);
+    /**
+     * Get the allowable tolerance distance in meters from the click location on the map view and map with the screen percentage tolerance.
+     *
+     * @param latLng                click location
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  map view
+     * @param map                   map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return tolerance distance in meters
+     * @since 6.3.0
+     */
+    public static double getToleranceDistance(LatLng latLng, float density, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+
+        LatLngBoundingBox latLngBoundingBox = buildClickLatLngBoundingBox(latLng, density, zoom, pixelBounds, view, map, screenClickPercentage);
+
+        double distance = getToleranceDistance(latLng, latLngBoundingBox);
+
+        return distance;
+    }
+
+    /**
+     * Get the allowable tolerance distance in meters from the click bounding box
+     *
+     * @param latLng      click location
+     * @param boundingBox click bounding box
+     * @return tolerance distance in meters
+     * @since 6.3.0
+     */
+    public static double getToleranceDistance(LatLng latLng, LatLngBoundingBox boundingBox) {
+
+        double northwest = SphericalUtil.computeDistanceBetween(boundingBox.getNorthwestCoordinate(), latLng);
+        double northeast = SphericalUtil.computeDistanceBetween(boundingBox.getNortheastCoordinate(), latLng);
+        double southeast = SphericalUtil.computeDistanceBetween(boundingBox.getSoutheastCoordinate(), latLng);
+        double southwest = SphericalUtil.computeDistanceBetween(boundingBox.getSouthwestCoordinate(), latLng);
+
+        double distance = Math.max(northwest, northeast);
+        distance = Math.max(distance, southeast);
+        distance = Math.max(distance, southwest);
+
+        return distance;
+    }
+
+    /**
+     * Get the allowable tolerance distance in meters from the click bounding box
+     *
+     * @param boundingBox click bounding box
+     * @return tolerance distance in meters
+     * @since 6.3.0
+     */
+    public static double getToleranceDistance(LatLngBoundingBox boundingBox) {
+
+        double distance1 = SphericalUtil.computeDistanceBetween(boundingBox.getNorthwestCoordinate(), boundingBox.getSoutheastCoordinate());
+        double distance2 = SphericalUtil.computeDistanceBetween(boundingBox.getSouthwestCoordinate(), boundingBox.getNortheastCoordinate());
+
+        double distance = Math.max(distance1, distance2) / 2.0;
 
         return distance;
     }
@@ -183,10 +390,81 @@ public class MapUtils {
      * @return lat lng bounding box
      */
     public static LatLngBoundingBox buildClickLatLngBoundingBox(LatLng latLng, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickLatLngBoundingBox(latLng, null, view, map, screenClickPercentage);
+    }
 
-        // Get the screen width and height a click occurs from a feature
-        int width = (int) Math.round(view.getWidth() * screenClickPercentage);
-        int height = (int) Math.round(view.getHeight() * screenClickPercentage);
+    /**
+     * Build a lat lng bounding box using the click location, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param pixelBounds           click pixel bounds
+     * @param view                  map view
+     * @param map                   map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return lat lng bounding box
+     * @since 6.3.0
+     */
+    public static LatLngBoundingBox buildClickLatLngBoundingBox(LatLng latLng, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickLatLngBoundingBox(latLng, 0.0, pixelBounds, view, map, screenClickPercentage);
+    }
+
+    /**
+     * Build a lat lng bounding box using the click location, zoom level, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  map view
+     * @param map                   map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return lat lng bounding box
+     * @since 6.3.0
+     */
+    public static LatLngBoundingBox buildClickLatLngBoundingBox(LatLng latLng, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+        return buildClickLatLngBoundingBox(latLng, 1.0f, zoom, pixelBounds, view, map, screenClickPercentage);
+    }
+
+    /**
+     * Build a lat lng bounding box using the click location, display density, zoom level, pixel bounds, map view, map, and screen percentage tolerance.
+     * The bounding box can be used to query for features that were clicked
+     *
+     * @param latLng                click location
+     * @param density               display density: {@link android.util.DisplayMetrics#density}
+     * @param zoom                  current zoom level
+     * @param pixelBounds           click pixel bounds
+     * @param view                  map view
+     * @param map                   map
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return lat lng bounding box
+     * @since 6.3.0
+     */
+    public static LatLngBoundingBox buildClickLatLngBoundingBox(LatLng latLng, float density, double zoom, PixelBounds pixelBounds, View view, GoogleMap map, float screenClickPercentage) {
+
+        // Get the pixels a click occurs from a feature
+        double pixels = Math.max(view.getWidth(), view.getHeight()) * screenClickPercentage;
+        double leftPixels = pixels;
+        double upPixels = pixels;
+        double rightPixels = pixels;
+        double downPixels = pixels;
+
+        if (pixelBounds != null) {
+            double adjust = 1.0 + zoom - (int) zoom;
+            adjust *= density;
+            leftPixels += (pixelBounds.getLeft() * adjust);
+            upPixels += (pixelBounds.getUp() * adjust);
+            rightPixels += (pixelBounds.getRight() * adjust);
+            downPixels += (pixelBounds.getDown() * adjust);
+        }
+
+        int leftOffset = (int) Math.ceil(leftPixels);
+        int upOffset = (int) Math.ceil(upPixels);
+        int rightOffset = (int) Math.ceil(rightPixels);
+        int downOffset = (int) Math.ceil(downPixels);
 
         // Get the screen click location
         Projection projection = map.getProjection();
@@ -197,10 +475,10 @@ public class MapUtils {
         android.graphics.Point up = new android.graphics.Point(clickLocation);
         android.graphics.Point right = new android.graphics.Point(clickLocation);
         android.graphics.Point down = new android.graphics.Point(clickLocation);
-        left.offset(-width, 0);
-        up.offset(0, -height);
-        right.offset(width, 0);
-        down.offset(0, height);
+        left.offset(-leftOffset, 0);
+        up.offset(0, -upOffset);
+        right.offset(rightOffset, 0);
+        down.offset(0, downOffset);
 
         // Get the coordinates of the bounding box points
         LatLng leftCoordinate = projection.fromScreenLocation(left);
@@ -211,6 +489,32 @@ public class MapUtils {
         LatLngBoundingBox latLngBoundingBox = new LatLngBoundingBox(leftCoordinate, upCoordinate, rightCoordinate, downCoordinate);
 
         return latLngBoundingBox;
+    }
+
+    /**
+     * Build a bounding box using the location coordinate click location and map view bounds
+     *
+     * @param latLng                click location
+     * @param mapBounds             map bounds
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static BoundingBox buildClickBoundingBox(LatLng latLng, BoundingBox mapBounds, float screenClickPercentage) {
+
+        // Get the screen width and height a click occurs from a feature
+        double width = TileBoundingBoxMapUtils.getLongitudeDistance(mapBounds) * screenClickPercentage;
+        double height = TileBoundingBoxMapUtils.getLatitudeDistance(mapBounds) * screenClickPercentage;
+
+        LatLng leftCoordinate = SphericalUtil.computeOffset(latLng, width, 270);
+        LatLng upCoordinate = SphericalUtil.computeOffset(latLng, height, 0);
+        LatLng rightCoordinate = SphericalUtil.computeOffset(latLng, width, 90);
+        LatLng downCoordinate = SphericalUtil.computeOffset(latLng, height, 180);
+
+        BoundingBox bbox = new BoundingBox(leftCoordinate.longitude, downCoordinate.latitude, rightCoordinate.longitude, upCoordinate.latitude);
+
+        return bbox;
     }
 
     /**

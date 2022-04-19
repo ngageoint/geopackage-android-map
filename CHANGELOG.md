@@ -4,9 +4,14 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.2.2 (TBD)
+## [6.3.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.3.0) (04-19-2022)
 
-* TBD
+* geopackage-android version 6.3.0
+* LatLngBoundingBox coordinate constructor and directional methods
+* MapUtils build click and tolerance method enhancements (density, zoom, pixel bounds)
+* FeatureInfoBuilder feature styles fine filter support
+* FeatureOverlayQuery style pixel bounds support for querying visualized geometry styles and icons
+* gradle plugin updated to 7.1.3
 
 ## [6.2.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.2.1) (03-11-2022)
 
