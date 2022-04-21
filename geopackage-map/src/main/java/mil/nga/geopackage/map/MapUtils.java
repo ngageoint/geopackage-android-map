@@ -696,4 +696,117 @@ public class MapUtils {
         return near;
     }
 
+    /**
+     * Is the point on or near the shape, returning the distance when on the shape
+     *
+     * @param point     lat lng point
+     * @param shape     map shape
+     * @param geodesic  geodesic check flag
+     * @param tolerance distance tolerance
+     * @return distance when on shape, -1.0 when distance not calculated, null when not on shape
+     * @since 6.3.1
+     */
+    public static Double isPointOnShapeDistance(LatLng point,
+                                                GoogleMapShape shape, boolean geodesic, double tolerance) {
+
+        Double distance = null;
+
+        switch (shape.getShapeType()) {
+
+            case LAT_LNG:
+                distance = isPointNearPointDistance(point, (LatLng) shape.getShape(), tolerance);
+                break;
+            case MARKER_OPTIONS:
+                distance = isPointNearMarkerDistance(point, (MarkerOptions) shape.getShape(), tolerance);
+                break;
+            case POLYLINE_OPTIONS:
+                if (isPointOnPolyline(point, (PolylineOptions) shape.getShape(), geodesic, tolerance)) {
+                    distance = -1.0;
+                }
+                break;
+            case POLYGON_OPTIONS:
+                if (isPointOnPolygon(point, (PolygonOptions) shape.getShape(), geodesic, tolerance)) {
+                    distance = -1.0;
+                }
+                break;
+            case MULTI_LAT_LNG:
+                distance = isPointNearMultiLatLngDistance(point, (MultiLatLng) shape.getShape(), tolerance);
+                break;
+            case MULTI_POLYLINE_OPTIONS:
+                if (isPointOnMultiPolyline(point, (MultiPolylineOptions) shape.getShape(), geodesic, tolerance)) {
+                    distance = -1.0;
+                }
+                break;
+            case MULTI_POLYGON_OPTIONS:
+                if (isPointOnMultiPolygon(point, (MultiPolygonOptions) shape.getShape(), geodesic, tolerance)) {
+                    distance = -1.0;
+                }
+                break;
+            case COLLECTION:
+                @SuppressWarnings("unchecked")
+                List<GoogleMapShape> shapeList = (List<GoogleMapShape>) shape
+                        .getShape();
+                for (GoogleMapShape shapeListItem : shapeList) {
+                    Double shapeDistance = isPointOnShapeDistance(point, shapeListItem, geodesic, tolerance);
+                    if (distance == null || (shapeDistance != null && shapeDistance >= 0 && shapeDistance < distance)) {
+                        distance = shapeDistance;
+                    }
+                }
+                break;
+            default:
+                throw new GeoPackageException("Unsupported Shape Type: "
+                        + shape.getShapeType());
+
+        }
+
+        return distance;
+    }
+
+    /**
+     * Is the point near the shape marker, returning the distance when on marker
+     *
+     * @param point       point
+     * @param shapeMarker shape marker
+     * @param tolerance   distance tolerance
+     * @return distance when on marker, null when not
+     * @since 6.3.1
+     */
+    public static Double isPointNearMarkerDistance(LatLng point, MarkerOptions shapeMarker, double tolerance) {
+        return isPointNearPointDistance(point, shapeMarker.getPosition(), tolerance);
+    }
+
+    /**
+     * Is the point near the shape point, returning the distance when on point
+     *
+     * @param point      point
+     * @param shapePoint shape point
+     * @param tolerance  distance tolerance
+     * @return distance when on point, null when not
+     * @since 6.3.1
+     */
+    public static Double isPointNearPointDistance(LatLng point, LatLng shapePoint, double tolerance) {
+        double distance = SphericalUtil.computeDistanceBetween(point, shapePoint);
+        return distance <= tolerance ? distance : null;
+    }
+
+    /**
+     * Is the point near any points in the multi lat lng, returning the nearest distance when on multi lat lng
+     *
+     * @param point       point
+     * @param multiLatLng multi lat lng
+     * @param tolerance   distance tolerance
+     * @return distance when on multi lat lng, null when not
+     * @since 6.3.1
+     */
+    public static Double isPointNearMultiLatLngDistance(LatLng point, MultiLatLng multiLatLng, double tolerance) {
+        Double distance = null;
+        for (LatLng multiPoint : multiLatLng.getLatLngs()) {
+            Double pointDistance = isPointNearPointDistance(point, multiPoint, tolerance);
+            if (distance == null || (pointDistance != null && pointDistance < distance)) {
+                distance = pointDistance;
+            }
+        }
+        return distance;
+    }
+
 }

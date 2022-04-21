@@ -10,11 +10,13 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.nga.style.FeatureStyleExtension;
@@ -623,8 +625,10 @@ public class FeatureInfoBuilder {
                 for (FeatureRow featureRow : filteredResults) {
 
                     Map<String, Object> values = new HashMap<>();
+                    String idColumnName = null;
                     String geometryColumnName = null;
 
+                    int idColumn = featureRow.getPkColumnIndex();
                     int geometryColumn = featureRow.getGeometryColumnIndex();
                     for (int i = 0; i < featureRow.columnCount(); i++) {
 
@@ -634,7 +638,9 @@ public class FeatureInfoBuilder {
 
                         columnName = getColumnName(dataColumnsDao, featureRow, columnName);
 
-                        if (i == geometryColumn) {
+                        if(i == idColumn){
+                            idColumnName = columnName;
+                        }else if (i == geometryColumn) {
                             geometryColumnName = columnName;
                             if (projection != null && value != null) {
                                 GeoPackageGeometryData geomData = (GeoPackageGeometryData) value;
@@ -647,7 +653,7 @@ public class FeatureInfoBuilder {
                         }
                     }
 
-                    FeatureRowData featureRowData = new FeatureRowData(values, geometryColumnName);
+                    FeatureRowData featureRowData = new FeatureRowData(values, idColumnName, geometryColumnName);
                     rows.add(featureRowData);
                 }
 
@@ -759,11 +765,26 @@ public class FeatureInfoBuilder {
         FeatureIndexResults filteredResults = null;
         if (ignoreGeometryTypes.contains(geometryType)) {
             filteredResults = new FeatureIndexListResults();
-        } else if (clickLocation == null && ignoreGeometryTypes.isEmpty()) {
+        } else if (results.count() == 0 || (clickLocation == null && ignoreGeometryTypes.isEmpty())) {
             filteredResults = results;
         } else {
 
-            FeatureIndexListResults filteredListResults = new FeatureIndexListResults();
+            TreeMap<Double, FeatureRow> sortedResults = new TreeMap<>(new Comparator<Double>() {
+                @Override
+                public int compare(Double distance1, Double distance2) {
+                    int compare = 0;
+                    if (distance1 >= 0) {
+                        if (distance2 >= 0) {
+                            compare = distance1.compareTo(distance2);
+                        } else {
+                            compare = -1;
+                        }
+                    } else if (distance2 >= 0) {
+                        compare = 1;
+                    }
+                    return compare;
+                }
+            });
 
             GoogleMapShapeConverter converter = new GoogleMapShapeConverter(
                     featureDao.getProjection());
@@ -777,22 +798,22 @@ public class FeatureInfoBuilder {
 
                         if (!ignoreGeometryTypes.contains(geometry.getGeometryType())) {
 
-                            boolean addRow = true;
+                            Double distance = -1.0;
 
                             if (clickLocation != null) {
 
                                 GoogleMapShape mapShape = converter.toShape(geometry);
-                                Boolean styleFiltered = fineFilterStyle(featureRow, geometry, mapShape, clickLocation, density, zoom, view, map, screenClickPercentage);
-                                if (styleFiltered == null) {
-                                    addRow = MapUtils.isPointOnShape(clickLocation, mapShape, geodesic, tolerance);
+                                Double styleFiltered = fineFilterStyle(featureRow, geometry, mapShape, clickLocation, density, zoom, view, map, screenClickPercentage);
+                                if (styleFiltered != null && styleFiltered == -2.0) {
+                                    distance = MapUtils.isPointOnShapeDistance(clickLocation, mapShape, geodesic, tolerance);
                                 } else {
-                                    addRow = styleFiltered;
+                                    distance = styleFiltered;
                                 }
 
                             }
 
-                            if (addRow) {
-                                filteredListResults.addRow(featureRow);
+                            if (distance != null) {
+                                sortedResults.put(distance, featureRow);
                             }
 
                         }
@@ -801,7 +822,7 @@ public class FeatureInfoBuilder {
 
             }
 
-            filteredResults = filteredListResults;
+            filteredResults = new FeatureIndexListResults(new ArrayList<>(sortedResults.values()));
         }
 
         return filteredResults;
@@ -819,10 +840,10 @@ public class FeatureInfoBuilder {
      * @param view                  view
      * @param map                   Google Map
      * @param screenClickPercentage screen click percentage between 0.0 and 1.0
-     * @return true if passes fine filter
+     * @return -2.0 when not style filtered, distance if passes fine filter, -1.0 when distance not calculated, null if does not pass
      */
-    private Boolean fineFilterStyle(FeatureRow featureRow, Geometry geometry, GoogleMapShape mapShape, LatLng clickLocation, float density, double zoom, View view, GoogleMap map, float screenClickPercentage) {
-        Boolean passes = null;
+    private Double fineFilterStyle(FeatureRow featureRow, Geometry geometry, GoogleMapShape mapShape, LatLng clickLocation, float density, double zoom, View view, GoogleMap map, float screenClickPercentage) {
+        Double distance = -2.0;
         if (featureStyles != null && view != null && map != null) {
 
             PixelBounds pixelBounds = null;
@@ -862,12 +883,12 @@ public class FeatureInfoBuilder {
                 // Get the map click distance tolerance
                 double tolerance = MapUtils.getToleranceDistance(clickLocation, density, zoom, pixelBounds, view, map, screenClickPercentage);
 
-                passes = MapUtils.isPointOnShape(clickLocation, mapShape, geodesic, tolerance);
+                distance = MapUtils.isPointOnShapeDistance(clickLocation, mapShape, geodesic, tolerance);
 
             }
 
         }
-        return passes;
+        return distance;
     }
 
 }

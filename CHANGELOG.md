@@ -6,7 +6,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.3.1 (TBD)
 
-* TBD
+* geopackage-android version 6.3.1
+* MapUtils on shape returning distance support
+* Ordering of map click queried point based features by distance
 
 ## [6.3.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.3.0) (04-19-2022)
 
