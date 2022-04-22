@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import mil.nga.geopackage.BoundingBox;
+import mil.nga.geopackage.map.CreateGeoPackageTestCase;
 import mil.nga.proj.Projection;
 import mil.nga.proj.ProjectionConstants;
 import mil.nga.proj.ProjectionFactory;
@@ -14,11 +15,11 @@ import mil.nga.sf.Point;
 import mil.nga.sf.proj.GeometryTransform;
 
 /**
- * Feature Overlay Query tests
+ * Test Feature Overlay Query from a created database
  *
  * @author osbornb
  */
-public class FeatureOverlayQueryTest {
+public class FeatureOverlayQueryCreateTest extends CreateGeoPackageTestCase {
 
     /**
      * Test Tile Bounds
@@ -78,6 +79,16 @@ public class FeatureOverlayQueryTest {
         TestCase.assertEquals(-4010192.2519534864, boundingBox.getMinLatitude(), 0.0);
         TestCase.assertEquals(16833268.117074657, boundingBox.getMaxLongitude(), 0.0);
         TestCase.assertEquals(-4008969.2595009245, boundingBox.getMaxLatitude(), 0.0);
+
+    }
+
+    /**
+     * Test Build Map Click Table Data
+     */
+    @Test
+    public void testBuildMapClickTableData() {
+
+        FeatureOverlayQueryUtils.testBuildMapClickTableData(activity, geoPackage);
 
     }
 

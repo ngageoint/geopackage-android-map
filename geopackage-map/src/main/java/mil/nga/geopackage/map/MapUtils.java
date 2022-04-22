@@ -498,10 +498,10 @@ public class MapUtils {
      * @param mapBounds             map bounds
      * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
      *                              on the screen must be to be included in a click query
-     * @return bounding box
-     * @since 6.3.0
+     * @return lat lng bounding box
+     * @since 6.3.1
      */
-    public static BoundingBox buildClickBoundingBox(LatLng latLng, BoundingBox mapBounds, float screenClickPercentage) {
+    public static LatLngBoundingBox buildClickLatLngBoundingBox(LatLng latLng, BoundingBox mapBounds, float screenClickPercentage) {
 
         // Get the screen width and height a click occurs from a feature
         double width = TileBoundingBoxMapUtils.getLongitudeDistance(mapBounds) * screenClickPercentage;
@@ -512,7 +512,26 @@ public class MapUtils {
         LatLng rightCoordinate = SphericalUtil.computeOffset(latLng, width, 90);
         LatLng downCoordinate = SphericalUtil.computeOffset(latLng, height, 180);
 
-        BoundingBox bbox = new BoundingBox(leftCoordinate.longitude, downCoordinate.latitude, rightCoordinate.longitude, upCoordinate.latitude);
+        LatLngBoundingBox latLngBoundingBox = new LatLngBoundingBox(leftCoordinate, upCoordinate, rightCoordinate, downCoordinate);
+
+        return latLngBoundingBox;
+    }
+
+    /**
+     * Build a bounding box using the location coordinate click location and map view bounds
+     *
+     * @param latLng                click location
+     * @param mapBounds             map bounds
+     * @param screenClickPercentage screen click percentage between 0.0 and 1.0 for how close a feature
+     *                              on the screen must be to be included in a click query
+     * @return bounding box
+     * @since 6.3.0
+     */
+    public static BoundingBox buildClickBoundingBox(LatLng latLng, BoundingBox mapBounds, float screenClickPercentage) {
+
+        LatLngBoundingBox latLngBoundingBox = buildClickLatLngBoundingBox(latLng, mapBounds, screenClickPercentage);
+
+        BoundingBox bbox = buildClickBoundingBox(latLngBoundingBox);
 
         return bbox;
     }
