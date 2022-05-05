@@ -23,6 +23,7 @@ import mil.nga.geopackage.map.geom.MultiPolylineOptions;
 import mil.nga.geopackage.map.tiles.TileBoundingBoxMapUtils;
 import mil.nga.geopackage.style.PixelBounds;
 import mil.nga.proj.ProjectionConstants;
+import mil.nga.sf.proj.GeometryTransform;
 
 /**
  * Map utilities
@@ -43,21 +44,93 @@ public class MapUtils {
     }
 
     /**
-     * Get the tolerance distance meters in the current region of the map
+     * Get the tolerance distance meters in the current region of the visible map.
+     * Tolerance distance can be used for geometry simplification and is approximately the
+     * number of meters per view pixel.
      *
      * @param view view
      * @param map  google map
      * @return tolerance distance in meters
      */
     public static double getToleranceDistance(View view, GoogleMap map) {
+        return getToleranceDistance(view, getBoundingBox(map));
+    }
 
-        BoundingBox boundingBox = getBoundingBox(map);
+    /**
+     * Get the tolerance distance meters in the current region of the visible map projected bounds.
+     * Tolerance distance can be used for geometry simplification and is approximately the
+     * number of meters per view pixel.
+     *
+     * @param view        view
+     * @param boundingBox bounding box
+     * @param projection  bounding box projection
+     * @return tolerance distance in meters
+     * @since 6.3.1
+     */
+    public static double getToleranceDistance(View view, BoundingBox boundingBox, mil.nga.proj.Projection projection) {
+        return getToleranceDistance(view, getWGS84BoundingBox(boundingBox, projection));
+    }
+
+    /**
+     * Get the tolerance distance meters in the current region of the visible map bounds.
+     * Tolerance distance can be used for geometry simplification and is approximately the
+     * number of meters per view pixel.
+     *
+     * @param view        view
+     * @param boundingBox WGS84 bounding box
+     * @return tolerance distance in meters
+     * @since 6.3.1
+     */
+    public static double getToleranceDistance(View view, BoundingBox boundingBox) {
+        return getToleranceDistance(view.getWidth(), view.getHeight(), boundingBox);
+    }
+
+    /**
+     * Get the tolerance distance meters in the current region of the visible map.
+     * Tolerance distance can be used for geometry simplification and is approximately the
+     * number of meters per view pixel.
+     *
+     * @param viewWidth  view width
+     * @param viewHeight view height
+     * @param map        google map
+     * @return tolerance distance in meters
+     * @since 6.3.1
+     */
+    public static double getToleranceDistance(int viewWidth, int viewHeight, GoogleMap map) {
+        return getToleranceDistance(viewWidth, viewHeight, getBoundingBox(map));
+    }
+
+    /**
+     * Get the tolerance distance meters in the current region of the visible map projected bounds.
+     * Tolerance distance can be used for geometry simplification and is approximately the
+     * number of meters per view pixel.
+     *
+     * @param viewWidth   view width
+     * @param viewHeight  view height
+     * @param boundingBox bounding box
+     * @param projection  bounding box projection
+     * @return tolerance distance in meters
+     * @since 6.3.1
+     */
+    public static double getToleranceDistance(int viewWidth, int viewHeight, BoundingBox boundingBox, mil.nga.proj.Projection projection) {
+        return getToleranceDistance(viewWidth, viewHeight, getWGS84BoundingBox(boundingBox, projection));
+    }
+
+    /**
+     * Get the tolerance distance meters in the current region of the visible map bounds.
+     * Tolerance distance can be used for geometry simplification and is approximately the
+     * number of meters per view pixel.
+     *
+     * @param viewWidth   view width
+     * @param viewHeight  view height
+     * @param boundingBox WGS84 bounding box
+     * @return tolerance distance in meters
+     * @since 6.3.1
+     */
+    public static double getToleranceDistance(int viewWidth, int viewHeight, BoundingBox boundingBox) {
 
         double boundingBoxWidth = TileBoundingBoxMapUtils.getLongitudeDistance(boundingBox);
         double boundingBoxHeight = TileBoundingBoxMapUtils.getLatitudeDistance(boundingBox);
-
-        int viewWidth = view.getWidth();
-        int viewHeight = view.getHeight();
 
         double meters = 0;
 
@@ -70,6 +143,23 @@ public class MapUtils {
         }
 
         return meters;
+    }
+
+    /**
+     * Get a WGS84 Bounding Box from a projected bounding box
+     *
+     * @param boundingBox bounding box
+     * @param projection  bounding box projection
+     * @return WGS84 bounding box
+     * @since 6.3.1
+     */
+    public static BoundingBox getWGS84BoundingBox(BoundingBox boundingBox, mil.nga.proj.Projection projection) {
+        GeometryTransform transform = GeometryTransform
+                .create(projection, ProjectionConstants.EPSG_WORLD_GEODETIC_SYSTEM);
+        if (!transform.isSameProjection()) {
+            boundingBox = boundingBox.transform(transform);
+        }
+        return boundingBox;
     }
 
     /**
