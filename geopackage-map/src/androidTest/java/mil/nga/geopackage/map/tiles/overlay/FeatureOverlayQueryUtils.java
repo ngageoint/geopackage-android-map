@@ -23,6 +23,7 @@ import mil.nga.geopackage.tiles.features.FeatureTiles;
 import mil.nga.geopackage.tiles.overlay.FeatureRowData;
 import mil.nga.geopackage.tiles.overlay.FeatureTableData;
 import mil.nga.proj.Projection;
+import mil.nga.proj.ProjectionConstants;
 import mil.nga.sf.Geometry;
 import mil.nga.sf.GeometryType;
 import mil.nga.sf.Point;
@@ -96,6 +97,10 @@ public class FeatureOverlayQueryUtils {
 
                     if (geometry.getGeometryType() == GeometryType.POINT) {
                         TestCase.assertNotNull(featureTableData);
+                    }
+
+                    if (projection.getAuthority().equalsIgnoreCase(ProjectionConstants.AUTHORITY_NONE)) {
+                        continue;
                     }
 
                     if (featureTableData != null) {
