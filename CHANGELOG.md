@@ -4,7 +4,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.3.1 (TBD)
+## [6.3.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.3.1) (05-06-2022)
 
 * geopackage-android version 6.3.1
 * MapUtils on shape returning distance support
