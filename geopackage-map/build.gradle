@@ -4,14 +4,14 @@ apply plugin: 'signing'
 
 group = "mil.nga.geopackage.map"
 archivesBaseName = "geopackage-android-map"
-version = "6.3.2"
+version = "6.4.0"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 32
+        targetSdkVersion 33
         multiDexEnabled true
 
         testApplicationId 'mil.nga.geopackage.map.test'
@@ -58,6 +58,7 @@ android {
         options.links "https://ngageoint.github.io/simple-features-proj-java/docs/api/"
         options.links "https://ngageoint.github.io/simple-features-geojson-java/docs/api/"
         options.links "https://ngageoint.github.io/ogc-api-features-json-java/docs/api/"
+        options.links "https://ngageoint.github.io/color-java/docs/api/"
         options.links "https://ngageoint.github.io/geopackage-core-java/docs/api/"
         // In this ordering, BoundingBox currently generated with url to geopackage-android instead of geopackage-core-java. Replace with:
         // find docs/docs/api/ -type f -name "*.html" | xargs sed -i '' 's|geopackage-android/docs/api/mil/nga/geopackage/BoundingBox.html|geopackage-core-java/docs/api/mil/nga/geopackage/BoundingBox.html|g'
@@ -167,9 +168,9 @@ afterEvaluate {
 dependencies {
     api 'com.google.android.gms:play-services-maps:18.0.2'
     api 'com.google.maps.android:android-maps-utils:2.3.0'
-    api 'mil.nga.geopackage:geopackage-android:6.3.1'
+    api 'mil.nga.geopackage:geopackage-android:6.4.0'
     //api project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:6.3.1'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:6.4.0'
     testImplementation 'androidx.multidex:multidex:2.0.1'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test:rules:1.4.0'
