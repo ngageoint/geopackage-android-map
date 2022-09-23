@@ -4,9 +4,11 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## 6.4.1 (TBD)
+## [6.5.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.5.0) (09-23-2022)
 
-* TBD
+* geopackage-android version 6.5.0
+* play-services-maps version 18.1.0
+* Map shape converter same projection conversion shortcuts
 
 ## [6.4.0](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.4.0) (07-11-2022)
 

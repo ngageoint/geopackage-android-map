@@ -196,7 +196,7 @@ public class GoogleMapShapeConverter {
      * @return WGS84 point
      */
     public Point toWgs84(Point point) {
-        if (projection != null) {
+        if (projection != null && !toWgs84.isSameProjection()) {
             point = toWgs84.transform(point);
         }
         return point;
@@ -209,7 +209,7 @@ public class GoogleMapShapeConverter {
      * @return projection point
      */
     public Point toProjection(Point point) {
-        if (projection != null) {
+        if (projection != null && !fromWgs84.isSameProjection()) {
             point = fromWgs84.transform(point);
         }
         return point;
