@@ -172,6 +172,6 @@ dependencies {
     //api project(':geopackage-sdk') // uncomment me to build locally
     javadocDeps 'mil.nga.geopackage:geopackage-android:6.7.0'
     testImplementation 'androidx.multidex:multidex:2.0.1'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test:rules:1.4.0'
+    androidTestImplementation 'androidx.test:runner:1.5.1'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
 }
