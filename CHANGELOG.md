@@ -6,7 +6,9 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.7.2 (TBD)
 
-* TBD
+* compile and target SDK version 34
+* geopackage-android version 6.7.2
+* android-maps-utils version 3.5.3
 
 ## [6.7.1](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.7.1) (01-24-2023)
 

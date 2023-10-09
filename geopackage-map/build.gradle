@@ -7,11 +7,14 @@ archivesBaseName = "geopackage-android-map"
 version = "6.7.2"
 
 android {
-    compileSdkVersion 33
+    namespace 'mil.nga.geopackage.map'
+    testNamespace "mil.nga.geopackage.map.test"
+
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 34
         multiDexEnabled true
 
         testApplicationId 'mil.nga.geopackage.map.test'
@@ -42,10 +45,11 @@ android {
         }
     }
 
-    task javadoc(type: Javadoc) {
+    tasks.register('javadoc', Javadoc) {
         title = "$archivesBaseName $version API"
         source = android.sourceSets.main.java.srcDirs
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        dependsOn("generateDebugRFile")
+        dependsOn("generateReleaseRFile")
         classpath += configurations.javadocDeps
         classpath += files("${android.sdkDirectory}/extras/google/google_play_services/libproject/google-play-services_lib/libs/google-play-services.jar")
         options.source = "11"
@@ -66,18 +70,18 @@ android {
         options.links "https://ormlite.com/javadoc/ormlite-core/"
         options.links "https://ormlite.com/javadoc/ormlite-android/"
         options.links "https://hjg.com.ar/pngj/apidocs/"
-        options.linksOffline "https://d.android.com/reference","${android.sdkDirectory}/docs/reference"
-        options.linksOffline "https://developers.google.com/android/reference","${android.sdkDirectory}/extras/google/google_play_services/reference"
+        options.linksOffline "https://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
+        options.linksOffline "https://developers.google.com/android/reference", "${android.sdkDirectory}/extras/google/google_play_services/reference"
         destinationDir = file("../javadoc/")
         failOnError false
     }
 
-    task javadocJar(type: Jar) {
+    tasks.register('javadocJar', Jar) {
         archiveClassifier.set("javadoc")
         from javadoc
     }
 
-    task sourcesJar(type: Jar) {
+    tasks.register('sourcesJar', Jar) {
         archiveClassifier.set("sources")
         from sourceSets.main.java.srcDirs
     }
@@ -167,10 +171,10 @@ afterEvaluate {
 
 dependencies {
     api 'com.google.android.gms:play-services-maps:18.1.0'
-    api 'com.google.maps.android:android-maps-utils:2.3.0'
-    api 'mil.nga.geopackage:geopackage-android:6.7.1'
+    api 'com.google.maps.android:android-maps-utils:3.5.3'
+    api 'mil.nga.geopackage:geopackage-android:6.7.2'
     //api project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:6.7.1'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:6.7.2'
     testImplementation 'androidx.multidex:multidex:2.0.1'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
