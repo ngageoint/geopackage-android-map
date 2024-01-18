@@ -6,7 +6,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 ## 6.7.4 (TBD)
 
-* TBD
+* geopackage-android version 6.7.4
 
 ## [6.7.3](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.7.3) (11-30-2023)
 
