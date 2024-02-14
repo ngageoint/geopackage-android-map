@@ -1,5 +1,7 @@
 package mil.nga.geopackage.map.tiles.overlay;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
@@ -8,10 +10,15 @@ import java.util.Collection;
 import java.util.List;
 
 import mil.nga.geopackage.GeoPackage;
+import mil.nga.geopackage.GeoPackageException;
 import mil.nga.geopackage.extension.nga.link.FeatureTileTableLinker;
 import mil.nga.geopackage.extension.nga.scale.TileScaling;
+import mil.nga.geopackage.features.user.FeatureDao;
+import mil.nga.geopackage.tiles.features.DefaultFeatureTiles;
+import mil.nga.geopackage.tiles.features.FeatureTiles;
 import mil.nga.geopackage.tiles.retriever.GeoPackageTile;
 import mil.nga.geopackage.tiles.user.TileDao;
+import mil.nga.geopackage.user.UserDao;
 
 /**
  * Get a tile provider for the Tile DAO
@@ -193,6 +200,164 @@ public class GeoPackageOverlayFactory {
             tile = new Tile(geoPackageTile.getWidth(), geoPackageTile.getHeight(), geoPackageTile.getData());
         }
         return tile;
+    }
+
+    /**
+     * Get a Tile Provider for a tile or feature table
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param table tile or feature table
+     * @return tile provider
+     * @since 6.7.4
+     */
+    public static TileProvider getTileProvider(Context context, GeoPackage geoPackage, String table) {
+        return getBoundedOverlay(context, geoPackage, table);
+    }
+
+    /**
+     * Get a Bounded Overlay Tile Provider for a tile or feature table
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param table tile or feature table
+     * @return bounded overlay
+     * @since 6.7.4
+     */
+    public static BoundedOverlay getBoundedOverlay(Context context, GeoPackage geoPackage, String table) {
+
+        BoundedOverlay overlay = null;
+
+        if (geoPackage.isTileTable(table)) {
+            TileDao tileDao = geoPackage.getTileDao(table);
+            overlay = getBoundedOverlay(tileDao);
+        } else if (geoPackage.isFeatureTable(table)) {
+            FeatureDao featureDao = geoPackage.getFeatureDao(table);
+            FeatureTiles featureTiles = new DefaultFeatureTiles(context, geoPackage, featureDao);
+            overlay = new FeatureOverlay(featureTiles);
+        } else {
+            throw new GeoPackageException("Table is not a tile or feature type: " + table);
+        }
+
+        return overlay;
+    }
+
+    /**
+     * Get a Tile Provider for a tile or feature table
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param table tile or feature table
+     * @return tile provider
+     * @since 6.7.4
+     */
+    public static TileProvider getTileProvider(Context context, GeoPackage geoPackage, String table, float density) {
+        return getBoundedOverlay(context, geoPackage, table, density);
+    }
+
+    /**
+     * Get a Bounded Overlay Tile Provider for a tile or feature table
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param table tile or feature table
+     * @return bounded overlay
+     * @since 6.7.4
+     */
+    public static BoundedOverlay getBoundedOverlay(Context context, GeoPackage geoPackage, String table, float density) {
+
+        BoundedOverlay overlay = null;
+
+        if (geoPackage.isTileTable(table)) {
+            TileDao tileDao = geoPackage.getTileDao(table);
+            overlay = getBoundedOverlay(tileDao, density);
+        } else if (geoPackage.isFeatureTable(table)) {
+            FeatureDao featureDao = geoPackage.getFeatureDao(table);
+            FeatureTiles featureTiles = new DefaultFeatureTiles(context, geoPackage, featureDao, density);
+            overlay = new FeatureOverlay(featureTiles);
+        } else {
+            throw new GeoPackageException("Table is not a tile or feature type: " + table);
+        }
+
+        return overlay;
+    }
+
+    /**
+     * Get a Tile Provider for a tile or feature DAO
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param userDao user DAO
+     * @return tile provider
+     * @since 6.7.4
+     */
+    public static TileProvider getTileProvider(Context context, GeoPackage geoPackage, UserDao<?, ?, ?, ?> userDao) {
+        return getBoundedOverlay(context, geoPackage, userDao);
+    }
+
+    /**
+     * Get a Bounded Overlay Tile Provider for a tile or feature DAO
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param userDao user DAO
+     * @return bounded overlay
+     * @since 6.7.4
+     */
+    public static BoundedOverlay getBoundedOverlay(Context context, GeoPackage geoPackage, UserDao<?, ?, ?, ?> userDao) {
+
+        BoundedOverlay overlay = null;
+
+        if (userDao instanceof TileDao) {
+            overlay = getBoundedOverlay((TileDao) userDao);
+        } else if (userDao instanceof FeatureDao) {
+            FeatureTiles featureTiles = new DefaultFeatureTiles(context, geoPackage, (FeatureDao) userDao);
+            overlay = new FeatureOverlay(featureTiles);
+        } else {
+            throw new GeoPackageException("User DAO is not a tile or feature type: " + userDao.getTableName());
+        }
+
+        return overlay;
+    }
+
+    /**
+     * Get a Tile Provider for a tile or feature DAO
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param userDao user DAO
+     * @param density display density: {@link android.util.DisplayMetrics#density}
+     * @return tile provider
+     * @since 6.7.4
+     */
+    public static TileProvider getTileProvider(Context context, GeoPackage geoPackage, UserDao<?, ?, ?, ?> userDao, float density) {
+        return getBoundedOverlay(context, geoPackage, userDao, density);
+    }
+
+    /**
+     * Get a Bounded Overlay Tile Provider for a tile or feature DAO
+     *
+     * @param context context
+     * @param geoPackage GeoPackage
+     * @param userDao user DAO
+     * @param density display density: {@link android.util.DisplayMetrics#density}
+     * @return bounded overlay
+     * @since 6.7.4
+     */
+    public static BoundedOverlay getBoundedOverlay(Context context, GeoPackage geoPackage, UserDao<?, ?, ?, ?> userDao, float density) {
+
+        BoundedOverlay overlay = null;
+
+        if (userDao instanceof TileDao) {
+            overlay = getBoundedOverlay((TileDao) userDao, density);
+        } else if (userDao instanceof FeatureDao) {
+            FeatureTiles featureTiles = new DefaultFeatureTiles(context, geoPackage, (FeatureDao) userDao, density);
+            overlay = new FeatureOverlay(featureTiles);
+        } else {
+            throw new GeoPackageException("User DAO is not a tile or feature type: " + userDao.getTableName());
+        }
+
+        return overlay;
     }
 
 }

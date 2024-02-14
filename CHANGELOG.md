@@ -7,6 +7,7 @@ Adheres to [Semantic Versioning](http://semver.org/).
 ## 6.7.4 (TBD)
 
 * geopackage-android version 6.7.4
+* Get Tile Providers and Bounded Overlays by tile table, feature table, or user DAO
 
 ## [6.7.3](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.7.3) (11-30-2023)
 

@@ -29,6 +29,16 @@ public class XYZGeoPackageOverlay extends BoundedOverlay {
     }
 
     /**
+     * Get the tile retriever
+     *
+     * @return retriever
+     * @since 6.7.4
+     */
+    public TileRetriever getRetriever() {
+        return retriever;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
