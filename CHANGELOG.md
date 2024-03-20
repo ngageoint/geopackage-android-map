@@ -8,6 +8,8 @@ Adheres to [Semantic Versioning](http://semver.org/).
 
 * geopackage-android version 6.7.4
 * Get Tile Providers and Bounded Overlays by tile table, feature table, or user DAO
+* Feature Overlay Query and Feature Info Builder geodesic support
+* gradle plugin updated to 8.3.1
 
 ## [6.7.3](https://github.com/ngageoint/geopackage-android-map/releases/tag/6.7.3) (11-30-2023)
 

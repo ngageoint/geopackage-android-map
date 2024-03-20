@@ -124,9 +124,35 @@ public class FeatureInfoBuilder {
      * @since 6.3.0
      */
     public FeatureInfoBuilder(Context context, FeatureDao featureDao, FeatureTableStyles featureStyles) {
+        this(context, featureDao, featureStyles, false);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param context    context
+     * @param featureDao feature dao
+     * @param geodesic   geodesic check flag
+     * @since 6.7.4
+     */
+    public FeatureInfoBuilder(Context context, FeatureDao featureDao, boolean geodesic) {
+        this(context, featureDao, null, geodesic);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param context       context
+     * @param featureDao    feature dao
+     * @param featureStyles feature table styles
+     * @param geodesic      geodesic check flag
+     * @since 6.7.4
+     */
+    public FeatureInfoBuilder(Context context, FeatureDao featureDao, FeatureTableStyles featureStyles, boolean geodesic) {
 
         this.featureDao = featureDao;
         this.featureStyles = featureStyles;
+        this.geodesic = geodesic;
 
         geometryType = featureDao.getGeometryType();
         name = featureDao.getDatabase() + " - " + featureDao.getTableName();

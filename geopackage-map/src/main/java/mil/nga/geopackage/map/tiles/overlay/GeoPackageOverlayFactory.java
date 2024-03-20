@@ -248,6 +248,7 @@ public class GeoPackageOverlayFactory {
      * @param context context
      * @param geoPackage GeoPackage
      * @param table tile or feature table
+     * @param density display density: {@link android.util.DisplayMetrics#density}
      * @return tile provider
      * @since 6.7.4
      */
@@ -261,6 +262,7 @@ public class GeoPackageOverlayFactory {
      * @param context context
      * @param geoPackage GeoPackage
      * @param table tile or feature table
+     * @param density display density: {@link android.util.DisplayMetrics#density}
      * @return bounded overlay
      * @since 6.7.4
      */

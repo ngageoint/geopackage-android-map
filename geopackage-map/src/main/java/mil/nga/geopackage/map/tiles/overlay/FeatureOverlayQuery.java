@@ -104,7 +104,8 @@ public class FeatureOverlayQuery {
         featuresInfo = resources.getBoolean(R.bool.map_feature_overlay_features_info);
 
         FeatureDao featureDao = featureTiles.getFeatureDao();
-        featureInfoBuilder = new FeatureInfoBuilder(context, featureDao, featureTiles.getFeatureTableStyles());
+        featureInfoBuilder = new FeatureInfoBuilder(context, featureDao,
+                featureTiles.getFeatureTableStyles(), featureTiles.isGeodesic());
     }
 
     /**
