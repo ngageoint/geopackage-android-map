@@ -207,7 +207,7 @@ public class ReadmeTest extends ImportGeoPackageTestCase {
                 .getProjection(ProjectionConstants.EPSG_WEB_MERCATOR);
 
         // Index Features
-        FeatureIndexManager indexer = new FeatureIndexManager(context, geoPackage, featureDao);
+        FeatureIndexManager indexer = new FeatureIndexManager(context, geoPackage, featureDao, false);
         indexer.setIndexLocation(FeatureIndexType.GEOPACKAGE);
         int indexedCount = indexer.index();
 
@@ -225,7 +225,7 @@ public class ReadmeTest extends ImportGeoPackageTestCase {
         }
 
         // Feature Tile Provider (dynamically draw tiles from features)
-        FeatureTiles featureTiles = new DefaultFeatureTiles(context, featureDao, context.getResources().getDisplayMetrics().density);
+        FeatureTiles featureTiles = new DefaultFeatureTiles(context, featureDao, context.getResources().getDisplayMetrics().density, false);
         featureTiles.setMaxFeaturesPerTile(1000); // Set max features to draw per tile
         NumberFeaturesTile numberFeaturesTile = new NumberFeaturesTile(context); // Custom feature tile implementation
         featureTiles.setMaxFeaturesTileDraw(numberFeaturesTile); // Draw feature count tiles when max features passed
