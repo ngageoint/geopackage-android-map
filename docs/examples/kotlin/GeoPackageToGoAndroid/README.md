@@ -34,7 +34,7 @@ To add geopackage-android-map, add it to the dependencies section of the build.g
 ```
 dependencies {
   ...
-  implementation "mil.nga.geopackage.map:geopackage-android-map:6.7.2"
+  implementation "mil.nga.geopackage.map:geopackage-android-map:6.7.4"
   ...
 }
 ```
