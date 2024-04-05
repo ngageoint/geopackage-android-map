@@ -4,7 +4,7 @@ apply plugin: 'signing'
 
 group = "mil.nga.geopackage.map"
 archivesBaseName = "geopackage-android-map"
-version = "6.7.4"
+version = "6.7.5"
 
 android {
     namespace 'mil.nga.geopackage.map'
