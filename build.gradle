@@ -1,20 +1,57 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext.kotlin_version = '1.8.20'
+
     repositories {
         google()
         mavenCentral()
         mavenLocal()
+
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.1'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.android.tools.build:gradle:8.3.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
+plugins {
+    id "io.github.gradle-nexus.publish-plugin" version "2.0.0"
+}
+
 allprojects {
+    group = "mil.nga.geopackage.map"
+    version = "6.7.5"
+
     repositories {
         google()
         mavenCentral()
         mavenLocal()
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+
+            username = System.getenv("SONATYPE_USERNAME")
+            password = System.getenv("SONATYPE_PASSWORD")
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'signing' //apply signing plugin to all subprojects
+
+    afterEvaluate {
+        def signingKey = System.getenv("GPG_PRIVATE_KEY")
+        def signingPassword = System.getenv("GPG_PASSWORD")
+        if (signingKey != null && signingPassword != null) {
+            signing {
+                useInMemoryPgpKeys(signingKey, signingPassword)
+                sign publishing.publications
+            }
+        }
     }
 }
