@@ -1,10 +1,10 @@
-apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
+plugins {
+    id "com.android.library"
+    id "maven-publish"
+}
 
-group = "mil.nga.geopackage.map"
+
 archivesBaseName = "geopackage-android-map"
-version = "6.7.5"
 
 android {
     namespace 'mil.nga.geopackage.map'
@@ -109,7 +109,7 @@ afterEvaluate {
 
                 groupId = group
                 artifactId = archivesBaseName
-                version = version
+
                 pom {
                     name = 'GeoPackage Android Map'
                     packaging = 'aar'
@@ -137,33 +137,16 @@ afterEvaluate {
 
                     developers {
                         developer {
-                            id = 'bosborn'
-                            name = 'Brian Osborn'
-                            email = 'bosborn@caci.com'
-                            organizationUrl = 'https://www.caci.com/bit-systems'
+                            id = 'nruss11-om'
+                            name = 'Nathan Russell'
+                            email = 'nathan.russell@omnifederal.com'
+                            organizationUrl = 'https://omnifederal.com/'
                             timezone = 'UTC-07'
                         }
                     }
                 }
             }
         }
-        repositories {
-            maven {
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                def user = project.hasProperty('ossrhUsername') ? ossrhUsername : ""
-                def pw = project.hasProperty('ossrhPassword') ? ossrhPassword : ""
-                credentials {
-                    username = user
-                    password = pw
-                }
-            }
-        }
-    }
-
-    signing {
-        sign publishing.publications.maven
     }
 }
 
