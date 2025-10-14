@@ -6,8 +6,8 @@ on:
       - master
   pull_request:
 
-    #manual triggering
-    workflow_dispatch:
+  #manual triggering
+  workflow_dispatch:
 
 jobs:
 
