@@ -153,9 +153,9 @@ afterEvaluate {
 dependencies {
     api 'com.google.android.gms:play-services-maps:18.2.0'
     api 'com.google.maps.android:android-maps-utils:3.5.3'
-    api 'mil.nga.geopackage:geopackage-android:6.7.4'
+    api 'mil.nga.geopackage:geopackage-android:6.7.5'
     //api project(':geopackage-sdk') // uncomment me to build locally
-    javadocDeps 'mil.nga.geopackage:geopackage-android:6.7.4'
+    javadocDeps 'mil.nga.geopackage:geopackage-android:6.7.5'
     testImplementation 'androidx.multidex:multidex:2.0.1'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
