@@ -6,8 +6,8 @@ on:
       - master
   pull_request:
 
-    #manual triggering
-    workflow_dispatch:
+  #manual triggering
+  workflow_dispatch:
 
 jobs:
 
@@ -33,10 +33,10 @@ jobs:
 
     - name: Copy Release Artifacts
       run: |
-        mkdir geopackage-map/build/release
-        cp geopackage-map/build/libs/*.jar geopackage-map/build/outputs/aar/*release.aar geopackage-map/build/release/
-        grep "version =" build.gradle | sed 's/[a-z ="]//g' > VERSION
-        mv geopackage-map/build/release/*.aar geopackage-map/build/release/geopackage-android-map-$(cat VERSION).aar
+        mkdir -p geopackage-map/build/release
+        cp geopackage-map/build/libs/*.jar geopackage-map/build/outputs/aar/geopackage-android-map-release.aar geopackage-map/build/release/
+        VERSION=$(grep -E "^\s*version\s*=" build.gradle | sed 's/[a-z ="]//g')
+        mv "geopackage-map/build/release/geopackage-android-map-release.aar" "geopackage-map/build/release/geopackage-android-map-${VERSION}.aar"
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
